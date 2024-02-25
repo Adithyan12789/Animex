@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #ffffff;
+            background: url('path/to/background-image.jpg') center/cover no-repeat; /* Replace 'path/to/background-image.jpg' with the actual path to your image */
+        }
+
+        .container {
+            border-radius: 10px;
+            overflow: hidden;
+            width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            background-color: rgba(0, 0, 0, 0.9); /* Slightly transparent white background */
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 15px;
+            font-size: 16px;
+            color: black;
+        }
+
+        .btn {
+            background-color: #088178;
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 15px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #098980;
+        }
+
+        .card-footer {
+            border-top: 1px solid #e0e0e0;
+            padding: 20px;
+            text-align: center;
+            font-size: 16px;
+            background-color: rgba(0, 0, 0, 0.9); /* Slightly transparent light gray background */
+        }
+
+        .footer-link {
+            color: #088178;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- OTP Verification Page -->
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="fw-bold mb-4 text-center" style="color: #088178;">OTP Verification</h2>
+                <p class="text-center text-muted">We've sent a verification code to your email. Please enter the code below:</p>
+
+                <!-- Add this form in your otp.ejs file -->
+                <form method="post" action="/verify-otp">
+                    <input type="hidden" name="email" value="<%= email %>">
+                    <label for="otp" class="form-label">Enter OTP:</label>
+                    <input type="text" name="otp" class="form-control" required>
+                    <button type="submit" class="btn">Verify OTP</button>
+                </form>
+            </div>
+            <div class="card-footer">
+                <p class="mb-0">Didn't receive the code? <a href="resend-otp" class="footer-link">Resend</a></p>
+            </div>
+        </div>
+    </div>
+     
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
