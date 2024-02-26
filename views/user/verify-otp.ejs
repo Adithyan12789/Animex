@@ -87,7 +87,7 @@
                 <p class="text-center text-muted">We've sent a verification code to your email. Please enter the code below:</p>
 
                 <!-- Add this form in your otp.ejs file -->
-                <form method="post" action="/verify-otp">
+                <form method="post" action="/verifyOtp">
                     <input type="hidden" name="email" value="<%= email %>">
                     <label for="otp" class="form-label">Enter OTP:</label>
                     <input type="text" name="otp" class="form-control" required>

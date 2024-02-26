@@ -98,7 +98,7 @@ const insertUser = async (req, res) => {
       req.session.tempEmail = req.body.email;
       const email = req.session.tempEmail;
       console.log(email)
-      res.render("user/verify-otp", { message: "Registered Successfully !!", email: email });
+      res.render("user/verify-otp", { email: email });
     }
   } catch (error) {
     console.error(error);
@@ -342,7 +342,41 @@ console.log(product)
 };
 
 
+//User Profile
+const userProfile = (req,res) => {
+  res.render("user/profile");
+}
 
+const addressManagement = (req,res) => {
+  res.render("user/addressManage");
+}
+
+const ordersPage = (req,res) => {
+  res.render("user/orders");
+}
+
+const editUserProfile = (req,res) => {
+  res.render("user/editProfile");
+}
+
+const addAddressPage = (req,res) => {
+  res.render("user/addAddress");
+}
+
+const editAddressPage = (req,res) => {
+  res.render("user/editAddress");
+}
+
+
+
+
+
+
+
+//Cart Controller
+const cartPage = (req,res) => {
+  res.render("user/cart");
+}
 
 
 module.exports = {
@@ -360,5 +394,16 @@ module.exports = {
   //shop Page
   shopPage,
   productDetails,
-  getShopPagination
+  getShopPagination,
+
+  //user profile
+  userProfile,
+  editUserProfile,
+  addressManagement,
+  addAddressPage,
+  editAddressPage,
+  ordersPage,
+
+  //cart Page
+  cartPage
 };

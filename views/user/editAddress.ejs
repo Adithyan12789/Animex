@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit Address - Animex</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-JDOvPXhfZgE/bs+FMqRf1rVHzAIn2tD5z5Q3zYqlv7qIYk5Nb57Ala9b2Di1D3FJf58po05MRV31/KBtCJnH7A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      /* Add any additional styling specific to the edit address page here */
+      body {
+        font-family: "Montserrat", sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
+      .edit-address-form {
+        background: #fff;
+        border-radius: 10px;
+        padding: 50px;
+        margin: 65px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+      .edit-address-form h3 {
+        color: #333;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #88c8bc;
+        padding-bottom: 10px;
+      }
+      .edit-address-form label {
+        font-weight: bold;
+      }
+      .edit-address-form input[type="text"],
+      .edit-address-form input[type="tel"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+      .edit-address-form .update-button {
+        background-color: #88c8bc;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 25px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .update-button:hover {
+        background-color: #488f82;
+      }
+      .sidebar {
+        background: #f8f9fa;
+        border-right: 1px solid #ddd;
+        padding: 20px;
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        overflow-y: auto;
+        margin-top: 100px;
+      }
+      .sidebar h4 {
+        margin-bottom: 40px;
+        color: #333;
+        border-bottom: 2px solid #88c8bc;
+        padding-bottom: 10px;
+      }
+      .sidebar ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      .sidebar ul li {
+        margin-bottom: 10px;
+      }
+      .sidebar li a {
+        color: #333;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        font-family: "Montserrat", sans-serif; /* Change the font family */
+      }
+
+      .sidebar li a:hover {
+        background-color: #88c8bc; /* Change background color on hover */
+        color: #fff; /* Change text color on hover */
+      }
+
+      li {
+        list-style: none;
+        font-size: 17px;
+        font-weight: 400;
+        margin: 30px 0px;
+      }
+      .active{
+        background-color: #88c8bc;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="page">
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="sidebar">
+                  <li><a href="/index">Home</a></li>
+                  <li><a href="/profile">Profile</a></li>
+                  <li class="active"><a href="/addressManage">Address Management</a></li>
+                  <li><a href="/index">Orders</a></li>
+                </div>
+              </div>
+          <div class="col-md-10">
+            <div class="edit-address-form">
+              <h3>Edit Address</h3>
+              <form action="/updateAddress" method="POST">
+                <div class="form-group">
+                  <label for="name">Recipient's Name:</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value="John Doe"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="address">Address:</label>
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    value="123 Street, City"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="phone">Phone:</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value="+918891768287"
+                    required
+                  />
+                </div>
+                <button type="submit" class="update-button">Update Address</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
+      integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -20,12 +20,12 @@ const verifyOTP = async (req, res) => {
       }
     } catch (error) {
       console.log(error.message);
-      res.redirect("/verify-otp");
+      res.redirect("user/verify-otp");
     }
   };
 
   const OTPpage = (req,res) => {
-    res.redirect("/verify-otp")
+    res.redirect("/login")
   }
 
   

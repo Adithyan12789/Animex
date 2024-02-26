@@ -35,6 +35,36 @@
 	<!-- Theme style  -->
 	<link rel="stylesheet" href="/static/css/style.css">
 
+	<style>
+		.prod-img {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.prod-img i {
+    position: absolute;
+    top: 310px;
+    right: 25px;
+    font-size: 24px;
+    color: #fff;
+    z-index: 2;
+    transition: transform 0.3s ease; /* Added transition property */
+}
+
+.prod-img i:hover {
+    transform: scale(1.1);
+}
+
+
+.prod-img:hover img {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+
+	</style>
+
 	</head>
 	<body>
 		
@@ -64,8 +94,10 @@
 								<li><a href="/shop">Shop</a></li>	
 								<li><a href="about.ejs">About</a></li>
 								<li><a href="contact.ejs">Contact</a></li>
-								<li class="cart"><a href="cart.ejs"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+								<li style="float: right;"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
+								<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
 								<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li> 
+
 							</ul>
 						</div>
 					</div>
@@ -198,9 +230,10 @@
 					<% product.forEach((product, index) => { %>
 						<div class="col-lg-4 mb-4 text-center">
 							<div class="product-entry border">
-								<a href="#" class="prod-img">
+								<div class="prod-img">
+									<a href="/cart"><i class="fas fa-cart-plus"></i></a>
 									<img src="/static/uploads/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
-								</a>
+								</div>
 								<div class="desc">
 									<h2><a href="#"><%= product.name %></a></h2>
 									<% if (product.category) { %>
@@ -211,7 +244,7 @@
 									<span class="price">₹<%= product.price %></span>
 									<p><a href="/shop" class="btn btn-primary">View Details</a></p>
 								</div>
-							</div>
+							</div>							
 						</div>
 					<% }) %>
 					
@@ -331,6 +364,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<div class="gototop js-top">
 		<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
 	</div>
+
+	<script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
 	
 	<!-- jQuery -->
 	<script src="/static/js/jquery.min.js"></script>
