@@ -132,20 +132,20 @@
               <li><a href="/index">Home</a></li>
               <li class="active"><a href="/profile">Profile</a></li>
               <li><a href="/addressManage">Address Management</a></li>
-              <li><a href="/index">Orders</a></li>
+              <li><a href="/orders">Orders</a></li>
             </div>
           </div>
           <div class="col-md-10">
             <div class="edit-profile-form">
               <h3>Edit Profile</h3>
-              <form action="/updateProfile" method="POST">
+              <form action="/editUserProfile" method="POST">
                 <div class="form-group">
                   <label for="name">Name:</label>
                   <input
                     type="text"
                     id="name"
                     name="name"
-                    value="John Doe"
+                    value="<%= editUser.name %>"
                     required
                   />
                 </div>
@@ -155,7 +155,7 @@
                     type="email"
                     id="email"
                     name="email"
-                    value="john.doe@example.com"
+                    value="<%= editUser.email %>"
                     required
                   />
                 </div>
@@ -165,7 +165,7 @@
                     type="tel"
                     id="phone"
                     name="phone"
-                    value="+918891768287"
+                    value="+91<%= editUser.mobile %>"
                     required
                   />
                 </div>

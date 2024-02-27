@@ -14,6 +14,10 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const page404 = (req,res) => {
+  res.render("user/page404")
+}
+
 const loadregister = function (req, res) {
   if (req.session.user) {
     res.redirect("/index");
@@ -98,10 +102,12 @@ const insertUser = async (req, res) => {
       req.session.tempEmail = req.body.email;
       const email = req.session.tempEmail;
       console.log(email)
+      console.log("1")
       res.render("user/verify-otp", { email: email });
     }
   } catch (error) {
     console.error(error);
+    console.log("2")
     res.render("user/register", { errorMessage: "An error occurred during registration." });
   }
 };
@@ -343,9 +349,27 @@ console.log(product)
 
 
 //User Profile
-const userProfile = (req,res) => {
-  res.render("user/profile");
-}
+const userProfile = async (req, res) => {
+  try {
+    if (req.session.user) {
+      const userdata = await User.findById(req.session.user);
+      console.log(userdata)
+      if (userdata) {
+        res.render("user/profile", { users: userdata });
+      } else {
+        console.log("User not found");
+        res.redirect("/");
+      } 
+    } else {
+      res.redirect("/");
+    }
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+
 
 const addressManagement = (req,res) => {
   res.render("user/addressManage");
@@ -355,16 +379,65 @@ const ordersPage = (req,res) => {
   res.render("user/orders");
 }
 
-const editUserProfile = (req,res) => {
-  res.render("user/editProfile");
-}
+const editUserProfile = async (req, res) => {
+  try {
+    if (req.session.user) {
+      const userdata = await User.findById(req.session.user);
+      console.log(userdata)
+      if (userdata) {
+        res.render("user/editProfile", { editUser: userdata });
+      } else {
+        console.log("User not found");
+        res.redirect("/");
+      } 
+    } else {
+      res.redirect("/");
+    }
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
-const addAddressPage = (req,res) => {
-  res.render("user/addAddress");
-}
 
-const editAddressPage = (req,res) => {
-  res.render("user/editAddress");
+const postEditProfile = async (req, res) => {
+  try {
+    if (req.session.user) {
+      const id = req.session.user; // Extract user ID from session
+      const name = req.body.name;
+      const email = req.body.email;
+      const mobile = req.body.mobile;
+
+      const existingProfile = await User.findOne({ _id: { $ne: id }, name: name });
+      if (existingProfile) {
+        // User name already exists
+        res.render('user/editProfile', {
+          editUser: await User.findById(id),
+          message: 'User name already exists.'
+        });
+      } else {
+        // Update user's profile
+        const updatedUser = await User.findByIdAndUpdate(id, { $set: { name: name, email: email, mobile: mobile } }, { new: true });
+        if (updatedUser) {
+          res.redirect('/profile');
+        } else {
+          console.log("User not found");
+          res.redirect("/");
+        }
+      }
+    } else {
+      res.redirect('/');
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+
+
+const trackOrderPage = (req,res) => {
+  res.render("user/trackOrder");
 }
 
 
@@ -380,6 +453,9 @@ const cartPage = (req,res) => {
 
 
 module.exports = {
+  //page 404
+  page404,
+
   loadregister,
   insertUser,
   loginload,
@@ -399,10 +475,10 @@ module.exports = {
   //user profile
   userProfile,
   editUserProfile,
+  postEditProfile,
   addressManagement,
-  addAddressPage,
-  editAddressPage,
   ordersPage,
+  trackOrderPage,
 
   //cart Page
   cartPage

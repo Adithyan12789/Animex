@@ -14,7 +14,7 @@ const verifyOTP = async (req, res) => {
         user.isVerified = true;
         await user.save();
   
-        res.render("user/login", {message: "Registered Successfully !!"});
+        res.redirect("/");
       } else {
         res.render("user/verify-otp", { message: "Incorrect OTP. Please try again.",email:email });
       }

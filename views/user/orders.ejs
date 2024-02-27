@@ -97,6 +97,10 @@
         background-color: #88c8bc;
         border-radius: 5px;
       }
+      .table td{
+        color: black;
+        font-weight: 400;
+      }
     </style>
 </head>
 <body>
@@ -168,8 +172,8 @@
                                             <td>Paid</td>
                                             <td>Shipped</td>
                                             <td>
-                                                <button class="btn btn-sm btn-primary">View Details</button>
-                                                <button class="btn btn-sm btn-success">Track Order</button>
+                                                <a href="/trackOrder"><button class="btn btn-sm btn-success">Track Order</button></a>
+                                                <button class="btn btn-sm btn-primary">Cancel Order</button>
                                             </td>
                                         </tr>
                                         <tr>
@@ -179,8 +183,8 @@
                                             <td>Pending</td>
                                             <td>Processing</td>
                                             <td>
-                                                <button class="btn btn-sm btn-primary">View Details</button>
                                                 <button class="btn btn-sm btn-success">Track Order</button>
+                                                <button class="btn btn-sm btn-primary">Cancel Order</button>
                                             </td>
                                         </tr>
                                         <!-- Add more rows for additional orders as needed -->

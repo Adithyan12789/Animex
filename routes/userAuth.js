@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
+const addressController = require('../controllers/addressController');
+
+//404 page
+
+router.get('page404', userController.page404)
+    
 
 // User Authentication Routes
 router.get('/', userController.loginload); // User login page
@@ -17,11 +23,12 @@ router.get('/userlogout', userController.logoutuser); // User logout
 // User Profile Routes
 router.get('/profile', userController.userProfile); // User profile page
 router.get('/editUserProfile', userController.editUserProfile); // Edit user profile page
+router.post("/editUserProfile", userController.postEditProfile); // Post Edit user profile page
 
 // Address Management Routes
 router.get('/addressManage', userController.addressManagement); // Address management page
-router.get('/addAddress', userController.addAddressPage); // Add Address page
-router.get('/editAddress', userController.editAddressPage); // Add Address page
+router.get('/addAddress', addressController.addAddressPage); // Add Address page
+router.get('/editAddress', addressController.editAddressPage); // Add Address page
 
 // Shop Routes
 router.get("/shop", userController.shopPage); // Shop page
@@ -32,6 +39,7 @@ router.get('/shop/:page', userController.getShopPagination); // Shop pagination
 
 // Orders Route
 router.get('/orders', userController.ordersPage); // Orders page
+router.get('/trackOrder', userController.trackOrderPage); // Orders page
 
 //Cart Route
 router.get('/cart', userController.cartPage);
