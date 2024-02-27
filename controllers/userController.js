@@ -4,6 +4,7 @@ const Product = require('../models/products');
 const Category = require('../models/category');
 const randomstring = require('randomstring');
 const bcrypt = require("bcrypt");
+const Address = require('../models/address');
 const saltpassword = 10;
 
 const transporter = nodemailer.createTransport({
@@ -102,12 +103,10 @@ const insertUser = async (req, res) => {
       req.session.tempEmail = req.body.email;
       const email = req.session.tempEmail;
       console.log(email)
-      console.log("1")
       res.render("user/verify-otp", { email: email });
     }
   } catch (error) {
     console.error(error);
-    console.log("2")
     res.render("user/register", { errorMessage: "An error occurred during registration." });
   }
 };
@@ -352,7 +351,7 @@ console.log(product)
 const userProfile = async (req, res) => {
   try {
     if (req.session.user) {
-      const userdata = await User.findById(req.session.user);
+      const userdata = await User.findById(req.session.user)
       console.log(userdata)
       if (userdata) {
         res.render("user/profile", { users: userdata });
@@ -369,11 +368,6 @@ const userProfile = async (req, res) => {
   }
 };
 
-
-
-const addressManagement = (req,res) => {
-  res.render("user/addressManage");
-}
 
 const ordersPage = (req,res) => {
   res.render("user/orders");
@@ -476,7 +470,6 @@ module.exports = {
   userProfile,
   editUserProfile,
   postEditProfile,
-  addressManagement,
   ordersPage,
   trackOrderPage,
 

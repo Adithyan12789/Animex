@@ -26,9 +26,12 @@ router.get('/editUserProfile', userController.editUserProfile); // Edit user pro
 router.post("/editUserProfile", userController.postEditProfile); // Post Edit user profile page
 
 // Address Management Routes
-router.get('/addressManage', userController.addressManagement); // Address management page
+router.get('/addressManage', addressController.addressManagement); // Address management page
 router.get('/addAddress', addressController.addAddressPage); // Add Address page
-router.get('/editAddress', addressController.editAddressPage); // Add Address page
+router.post('/addAddress', addressController.postAddAddressPage); // Add Address page
+router.get('/editAddress/:id', addressController.editAddressPage); // Add Address page
+router.post('/updateAddress/:id', addressController.updateAddress); // Add Address page
+router.get('/deleteAddress/:id', addressController.deleteAddressPage); // Add Address page
 
 // Shop Routes
 router.get("/shop", userController.shopPage); // Shop page
