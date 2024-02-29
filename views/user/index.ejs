@@ -1,13 +1,14 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
+
+<head>
 	<title>Animex</title>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
-	
+
 	<!-- Animate.css -->
 	<link rel="stylesheet" href="/static/css/animate.css">
 	<!-- Icomoon Icon Fonts-->
@@ -26,7 +27,7 @@
 	<!-- Owl Carousel -->
 	<link rel="stylesheet" href="/static/css/owl.carousel.min.css">
 	<link rel="stylesheet" href="/static/css/owl.theme.default.min.css">
-	
+
 	<!-- Date Picker -->
 	<link rel="stylesheet" href="/static/css/bootstrap-datepicker.css">
 	<!-- Flaticons  -->
@@ -36,38 +37,70 @@
 	<link rel="stylesheet" href="/static/css/style.css">
 
 	<style>
+		
 		.prod-img {
-    position: relative;
-    display: inline-block;
-    overflow: hidden;
+			position: relative;
+			display: inline-block;
+			overflow: hidden;
+		}
+
+		.prod-img i {
+			position: absolute;
+			top: 310px;
+			right: 25px;
+			font-size: 24px;
+			color: #fff;
+			z-index: 2;
+			transition: transform 0.3s ease;
+			/* Added transition property */
+		}
+
+		.prod-img i:hover {
+			transform: scale(1.1);
+		}
+
+
+		.prod-img:hover img {
+			transform: scale(1.1);
+			transition: transform 0.3s ease;
+		}
+
+		/* View Details Button */
+.view-details {
+    background-color: #007bff; /* Blue color, you can adjust as needed */
+    color: #fff; /* Text color */
+    padding: 10px 20px; /* Add some padding for better spacing */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
 }
 
-.prod-img i {
-    position: absolute;
-    top: 310px;
-    right: 25px;
-    font-size: 24px;
-    color: #fff;
-    z-index: 2;
-    transition: transform 0.3s ease; /* Added transition property */
+.view-details:hover {
+    background-color: #0056b3; /* Darker shade on hover */
 }
 
-.prod-img i:hover {
-    transform: scale(1.1);
+/* Add to Cart Icon Button */
+.btn-update {
+    background-color: #28a745; /* Green color for add to cart button */
+    color: #fff; /* Text color */
+    padding: 10px 20px; /* Adjust padding */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Show pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
 }
 
-
-.prod-img:hover img {
-    transform: scale(1.1);
-    transition: transform 0.3s ease;
+.btn-update:hover {
+    background-color: #218838; /* Darker shade of green on hover */
 }
 
 
 	</style>
 
-	</head>
-	<body>
-		
+</head>
+
+<body>
+
 	<div class="colorlib-loader"></div>
 
 	<div id="page">
@@ -79,24 +112,26 @@
 							<div id="colorlib-logo"><a href="/index">Animex</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
-			            <form action="#" class="search-wrap">
-			               <div class="form-group">
-			                  <input type="search" class="form-control search" placeholder="Search">
-			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-			               </div>
-			            </form>
-			         </div>
-		         </div>
+							<form action="#" class="search-wrap">
+								<div class="form-group">
+									<input type="search" class="form-control search" placeholder="Search">
+									<button class="btn btn-primary submit-search text-center" type="submit"><i
+											class="icon-search"></i></button>
+								</div>
+							</form>
+						</div>
+					</div>
 					<div class="row">
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
 								<li class="active"><a href="/index">Home</a></li>
-								<li><a href="/shop">Shop</a></li>	
+								<li><a href="/shop">Shop</a></li>
 								<li><a href="about.ejs">About</a></li>
 								<li><a href="contact.ejs">Contact</a></li>
-								<li style="float: right;"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
+								<li style="float: right;"><a href="/profile"><i
+											class="fa-regular fa-circle-user fa-2x"></i></a></li>
 								<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-								<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li> 
+								<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
 
 							</ul>
 						</div>
@@ -129,68 +164,70 @@
 		<aside id="colorlib-hero">
 			<div class="flexslider">
 				<ul class="slides">
-			   	<li style="background-image: url(/static/images/Hell3.webp);">
-			   		<div class="overlay"></div>
-			   		<div class="container-fluid">
-			   			<div class="row">
-				   			<div class="col-sm-6 offset-sm-3 text-center slider-text">
-				   				<div class="slider-text-inner">
-				   					<div class="desc">
-					   					<h1 class="head-1">Men's</h1>
-					   					<h2 class="head-2">T-shirts</h2>
-					   					<h2 class="head-3">Collection</h2>
-					   					<p class="category"><span>New trending Hoodies</span></p>
-					   					<p><a href="#" class="btn btn-primary">Shop Collection</a></p>
-				   					</div>
-				   				</div>
-				   			</div>
-				   		</div>
-			   		</div>
-			   	</li>
-			   	<li style="background-image: url(/static/images/Berserk3.webp)">
-			   		<div class="overlay"></div>
-			   		<div class="container-fluid">
-			   			<div class="row">
-				   			<div class="col-sm-6 offset-sm-3 text-center slider-text">
-				   				<div class="slider-text-inner">
-				   					<div class="desc">
-					   					<h1 class="head-1">Huge</h1>
-					   					<h2 class="head-2">Sale</h2>
-					   					<h2 class="head-3"><strong class="font-weight-bold">50%</strong> Off</h2>
-					   					<p class="category"><span>Big sale sandals</span></p>
-					   					<p><a href="#" class="btn btn-primary">Shop Collection</a></p>
-				   					</div>
-				   				</div>
-				   			</div>
-				   		</div>
-			   		</div>
-			   	</li>
-			   	<li style="background-image: url(/static/images/Pokemon-2.webp);">
-			   		<div class="overlay"></div>
-			   		<div class="container-fluid">
-			   			<div class="row">
-				   			<div class="col-sm-6 offset-sm-3 text-center slider-text">
-				   				<div class="slider-text-inner">
-				   					<div class="desc">
-					   					<h1 class="head-1">New</h1>
-					   					<h2 class="head-2">Arrival</h2>
-					   					<h2 class="head-3">up to <strong class="font-weight-bold">30%</strong> off</h2>
-					   					<p class="category"><span>New Fullsleeves Tshirt for men</span></p>
-					   					<p><a href="#" class="btn btn-primary">Shop Collection</a></p>
-				   					</div>
-				   				</div>
-				   			</div>
-				   		</div>
-			   		</div>
-			   	</li>
-			  	</ul>
-		  	</div>
+					<li style="background-image: url(/static/images/Hell3.webp);">
+						<div class="overlay"></div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-sm-6 offset-sm-3 text-center slider-text">
+									<div class="slider-text-inner">
+										<div class="desc">
+											<h1 class="head-1">Men's</h1>
+											<h2 class="head-2">T-shirts</h2>
+											<h2 class="head-3">Collection</h2>
+											<p class="category"><span>New trending Hoodies</span></p>
+											<p><a href="#" class="btn btn-primary">Shop Collection</a></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li style="background-image: url(/static/images/Berserk3.webp)">
+						<div class="overlay"></div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-sm-6 offset-sm-3 text-center slider-text">
+									<div class="slider-text-inner">
+										<div class="desc">
+											<h1 class="head-1">Huge</h1>
+											<h2 class="head-2">Sale</h2>
+											<h2 class="head-3"><strong class="font-weight-bold">50%</strong> Off</h2>
+											<p class="category"><span>Big sale sandals</span></p>
+											<p><a href="#" class="btn btn-primary">Shop Collection</a></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li style="background-image: url(/static/images/Pokemon-2.webp);">
+						<div class="overlay"></div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-sm-6 offset-sm-3 text-center slider-text">
+									<div class="slider-text-inner">
+										<div class="desc">
+											<h1 class="head-1">New</h1>
+											<h2 class="head-2">Arrival</h2>
+											<h2 class="head-3">up to <strong class="font-weight-bold">30%</strong> off
+											</h2>
+											<p class="category"><span>New Fullsleeves Tshirt for men</span></p>
+											<p><a href="#" class="btn btn-primary">Shop Collection</a></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
 		</aside>
 		<div class="colorlib-intro">
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-12 text-center">
-						<h2 class="intro">It started with a simple idea: Create quality, well-designed products that I wanted myself.</h2>
+						<h2 class="intro">It started with a simple idea: Create quality, well-designed products that I
+							wanted myself.</h2>
 					</div>
 				</div>
 			</div>
@@ -200,7 +237,8 @@
 				<div class="row">
 					<div class="col-sm-6 text-center">
 						<div class="featured">
-							<a href="#" class="featured-img" style="background-image: url(/static/images/Mob6.webp);"></a>
+							<a href="#" class="featured-img"
+								style="background-image: url(/static/images/Mob6.webp);"></a>
 							<div class="desc">
 								<h2><a href="#">Shop Men's Collection</a></h2>
 							</div>
@@ -208,7 +246,8 @@
 					</div>
 					<div class="col-sm-6 text-center">
 						<div class="featured">
-							<a href="#" class="featured-img" style="background-image: url(/static/images/BASIC-WASHED-HOODIE-1.webp);"></a>
+							<a href="#" class="featured-img"
+								style="background-image: url(/static/images/BASIC-WASHED-HOODIE-1.webp);"></a>
 							<div class="desc">
 								<h2><a href="#">Shop Women's Collection</a></h2>
 							</div>
@@ -220,34 +259,46 @@
 
 		<div class="colorlib-product">
 			<div class="container">
-				
+
 				<div class="row">
 					<div class="col-sm-8 offset-sm-2 text-center colorlib-heading">
 						<h2>Best Sellers</h2>
 					</div>
 				</div>
 				<div class="row">
-					<% product.forEach((product, index) => { %>
-						<div class="col-lg-4 mb-4 text-center">
-							<div class="product-entry border">
-								<div class="prod-img">
-									<a href="/cart"><i class="fas fa-cart-plus"></i></a>
-									<img src="/static/uploads/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+					<% product.forEach((item, index)=> { %>
+						<a href="/shop">
+							<div class="col-lg-4 mb-4 text-center">
+								<div class="product-entry border">
+									<div class="prod-img">
+										<img src="/static/uploads/<%= item.image[0] %>" class="img-fluid"
+											alt="Free html5 bootstrap 4 template">
+									</div>
+									<div class="desc">
+										<h2><a href="#">
+												<%= item.name %>
+											</a></h2>
+										<% if (item.category) { %>
+											<h2><a href="#">
+													<%= item.category.name %>
+												</a></h2>
+											<% } else { %>
+												<p>No category</p>
+												<% } %>
+											<span class="price">₹<%= item.price %></span>
+												<!-- Inside the loop where the "View Details" button is generated -->
+												<div class="buttons">
+													<!-- <p><a href="/shop" class="btn btn-primary view-details">View
+															Details</a></p> -->
+													<button class="btn btn-primary view-details" onclick="cart('<%= item._id %>')">
+														addTocart<i class="fas fa-cart-plus"></i> <!-- Add to Cart Icon -->
+													</button>
+												</div>    
+									</div>
 								</div>
-								<div class="desc">
-									<h2><a href="#"><%= product.name %></a></h2>
-									<% if (product.category) { %>
-										<h2><a href="#"><%= product.category.name %></a></h2>
-									<% } else { %>
-										<p>No category</p>
-									<% } %>
-									<span class="price">₹<%= product.price %></span>
-									<p><a href="/shop" class="btn btn-primary">View Details</a></p>
-								</div>
-							</div>							
-						</div>
-					<% }) %>
-					
+							</div>
+						</a>
+						<% }) %>
 				</div>
 				<div class="row">
 					<div class="col-md-12 text-center">
@@ -289,40 +340,41 @@
 				<div class="row row-pb-md">
 					<div class="col footer-col colorlib-widget">
 						<h4>About Footwear</h4>
-						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
+						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost
+							unorthographic life</p>
 						<p>
-							<ul class="colorlib-social-icons">
-								<li><a href="#"><i class="icon-twitter"></i></a></li>
-								<li><a href="#"><i class="icon-facebook"></i></a></li>
-								<li><a href="#"><i class="icon-linkedin"></i></a></li>
-								<li><a href="#"><i class="icon-dribbble"></i></a></li>
-							</ul>
+						<ul class="colorlib-social-icons">
+							<li><a href="#"><i class="icon-twitter"></i></a></li>
+							<li><a href="#"><i class="icon-facebook"></i></a></li>
+							<li><a href="#"><i class="icon-linkedin"></i></a></li>
+							<li><a href="#"><i class="icon-dribbble"></i></a></li>
+						</ul>
 						</p>
 					</div>
 					<div class="col footer-col colorlib-widget">
 						<h4>Customer Care</h4>
 						<p>
-							<ul class="colorlib-footer-links">
-								<li><a href="#">Contact</a></li>
-								<li><a href="#">Returns/Exchange</a></li>
-								<li><a href="#">Gift Voucher</a></li>
-								<li><a href="#">Wishlist</a></li>
-								<li><a href="#">Special</a></li>
-								<li><a href="#">Customer Services</a></li>
-								<li><a href="#">Site maps</a></li>
-							</ul>
+						<ul class="colorlib-footer-links">
+							<li><a href="#">Contact</a></li>
+							<li><a href="#">Returns/Exchange</a></li>
+							<li><a href="#">Gift Voucher</a></li>
+							<li><a href="#">Wishlist</a></li>
+							<li><a href="#">Special</a></li>
+							<li><a href="#">Customer Services</a></li>
+							<li><a href="#">Site maps</a></li>
+						</ul>
 						</p>
 					</div>
 					<div class="col footer-col colorlib-widget">
 						<h4>Information</h4>
 						<p>
-							<ul class="colorlib-footer-links">
-								<li><a href="#">About us</a></li>
-								<li><a href="#">Delivery Information</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-								<li><a href="#">Support</a></li>
-								<li><a href="#">Order Tracking</a></li>
-							</ul>
+						<ul class="colorlib-footer-links">
+							<li><a href="#">About us</a></li>
+							<li><a href="#">Delivery Information</a></li>
+							<li><a href="#">Privacy Policy</a></li>
+							<li><a href="#">Support</a></li>
+							<li><a href="#">Order Tracking</a></li>
+						</ul>
 						</p>
 					</div>
 
@@ -351,9 +403,14 @@
 					<div class="col-sm-12 text-center">
 						<p>
 							<span><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></span> 
-							<span class="block">Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a> , <a href="http://pexels.com/" target="_blank">Pexels.com</a></span>
+								Copyright &copy;
+								<script>document.write(new Date().getFullYear());</script> All rights reserved | This
+								template is made with <i class="icon-heart" aria-hidden="true"></i> by <a
+									href="https://colorlib.com" target="_blank">Colorlib</a>
+								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+							</span>
+							<span class="block">Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a>
+								, <a href="http://pexels.com/" target="_blank">Pexels.com</a></span>
 						</p>
 					</div>
 				</div>
@@ -366,15 +423,35 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	</div>
 
 	<script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
-	
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<!-- Your HTML content -->
+
+	<script>
+		function cart(id) {
+			Swal.fire({
+				title: "Successfully add to cart!",
+				showCancelButton: false,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "ok"
+			}).then((result) => {
+				if (result.isConfirmed) {
+					window.location.href = "/index";
+				}
+			});
+		}
+	</script>
+
 	<!-- jQuery -->
 	<script src="/static/js/jquery.min.js"></script>
-   <!-- popper -->
-   <script src="/static/js/popper.min.js"></script>
-   <!-- bootstrap 4.1 -->
-   <script src="/static/js/bootstrap.min.js"></script>
-   <!-- jQuery easing -->
-   <script src="/static/js/jquery.easing.1.3.js"></script>
+	<!-- popper -->
+	<script src="/static/js/popper.min.js"></script>
+	<!-- bootstrap 4.1 -->
+	<script src="/static/js/bootstrap.min.js"></script>
+	<!-- jQuery easing -->
+	<script src="/static/js/jquery.easing.1.3.js"></script>
 	<!-- Waypoints -->
 	<script src="/static/js/jquery.waypoints.min.js"></script>
 	<!-- Flexslider -->
@@ -391,6 +468,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<!-- Main -->
 	<script src="/static/js/main.js"></script>
 
-	</body>
-</html>
+</body>
 
+</html>

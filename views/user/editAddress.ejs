@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Edit Address - Animex</title>
     <meta charset="utf-8" />
@@ -8,7 +9,9 @@
     <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet" />
     <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-JDOvPXhfZgE/bs+FMqRf1rVHzAIn2tD5z5Q3zYqlv7qIYk5Nb57Ala9b2Di1D3FJf58po05MRV31/KBtCJnH7A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-JDOvPXhfZgE/bs+FMqRf1rVHzAIn2tD5z5Q3zYqlv7qIYk5Nb57Ala9b2Di1D3FJf58po05MRV31/KBtCJnH7A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Add any additional styling specific to the edit address page here */
         body {
@@ -17,6 +20,7 @@
             margin: 0;
             padding: 0;
         }
+
         .edit-address-form {
             background: #fff;
             border-radius: 10px;
@@ -25,15 +29,18 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             position: relative;
         }
+
         .edit-address-form h3 {
             color: #333;
             margin-bottom: 20px;
             border-bottom: 2px solid #88c8bc;
             padding-bottom: 10px;
         }
+
         .edit-address-form label {
             font-weight: bold;
         }
+
         .edit-address-form input[type="text"],
         .edit-address-form input[type="tel"] {
             width: 100%;
@@ -43,6 +50,7 @@
             border: 1px solid #ccc;
             box-sizing: border-box;
         }
+
         .edit-address-form .update-button {
             background-color: #88c8bc;
             color: #fff;
@@ -53,9 +61,11 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         .update-button:hover {
             background-color: #488f82;
         }
+
         .sidebar {
             background: #f8f9fa;
             border-right: 1px solid #ddd;
@@ -67,19 +77,23 @@
             overflow-y: auto;
             margin-top: 100px;
         }
+
         .sidebar h4 {
             margin-bottom: 40px;
             color: #333;
             border-bottom: 2px solid #88c8bc;
             padding-bottom: 10px;
         }
+
         .sidebar ul {
             list-style: none;
             padding-left: 0;
         }
+
         .sidebar ul li {
             margin-bottom: 10px;
         }
+
         .sidebar li a {
             color: #333;
             text-decoration: none;
@@ -87,24 +101,31 @@
             padding: 10px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            font-family: "Montserrat", sans-serif; /* Change the font family */
+            font-family: "Montserrat", sans-serif;
+            /* Change the font family */
         }
+
         .sidebar li a:hover {
-            background-color: #88c8bc; /* Change background color on hover */
-            color: #fff; /* Change text color on hover */
+            background-color: #88c8bc;
+            /* Change background color on hover */
+            color: #fff;
+            /* Change text color on hover */
         }
+
         li {
             list-style: none;
             font-size: 17px;
             font-weight: 400;
             margin: 30px 0px;
         }
-        .active{
+
+        .active {
             background-color: #88c8bc;
             border-radius: 5px;
         }
     </style>
 </head>
+
 <body>
     <div id="page">
         <div class="container-fluid">
@@ -113,56 +134,63 @@
                     <div class="sidebar">
                         <li><a href="/index">Home</a></li>
                         <li><a href="/profile">Profile</a></li>
-                        <li class="active"><a href="/addressManage">Address Management</a></li>
+                        <li class="active">
+                            <a href="/addressManage">Address Management</a>
+                        </li>
                         <li><a href="/orders">Orders</a></li>
                     </div>
                 </div>
                 <div class="col-md-10">
                     <div class="edit-address-form">
                         <h3>Edit Address</h3>
-                        <form action="/updateAddress/<%= address._id %>" method="POST">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" name="name" value="<%= address.name %>" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <input type="text" id="phone" name="phone" value="<%= address.phone %>" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="address1">Address</label>
-                                <input type="text" id="address1" name="address1" value="<%= address.address1 %>" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="address2">Street Name</label>
-                                <input type="text" id="address2" name="address2" value="<%= address.address2 %>" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="state">state:</label>
-                                <input type="text" id="state" name="state" value="<%= address.state %>" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="city">City:</label>
-                                <input type="text" id="city" name="city" value="<%= address.city %>" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="postalcode">Postal code:</label>
-                                <input type="text" id="postalcode" name="postalcode" value="<%= address.postalCode %>" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="country">Country:</label>
-                                <input type="text" id="country" name="country" value="<%= address.country %>" required />
-                            </div>
-                            <button type="submit" class="update-button">Update Address</button>
-                        </form>
+                        <% if (address) { %>
+                            <form action="/updateAddress/<%= address._id %>" method="POST">
+                                <div class="form-group">
+                                    <label for="address1">Address</label>
+                                    <input type="text" id="address1" name="address1" value="<%= address.address1 %>"
+                                        required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="address2">Street Name</label>
+                                    <input type="text" id="address2" name="address2" value="<%= address.address2 %>"
+                                        required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">state:</label>
+                                    <input type="text" id="state" name="state" value="<%= address.state %>" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">City:</label>
+                                    <input type="text" id="city" name="city" value="<%= address.city %>" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="postalcode">Postal code:</label>
+                                    <input type="text" id="postalcode" name="postalcode"
+                                        value="<%= address.postalCode %>" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Country:</label>
+                                    <input type="text" id="country" name="country" value="<%= address.country %>"
+                                        required />
+                                </div>
+                                <button type="submit" class="update-button">
+                                    Update Address
+                                </button>
+                            </form>
+                            <% } else { %>
+                                <p>No address found</p>
+                                <% } %>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
+        integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/popper.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
 </body>
+
 </html>

@@ -32,10 +32,11 @@
             padding-bottom: 10px;
         }
         .address-details p {
-            color: #555;
+            color: #000000;
             margin-bottom: 10px;
             font-size: 0.9rem;
             line-height: 1.6;
+            font-weight: 500;
         }
         .action-buttons {
             margin-top: 20px;
@@ -148,29 +149,28 @@
                         <a href="/addAddress"><button class="btn btn-primary">Add New Address</button></a>
                     </div>
                     <% if (address && address.length > 0) { %>
-                        <% address.forEach((row,index) => { %>
-                        <div class="address-box">
-                            <h3>Address <%= index + 1 %></h3>
-                            <div class="address-details">
-                                <p><strong>Name:</strong> <%= row.name %></p>
-                                <p><strong>phone:</strong> <%= row.phone %></p>
-                                <p><strong>Address:</strong> <%= row.address1 %></p>
-                                <p><strong>Street Name:</strong> <%= row.address2 %></p>
-                                <p><strong>State:</strong> <%= row.state %></p>
-                                <p><strong>city:</strong> <%= row.city %></p>
-                                <p><strong>Pin Code:</strong> <%= row.postalCode %></p>
-                                <p><strong>Country:</strong> <%= row.country %></p>
+                        <% address.forEach(address => { %>
+                            <% address.addressDetails.forEach((address,index) => { %>
+                            <div class="address-box">
+                                <h3>Address <%= index + 1 %></h3>
+                                <div class="address-details">
+                                    <p><strong>Address:</strong> <%= address.address1 %></p>
+                                    <p><strong>Street Name:</strong> <%= address.address2 %></p>
+                                    <p><strong>State:</strong> <%= address.state %></p>
+                                    <p><strong>City:</strong> <%= address.city %></p>
+                                    <p><strong>Pin Code:</strong> <%= address.postalCode %></p>
+                                    <p><strong>Country:</strong> <%= address.country %></p>
+                                </div>
+                                <div class="action-buttons">
+                                    <a href="/editAddress/<%= address._id %>"><button class="btn btn-secondary">Edit Address</button></a>
+                                    <button class="btn btn-danger" onclick="deleteAddress('<%= address._id %>')">Delete Address</button>
+                                </div>
                             </div>
-                            <div class="action-buttons">
-                                <a href="/editAddress/<%= row._id %>"><button class="btn btn-secondary">Edit Address</button></a>
-                                <button class="btn btn-danger" onclick="deleteAddress('<%= row._id %>')">Delete Address</button></a>
-                            </div>
-                        </div>
+                            <% }) %>
                         <% }) %>
                     <% } else { %>
                         <p>No addresses found.</p>
                     <% } %>
-                    
                 </div>
             </div>
         </div>

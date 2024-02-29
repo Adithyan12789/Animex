@@ -54,7 +54,8 @@ const loguser = async (req, res) => {
       const passwordMatch = await bcrypt.compare(logpassword, loggeduser.password);
 
       if (passwordMatch) {
-        req.session.user = loggeduser._id;
+        req.session.user = loggeduser;
+        req.session.userID = loggeduser._id;
         return res.redirect("/index");
       } else {
         return res.render("user/login", { errmessage: "Incorrect password. Please try again." });
@@ -436,16 +437,6 @@ const trackOrderPage = (req,res) => {
 
 
 
-
-
-
-
-//Cart Controller
-const cartPage = (req,res) => {
-  res.render("user/cart");
-}
-
-
 module.exports = {
   //page 404
   page404,
@@ -473,6 +464,4 @@ module.exports = {
   ordersPage,
   trackOrderPage,
 
-  //cart Page
-  cartPage
 };
