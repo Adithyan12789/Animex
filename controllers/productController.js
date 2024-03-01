@@ -79,8 +79,6 @@ const getProducts = async (req, res) => {
             .limit(perPage)
             .exec();
 
-            console.log(products)
-
         const totalPages = Math.ceil(totalProducts / perPage);
 
         res.render("admin/page-products-grid", {
@@ -142,7 +140,6 @@ const editProduct = async (req, res) => {
       const id = req.params.id;
       const productDetails = await Product.findById(id)
       const catergories = await Category.find()
-      console.log(productDetails)
       if (!productDetails) {
         return res.status(404).render("error", { message: "Product not found" });
       }

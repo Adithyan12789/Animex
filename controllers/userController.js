@@ -154,7 +154,6 @@ const loaduserHome = async function (req, res) {
         return product.category && product.category.isListed;
       });
       
-      console.log("Product Data:", listedProducts);
       if (userdata && listedProducts) {
         isAuthenticated = true;
         res.render("user/index", { user: userdata, isAuthenticated: isAuthenticated, product: listedProducts });
@@ -334,7 +333,6 @@ const productDetails = async (req, res) => {
   try {
     const proid = req.params.id; 
     const product = await Product.findById(proid).populate("category");
-console.log(product)
     if (!product) {
       console.log("Product not found");
       return res.redirect("/index");
@@ -396,38 +394,57 @@ const editUserProfile = async (req, res) => {
 
 
 const postEditProfile = async (req, res) => {
-  try {
-    if (req.session.user) {
-      const id = req.session.user; // Extract user ID from session
-      const name = req.body.name;
-      const email = req.body.email;
-      const mobile = req.body.mobile;
-
-      const existingProfile = await User.findOne({ _id: { $ne: id }, name: name });
-      if (existingProfile) {
-        // User name already exists
-        res.render('user/editProfile', {
-          editUser: await User.findById(id),
-          message: 'User name already exists.'
-        });
-      } else {
-        // Update user's profile
-        const updatedUser = await User.findByIdAndUpdate(id, { $set: { name: name, email: email, mobile: mobile } }, { new: true });
-        if (updatedUser) {
-          res.redirect('/profile');
+    try {
+      if (req.session.user) {
+        const id = req.session.user; // Extract user ID from session
+        const name = req.body.name;
+        const email = req.body.email;
+        const mobile = req.body.mobile;
+        const currentPassword = req.body.currentPassword;
+        const newPassword = req.body.newPassword;
+        const confirmPassword = req.body.confirmPassword;
+  
+        // Check if current password matches the stored password
+        const user = await User.findById(id);
+        const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+  
+        if (!passwordMatch) {
+          // Current password doesn't match
+          console.log("Current password is incorrect")
+          return res.render('user/editProfile', {
+            editUser: await User.findById(id),
+            message: 'Current password is incorrect.'
+          });
+        } else if (newPassword !== confirmPassword) {
+          // New password and confirm password don't match
+          console.log("New password and confirm password do not match.")
+          return res.render('user/editProfile', {
+            editUser: await User.findById(id),
+            message: 'New password and confirm password do not match.'
+          });
         } else {
-          console.log("User not found");
-          res.redirect("/");
+          // Update user's profile and password
+          const hashedPassword = await bcrypt.hash(newPassword, 10);
+          const updatedUser = await User.findByIdAndUpdate(id, { $set: { name: name, email: email, mobile: mobile, password: hashedPassword } }, { new: true });
+          
+          if (updatedUser) {
+            return res.redirect('/profile');
+          } else {
+            console.log("User not found");
+            return res.redirect("/");
+          }
         }
+      } else {
+        return res.redirect('/');
       }
-    } else {
-      res.redirect('/');
+    } catch (error) {
+      console.log(error.message);
+      return res.status(500).send("Internal Server Error");
     }
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+  };
+  
+
+
 
 
 

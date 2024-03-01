@@ -2,7 +2,8 @@ const Address = require("../models/address");
 
 const addressManagement = async (req, res) => {
   try {
-    const address = await Address.find();
+    const userId = req.session.userID;
+    const address = await Address.find({ userId });
     res.render("user/addressManage", { address });
   } catch (error) {
     console.error("Error rendering address management page:", error);
@@ -12,7 +13,8 @@ const addressManagement = async (req, res) => {
 
 const addAddressPage = async (req, res) => {
   try {
-    const address = await Address.find();
+    const userId = req.session.userID;
+    const address = await Address.find({ userId });
     res.render("user/addAddress", { address });
   } catch (error) {
     console.error("Error fetching addresses:", error);
@@ -49,12 +51,15 @@ const editAddressPage = async (req, res) => {
     const { id } = req.params;
     const userId = req.session.userID;
     const userAddress = await Address.findOne({ userId });
+    console.log(userAddress)
 
     if (!userAddress) {
       return res.status(404).render("user/addressManage", { message: "Address not found" });
     }
 
     const address = userAddress.addressDetails.find((addr) => addr._id.toString() === id);
+
+    console.log(address)  
 
     if (!address) {
       return res.status(404).render("user/addressManage", { message: "Address not found" });

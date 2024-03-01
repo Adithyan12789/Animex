@@ -31,3 +31,7 @@ const verifyOTP = async (req, res) => {
   
   
   module.exports = {verifyOTP,OTPpage}
+
+
+
+  
