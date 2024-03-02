@@ -281,33 +281,28 @@
 												<div class="address-box" id="address<%= index + 1 %>">
 													<label>
 														<div class="radio-box">
-															<input style="margin: 3px 20px 32px 0px;" type="radio" name="selectedAddress" value="<%= address._id %>">
-															<h3 onclick="toggleAddressDetails('<%= index + 1 %>')">Address <%= index + 1 %></h3>
-														</div>
+															<input style="margin: 3px 20px 32px 0px;" type="radio" name="addressId" value="<%= address._id %>" onclick="setDefault('<%= address._id %>')" <%= address.isDefault ? 'checked' : '' %>>
+															<h3 onclick="toggleAddressDetails('<%= index + 1 %>', '<%= address._id %>')">Address <%= index + 1 %></h3>
+														</div>																											
 													</label>
 													<div class="address-details" style="display: none;">
 														<input type="hidden" name="id" value="<%= address._id %>">
 														<p>Address: <%= address.address1 %></p>
-
 														<p>Street Name: <%= address.address2 %></p>
-
 														<p>City: <%= address.city %></p>
-
 														<p>State: <%= address.state %></p>
-
 														<p>Postal Code: <%= address.postalCode %></p>
-
 														<p>Country: <%= address.country %></p>
-
 														<a href="/editAddress/<%= address._id %>"><button class="btn btn-secondary">Edit Address</button></a>
 													</div>
-												</div>
+												</div>												
 											<% }) %>
 										<% } else { %>
 											<p>No address found</p>
-										<% } %>										
+										<% } %>                                        
 									</div>
 								</div>
+								
 								<div class="action-buttons">
 									<a href="/addAddress"><button class="btn btn-primary">Add New Address</button></a>
 								</div>
@@ -323,7 +318,7 @@
 							
 											<div class="form-group">
 												<div class="col-md-12">
-													<h3>TotalPrice<%= totalPrice %></h3>
+													<h3>TotalPrice - <%= totalPrice %></h3>
 													<input type="hidden" name="totalPrice" value="<%= totalPrice %>">
 												</div>
 											</div>
@@ -335,13 +330,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="form-group">
-												<div class="col-md-12">
-													<div class="radio">
-														<label><input type="radio" name="optradio" value="paypal"> Paypal</label>
-													</div>
-												</div>
-											</div>
+											
 										</div>
 									</div>
 								</div>
@@ -483,16 +472,43 @@
 			}
 		</script>
 
-	<script>
-		function toggleAddressDetails(addressIndex) {
-			var addressDetails = document.getElementById('address' + addressIndex).getElementsByClassName('address-details')[0];
-			if (addressDetails.style.display === 'none') {
-				addressDetails.style.display = 'block';
-			} else {
-				addressDetails.style.display = 'none';
-			}
-		}
-	</script>
+<script>
+    function toggleAddressDetails(addressIndex, addressId) {
+        var addressDetails = document.getElementById('address' + addressIndex).getElementsByClassName('address-details')[0];
+        if (addressDetails.style.display === 'none') {
+            addressDetails.style.display = 'block';
+        } else {
+            addressDetails.style.display = 'none';
+        }
+
+        // Call setDefault function to update default address
+        setDefault(addressId);
+    }
+
+    function setDefault(addressId) {
+        // Make AJAX request to update default address
+        fetch('/defaultAddress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ addressId: addressId })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Default address updated successfully');
+            } else {
+                console.error('Error updating default address:', response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('Error updating default address:', error);
+        });
+    }
+</script>
+
+
+
 
 
 

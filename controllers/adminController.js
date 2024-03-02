@@ -3,7 +3,7 @@ const User = require("../models/userModel");
 
 const credentials = {
   email: "admin123@gmail.com",
-  password: "12345"
+  password: "12345678",
 };
 
 const adminloginload = function (req, res) {

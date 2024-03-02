@@ -44,10 +44,6 @@ router.get("/product-details/:id", user, userController.productDetails); // Prod
 // Pagination Route
 router.get('/shop/:page', user, userController.getShopPagination); // Shop pagination
 
-// Orders Route
-router.get('/orders', user, userController.ordersPage); // Orders page
-router.get('/trackOrder', user, userController.trackOrderPage); // Orders page
-
 //Cart Route
 router.get('/cart', user, cartController.cart);
 router.get('/addTocart/:id', user, cartController.cartPage);
@@ -58,9 +54,12 @@ router.get('/removeCart/:id', user, cartController.deleteCart);
 router.get('/checkout', user, cartController.checkoutPage);
 
 //Order Route
+router.get('/orderProfile', user, orderController.ordersProfilePage); // Orders page
+router.get('/trackOrder/:id', user, orderController.trackOrderPage); // Orders page
 router.get("/orderPage", user, orderController.orderPage)
-router.post('/order', user, orderController.placeOrder);
-router.get('/order', user, orderController.placeOrder);
+router.post('/order', user, cartController.placeOrder);
+router.post('/defaultAddress', user, orderController.defaultAddress);
+router.get('/deleteOrder/:id', user, orderController.deleteOrder); // Add Address page
 
 
 module.exports = router;

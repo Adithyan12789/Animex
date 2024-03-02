@@ -367,11 +367,6 @@ const userProfile = async (req, res) => {
   }
 };
 
-
-const ordersPage = (req,res) => {
-  res.render("user/orders");
-}
-
 const editUserProfile = async (req, res) => {
   try {
     if (req.session.user) {
@@ -445,15 +440,6 @@ const postEditProfile = async (req, res) => {
   
 
 
-
-
-
-const trackOrderPage = (req,res) => {
-  res.render("user/trackOrder");
-}
-
-
-
 module.exports = {
   //page 404
   page404,
@@ -478,7 +464,5 @@ module.exports = {
   userProfile,
   editUserProfile,
   postEditProfile,
-  ordersPage,
-  trackOrderPage,
 
 };

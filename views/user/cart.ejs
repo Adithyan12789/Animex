@@ -198,6 +198,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<h2>Your Shopping Cart</h2>
+						<% if (cart) { %>
 						<table class="table cart-table">
 							<thead>
 								<tr>
@@ -209,43 +210,48 @@
 									<th>Action</th>
 								</tr>
 							</thead>
-							<% cart.items.forEach(item=> { %>
-								<tr>
-									<td><img src="/static/uploads/<%= item.product.image[0] %>" alt="Product Image"
-											class="img-fluid"></td>
-									<td>
-										<%= item.product.name %>
-									</td>
-									<td>
-										<%= item.product.price %>
-									</td>
-									<td class="quantity__item">
-										<div class="quantity">
-											<div class="pro-qty-2" style="display: flex;">
-												<button class="qty-dec" data-id="<%= item.product._id %>"><i
-														class="fa fa-minus"></i></button>
-												<input style="   width: 40px;
-												text-align: center;" type="text" value="<%= item.quantity %>"
-													data-id="<%= item.product._id %>">
-												<button class="qty-inc" data-id="<%= item.product._id %>"><i
-														class="fa fa-plus"></i></button>
+							
+								<% cart.items.forEach(item=> { %>
+									<tr>
+										<td><img src="/static/uploads/<%= item.product.image[0] %>" alt="Product Image"
+												class="img-fluid"></td>
+										<td>
+											<%= item.product.name %>
+										</td>
+										<td>
+											<%= item.product.price %>
+										</td>
+										<td class="quantity__item">
+											<div class="quantity">
+												<div class="pro-qty-2" style="display: flex;">
+													<button class="qty-dec" data-id="<%= item.product._id %>"><i
+															class="fa fa-minus"></i></button>
+													<input style="   width: 40px;
+													text-align: center;" type="text" value="<%= item.quantity %>"
+														data-id="<%= item.product._id %>">
+													<button class="qty-inc" data-id="<%= item.product._id %>"><i
+															class="fa fa-plus"></i></button>
+												</div>
 											</div>
-										</div>
-
-									</td>
-									<td class="cart__price" data-id="<%= item.product._id %>">Rs <%= item.product.price * item.quantity %>
-									</td>
-									<td>
-										<button class="btn btn-danger btn-remove"
-											onclick="remove('<%= item._id %>')">Remove</button>
-									</td>
-								</tr>
-								<% }); %>
+	
+										</td>
+										<td class="cart__price" data-id="<%= item.product._id %>">Rs <%= item.product.price * item.quantity %>
+										</td>
+										<td>
+											<button class="btn btn-danger btn-remove"
+												onclick="remove('<%= item._id %>')">Remove</button>
+										</td>
+									</tr>
+									<% }); %>
+							
 						</table>
 						<div class="text-center mt-5">
 							<a href="/checkout"><button class="btn btn-primary btn-checkout">Proceed to
 									Checkout</button></a>
 						</div>
+						<% }else{ %>
+							<p>no Products in your cart</p>
+						<% } %>
 					</div>
 				</div>
 			</div>

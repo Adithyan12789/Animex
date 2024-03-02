@@ -137,7 +137,7 @@
                         <li class="active">
                             <a href="/addressManage">Address Management</a>
                         </li>
-                        <li><a href="/orders">Orders</a></li>
+                        <li><a href="/orderProfile">Orders</a></li>
                     </div>
                 </div>
                 <div class="col-md-10">
@@ -185,6 +185,45 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const form = document.querySelector(".edit-address-form");
+      
+          form.addEventListener("submit", function (event) {
+            const address1 = document.getElementById("address1").value;
+            const address2 = document.getElementById("address2").value;
+            const state = document.getElementById("state").value;
+            const city = document.getElementById("city").value;
+            const postalcode = document.getElementById("postalcode").value;
+            const country = document.getElementById("country").value;
+      
+            // Simple validation example
+            if (address1.trim() === "") {
+              alert("Please enter your address.");
+              event.preventDefault();
+              return;
+            }
+      
+            if (address2.trim() === "") {
+              alert("Please enter your street name.");
+              event.preventDefault();
+              return;
+            }
+      
+            // Additional validation rules can be added as needed
+      
+            // Postal code validation example
+            const postalCodeRegex = /^\d{5}$/;
+            if (!postalCodeRegex.test(postalcode)) {
+              alert("Please enter a valid postal code (5 digits).");
+              event.preventDefault();
+              return;
+            }
+          });
+        });
+      </script>
+      
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
         integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>

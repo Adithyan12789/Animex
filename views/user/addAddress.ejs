@@ -1,213 +1,265 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Animex - Add Address</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/static/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-      integrity="sha512-JDOvPXhfZgE/bs+FMqRf1rVHzAIn2tD5z5Q3zYqlv7qIYk5Nb57Ala9b2Di1D3FJf58po05MRV31/KBtCJnH7A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <style>
-      /* Add any additional styling specific to the add address page here */
-      body {
-        font-family: "Montserrat", sans-serif;
-        background-color: #f8f9fa;
-        margin: 0;
-        padding: 0;
-      }
-      .add-address-form {
-        background: #fff;
-        border-radius: 10px;
-        padding: 50px;
-        margin: 65px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        position: relative;
-      }
-      .add-address-form h3 {
-        color: #333;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #88c8bc;
-        padding-bottom: 10px;
-      }
-      .add-address-form label {
-        font-weight: bold;
-      }
-      .add-address-form input[type="text"],
-      .add-address-form input[type="email"],
-      .add-address-form input[type="tel"] {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-      }
-      .add-address-form .add-button {
-        background-color: #88c8bc;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        margin-top: 25px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-      .add-button:hover {
-        background-color: #488f82;
-      }
-      .sidebar {
-        background: #f8f9fa;
-        border-right: 1px solid #ddd;
-        padding: 20px;
-        height: 100%;
-        position: fixed;
-        left: 0;
-        top: 0;
-        overflow-y: auto;
-        margin-top: 100px;
-      }
-      .sidebar h4 {
-        margin-bottom: 40px;
-        color: #333;
-        border-bottom: 2px solid #88c8bc;
-        padding-bottom: 10px;
-      }
-      .sidebar ul {
-        list-style: none;
-        padding-left: 0;
-      }
-      .sidebar ul li {
-        margin-bottom: 10px;
-      }
-      .sidebar li a {
-        color: #333;
-        text-decoration: none;
-        display: block;
-        padding: 10px;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-        font-family: "Montserrat", sans-serif; /* Change the font family */
-      }
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>Animex - Add Address</title>
+      <meta charset="utf-8" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      />
+      <link
+        href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700"
+        rel="stylesheet"
+      />
+      <link
+        href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700"
+        rel="stylesheet"
+      />
+      <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="/static/css/style.css" />
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-JDOvPXhfZgE/bs+FMqRf1rVHzAIn2tD5z5Q3zYqlv7qIYk5Nb57Ala9b2Di1D3FJf58po05MRV31/KBtCJnH7A=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+      />
+      <style>
+        /* Add any additional styling specific to the add address page here */
+        body {
+          font-family: "Montserrat", sans-serif;
+          background-color: #f8f9fa;
+          margin: 0;
+          padding: 0;
+        }
+        .add-address-form {
+          background: #fff;
+          border-radius: 10px;
+          padding: 50px;
+          margin: 65px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+          position: relative;
+        }
+        .add-address-form h3 {
+          color: #333;
+          margin-bottom: 20px;
+          border-bottom: 2px solid #88c8bc;
+          padding-bottom: 10px;
+        }
+        .add-address-form label {
+          font-weight: bold;
+        }
+        .add-address-form input[type="text"],
+        .add-address-form input[type="email"],
+        .add-address-form input[type="tel"] {
+          width: 100%;
+          padding: 10px;
+          margin: 10px 0;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+          box-sizing: border-box;
+        }
+        .add-address-form .add-button {
+          background-color: #88c8bc;
+          color: #fff;
+          border: none;
+          padding: 10px 20px;
+          margin-top: 25px;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+        .add-button:hover {
+          background-color: #488f82;
+        }
+        .sidebar {
+          background: #f8f9fa;
+          border-right: 1px solid #ddd;
+          padding: 20px;
+          height: 100%;
+          position: fixed;
+          left: 0;
+          top: 0;
+          overflow-y: auto;
+          margin-top: 100px;
+        }
+        .sidebar h4 {
+          margin-bottom: 40px;
+          color: #333;
+          border-bottom: 2px solid #88c8bc;
+          padding-bottom: 10px;
+        }
+        .sidebar ul {
+          list-style: none;
+          padding-left: 0;
+        }
+        .sidebar ul li {
+          margin-bottom: 10px;
+        }
+        .sidebar li a {
+          color: #333;
+          text-decoration: none;
+          display: block;
+          padding: 10px;
+          border-radius: 5px;
+          transition: background-color 0.3s ease;
+          font-family: "Montserrat", sans-serif; /* Change the font family */
+        }
 
-      .sidebar li a:hover {
-        background-color: #88c8bc; /* Change background color on hover */
-        color: #fff; /* Change text color on hover */
-      }
+        .sidebar li a:hover {
+          background-color: #88c8bc; /* Change background color on hover */
+          color: #fff; /* Change text color on hover */
+        }
 
-      li {
-        list-style: none;
-        font-size: 17px;
-        font-weight: 400;
-        margin: 30px 0px;
-      }
-      .active {
-        background-color: #88c8bc;
-        border-radius: 5px;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="page">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-2">
-            <div class="sidebar">
-              <li><a href="/index">Home</a></li>
-              <li><a href="/profile">Profile</a></li>
-              <li class="active"><a href="/addressManage">Address Management</a></li>
-              <li><a href="/orders">Orders</a></li>
+        li {
+          list-style: none;
+          font-size: 17px;
+          font-weight: 400;
+          margin: 30px 0px;
+        }
+        .active {
+          background-color: #88c8bc;
+          border-radius: 5px;
+        }
+      </style>
+    </head>
+    <body>
+      <div id="page">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-2">
+              <div class="sidebar">
+                <li><a href="/index">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li class="active"><a href="/addressManage">Address Management</a></li>
+                <li><a href="/orderProfile">Orders</a></li>
+              </div>
             </div>
-          </div>
-          <div class="col-md-10">
-            <div class="add-address-form">
-              <h3>Add Address</h3>
-              <form action="/addAddress" method="POST">
-                <div class="form-group">
-                  <label for="address1">Address:</label>
-                  <input
-                    type="text"
-                    id="address1"
-                    name="address1"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="address2">Street Name:</label>
-                  <input
-                    type="text"
-                    id="address2"
-                    name="address2"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="state">State:</label>
-                  <input
-                    type="text"
-                    id="state"
-                    name="state"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="city">City:</label>
-                  <input
-                    type="text"
-                    id="city"
-                    name="city"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="postalCode">Postal Code:</label>
-                  <input
-                    type="text"
-                    id="postalCode"
-                    name="postalCode"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="country">Country:</label>
-                  <input
-                    type="text"
-                    id="country"
-                    name="country"
-                    required
-                  />
-                </div>
-                <button type="submit" class="add-button">Add Address</button>
-              </form>
+            <div class="col-md-10">
+              <div class="add-address-form">
+                <h3>Add Address</h3>
+                <form action="/addAddress" method="POST">
+                  <div class="form-group">
+                    <label for="address1">Address:</label>
+                    <input
+                      type="text"
+                      id="address1"
+                      name="address1"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="address2">Street Name:</label>
+                    <input
+                      type="text"
+                      id="address2"
+                      name="address2"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="state">State:</label>
+                    <input
+                      type="text"
+                      id="state"
+                      name="state"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="city">City:</label>
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="postalCode">Postal Code:</label>
+                    <input
+                      type="text"
+                      id="postalCode"
+                      name="postalCode"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="country">Country:</label>
+                    <input
+                      type="text"
+                      id="country"
+                      name="country"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="add-button">Add Address</button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
-      integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/popper.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-  </body>
-</html>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const form = document.querySelector(".add-address-form");
+      
+          form.addEventListener("submit", function (event) {
+            const address1 = document.getElementById("address1").value;
+            const address2 = document.getElementById("address2").value;
+            const state = document.getElementById("state").value;
+            const city = document.getElementById("city").value;
+            const postalCode = document.getElementById("postalCode").value;
+            const country = document.getElementById("country").value;
+      
+            if (address1.trim() === "") {
+              alert("Please enter Address Line 1.");
+              event.preventDefault();
+              return;
+            }
+      
+            if (address2.trim() === "") {
+              alert("Please enter Street Name.");
+              event.preventDefault();
+              return;
+            }
+      
+            if (state.trim() === "") {
+              alert("Please enter State.");
+              event.preventDefault();
+              return;
+            }
+      
+            if (city.trim() === "") {
+              alert("Please enter City.");
+              event.preventDefault();
+              return;
+            }
+      
+            if (postalCode.trim() === "") {
+              alert("Please enter Postal Code.");
+              event.preventDefault();
+              return;
+            }
+      
+            if (country.trim() === "") {
+              alert("Please enter Country.");
+              event.preventDefault();
+              return;
+            }
+          });
+        });
+      </script>
+      
+      <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
+        integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+      ></script>
+      <script src="/static/js/jquery.min.js"></script>
+      <script src="/static/js/popper.min.js"></script>
+      <script src="/static/js/bootstrap.min.js"></script>
+    </body>
+  </html>

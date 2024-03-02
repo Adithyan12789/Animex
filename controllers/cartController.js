@@ -2,6 +2,7 @@ const Cart = require("../models/Cart");
 const Product = require('../models/products');
 const User = require('../models/userModel');
 const Address = require('../models/address');
+const Order = require('../models/order');
 
 const cart = async (req, res) => {
     try {
@@ -53,20 +54,19 @@ const cartPage = async (req, res) => {
             userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
             await userCart.save();
         }
-        res.redirect("/cart");
+        res.redirect("/index");
     } catch (error) {
         console.error("Error adding item to cart:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 };
 
-// Function to update cart
 const updateCart = async (req, res) => {
     try {
         const userId = req.session.userID;
         const productId = req.body.productId;
         const action = req.body.action;
-        
+
         let userCart = await Cart.findOne({ userId }).populate('items.product');
 
         if (!userCart) {
@@ -85,11 +85,18 @@ const updateCart = async (req, res) => {
         if (action === "increment") {
             if (item.quantity < maxQuantity) {
                 item.quantity += 1;
+                item.price = item.product.price
+                userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+                await userCart.save();
             } else {
                 return res.json({ success: false, message: "Maximum quantity reached for this product" });
             }
         } else if (action === "decrement" && item.quantity > 1) {
             item.quantity -= 1;
+            item.price = item.product.price
+            userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            await userCart.save();
         } else {
             return res.json({ success: false, message: "Invalid action or quantity" });
         }
@@ -106,7 +113,6 @@ const updateCart = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
-
 
 const deleteCart = async (req, res) => {
     try {
@@ -134,28 +140,88 @@ const checkoutPage = async (req, res) => {
     try {
         const userId = req.session.userID;
 
-        // Retrieve user data from the database
-        const userdata = await User.findById(req.session.user);
+        const userdata = await User.findById(userId);
 
-
-        // Retrieve user's address from the database
         const userAddress = await Address.findOne({ userId });
 
-        const userCart = await Cart.findOne({userId}).populate("items.product")
+        const userCart = await Cart.findOne({ userId }).populate("items.product");
 
-        // Render the checkout page with the user's address data
-        res.render("user/checkout", { checkout: userAddress, user: userdata, totalPrice: userCart.totalPrice });
+        res.render("user/checkout", { checkout: userAddress, user: userdata, totalPrice: userCart ? userCart.totalPrice : 0 });
     } catch (err) {
-        // Handle errors
         console.error("Error in checkoutPage:", err);
         res.status(500).send("Internal Server Error");
     }
 };
+
+const placeOrder = async (req, res) => {
+    try {
+        const userId = req.session.userID;
+        const { id, totalPrice } = req.body;
+
+        // Check if an address is selected
+        if (!id) {
+            return res.status(400).json({ error: 'Please select an address' });
+        }
+
+        let userOrder = await Order.findOne({ userId });
+
+        if (!userOrder) {
+            userOrder = new Order({ userId, id, totalPrice });
+        }
+
+        userOrder.totalPrice = totalPrice;
+
+        const userCart = await Cart.findOne({ userId }).populate('items.product');
+
+        console.log("Cart:", userCart);
+
+        const user = await User.findById(userId);
+        const address = await Address.findOne({ userId });
+
+        const selectedAddress = address.addressDetails.find(a => id.includes(a._id.toString()));
+
+        if (selectedAddress) {
+            const orderItems = userCart.items.map(item => ({
+                product: item.product._id,
+                price: item.product.price,
+                quantity: item.quantity
+            }));
+
+            const order = new Order({
+                userId,
+                totalPrice,
+                billingDetails: {
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone,
+                    address1: selectedAddress.address1,
+                    address2: selectedAddress.address2,
+                    state: selectedAddress.state,
+                    city: selectedAddress.city,
+                    postalCode: selectedAddress.postalCode,
+                    country: selectedAddress.country
+                },
+                items: orderItems
+            });
+
+            await order.save();
+        } else {
+            return res.status(400).json({ error: 'Please select a valid address' });
+        }
+
+        res.redirect("/orderPage");
+    } catch (error) {
+        console.error("Error placing order:", error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
 
 module.exports = {
     cart,
     cartPage,
     updateCart,
     deleteCart,
-    checkoutPage
+    checkoutPage,
+    placeOrder
 };

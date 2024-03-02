@@ -29,8 +29,8 @@ const orderSchema = new mongoose.Schema({
     },
     billingDetails: {
         name: String,
-        addressLine1: String,
-        addressLine2: String,
+        address1: String,
+        address2: String,
         state: String,
         city: String,
         postalCode: String,
