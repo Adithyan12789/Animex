@@ -38,6 +38,14 @@ const orderSchema = new mongoose.Schema({
         phone: String,
         email: String
     },
+    paymentStatus: {
+        type: String,
+        default: 'pending'
+    },
+    orderStatus: {
+        type: String,
+        default: 'pending'
+    },
     orderDate: {
         type: Date,
         default: Date.now,

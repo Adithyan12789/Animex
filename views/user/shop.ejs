@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-	<title>Footwear - Free Bootstrap 4 Template by Colorlib</title>
+	<title>Animex - shop</title>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -36,17 +36,48 @@
 	<link rel="stylesheet" href="/static/css/style.css">
 
 	<style>
-		.prod-img {
-			position: relative;
-			display: inline-block;
-			overflow: hidden;
+
+        /* Apply Animation to Rating Elements */
+        .rating {
+			margin-top: 10px;
+			margin-bottom: 20px;
+        }
+
+		.checked{
+			color: yellow;	
 		}
-	
-		.prod-img:hover img {
-			transform: scale(1.1); /* adjust the scale factor as needed */
-			transition: transform 0.3s ease; /* adjust the transition duration as needed */
-		}
-	</style>
+
+        /* Other existing styles */
+        .prod-img {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .prod-img:hover img {
+            transform: scale(1.1); /* adjust the scale factor as needed */
+            transition: transform 0.3s ease; /* adjust the transition duration as needed */
+        }
+
+        .side.border.mb-1 ul li a {
+            color: black;
+            font-weight: 500;
+            display: block;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .side.border.mb-1 ul li a:hover {
+            background-color: #f8f9fa;
+        }
+
+        hr {
+            margin: 20px 20px;
+            background-color: aquamarine;
+            font-weight: 500;
+            height: 1px;
+        }
+    </style>
 
 	</head>
 	<body>
@@ -59,7 +90,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-7 col-md-9">
-							<div id="colorlib-logo"><a href="/index">Animex</a></div>
+							<div id="colorlib-logo"><a href="/">Animex</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
 			            <form action="#" class="search-wrap">
@@ -73,7 +104,7 @@
 					<div class="row">
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
-								<li><a href="/index">Home</a></li>
+								<li><a href="/">Home</a></li>
 								<li class="active"><a href="/shop">Shop</a></li>
 								<li><a href="about.ejs">About</a></li>
 								<li><a href="contact.ejs">Contact</a></li>
@@ -114,7 +145,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<p class="bread"><span><a href="/index">Home</a></span> / <span>Shop</span></p>
+						<p class="bread"><span><a href="/">Home</a></span> / <span>Shop</span></p>
 					</div>
 				</div>
 			</div>
@@ -128,38 +159,7 @@
 							<h2>Men's</h2>
 						</div>
 						<div class="menu text-center">
-							<p><a href="#">New Arrivals</a> <a href="#">Best Sellers</a> <a href="#">Extended Widths</a> <a href="#">Sale</a></p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="colorlib-featured">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-4 text-center">
-						<div class="featured">
-							<div class="featured-img featured-img-2" style="background-image: url(/static/images/ATKB6.webp);">
-								<h2>T-shirts</h2>
-								<p><a href="#" class="btn btn-primary btn-lg">Shop now</a></p>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-4 text-center">
-						<div class="featured">
-							<div class="featured-img featured-img-2" style="background-image: url(/static/images/AkiraHoodie8.webp);">
-								<h2>Hoodies</h2>
-								<p><a href="#" class="btn btn-primary btn-lg">Shop now</a></p>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-4 text-center">
-						<div class="featured">
-							<div class="featured-img featured-img-2" style="background-image: url(/static/images/ATKS2.webp);">
-								<h2>Shirts</h2>
-								<p><a href="#" class="btn btn-primary btn-lg">Shop now</a></p>
-							</div>
+							<p><a href="#">New Arrivals</a> <a href="#">Best Sellers</a> <a href="#">Popularity</a> <a href="#">Featured</a></p>
 						</div>
 					</div>
 				</div>
@@ -169,46 +169,85 @@
 		<div class="colorlib-product">
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
-						<h2>View All Products</h2>
-					</div>
-				</div>
-				<div class="row row-pb-md">
-					<% products.forEach(product => { %>
-					<div class="col-md-3 col-lg-3 mb-4 text-center">
-						<div class="product-entry border">
-							<a href="/product-details/<%= product._id %>" class="prod-img">
-								<img src="/static/uploads/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
-							</a>
-							<div class="desc">
-								<h2><a href="#"><%= product.name %></a></h2>
-								<% if (product.category) { %>
-									<h2><a href="#"><%= product.category.name %></a></h2>
-								<% } else { %>
-									<p>No category</p>
-								<% } %>
-								<span class="price">₹<%= product.price %></span>
-								<button class="btn btn-primary view-details" onclick="cart('<%= product._id %>')">
-									addTocart<i class="fas fa-cart-plus"></i> <!-- Add to Cart Icon -->
-								</button>
+					<div class="col-lg-12 col-xl-12">
+						
+						<div class="row row-pb-md" style="justify-content: end;">
+							<div class="col-lg-3 col-xl-3">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="side border mb-1">
+											<h3>Category</h3>
+											<hr>
+											<ul>
+												<li><a href="#">T-shirt</a></li>
+												<li><a href="#">Hoodie</a></li>
+												<li><a href="#">Shirt</a></li>
+											</ul>
+										</div>
+									</div>
+									<div class="col-sm-12">
+										<div class="side border mb-1">
+											<h3>Sort</h3>
+											<hr>
+											<ul>
+												<li><a href="#">Price: low to high</a></li>
+												<li><a href="#">Price: high to low</a></li>
+												<li><a href="#">Average ratings</a></li>
+												<li><a href="#">aA - zZ</a></li>
+												<li><a href="#">zZ - aA</a></li>
+											</ul>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+							<% products.forEach(product => { %>
+							<div class="col-md-3 col-lg-3 mb-4 text-center">
+								<div class="product-entry border">
+									<a href="/product-details/<%= product._id %>" class="prod-img">
+										<img src="/static/uploads/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+									</a>
+									<div class="desc">
+										<h2><a href="#"><%= product.name %></a></h2>
+										<% if (product.category) { %>
+											<h2><a href="#"><%= product.category.name %></a></h2>
+										<% } else { %>
+											<p>No category</p>
+										<% } %>
+										<span class="price">₹<%= product.price %></span>
+
+										<!-- Inside the loop where you display products -->
+                                        <div class="rating">
+                                        <!-- Static rating for demonstration purposes -->
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star"></span>
+                                            <span class="fa fa-star"></span>
+                                        </div>
+										<button class="btn btn-primary view-details" onclick="cart('<%= product._id %>')">
+											addTocart<i class="fas fa-cart-plus"></i> <!-- Add to Cart Icon -->
+										</button>
+									</div>
+								</div>
+							</div>
+							<% }) %>
+						</div>				
+						<div class="row">
+							<div class="col-md-12 text-center">
+								<div class="block-27">
+							   <ul>
+								   <li><a href="/shop?page=<%= currentPage - 1 %>"><i class="ion-ios-arrow-back"></i></a></li>
+								  <% for(i = 1 ; i <= totalPages ; i++){ %>
+									<li class="<%= currentPage == i ? "active": "" %> ">
+										<a href="/shop?page=<%= i %>"><span><%= i %></span></a>
+									</li>
+								  <% } %>
+								  <li><a href="/shop?page=<%= currentPage + 1 %>"><i class="ion-ios-arrow-forward"></i></a></li>
+							   </ul>
+							</div>
 							</div>
 						</div>
-					</div>
-					<% }) %>
-				</div>				
-				<div class="row">
-					<div class="col-md-12 text-center">
-						<div class="block-27">
-		               <ul>
-			               <li><a href="/shop?page=<%= currentPage - 1 %>"><i class="ion-ios-arrow-back"></i></a></li>
-						  <% for(i = 1 ; i <= totalPages ; i++){ %>
-							<li class="<%= currentPage == i ? "active": "" %> ">
-								<a href="/shop?page=<%= i %>"><span><%= i %></span></a>
-							</li>
-						  <% } %>
-		                  <li><a href="/shop?page=<%= currentPage + 1 %>"><i class="ion-ios-arrow-forward"></i></a></li>
-		               </ul>
-		            </div>
 					</div>
 				</div>
 			</div>
@@ -325,6 +364,17 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 	<!-- Your HTML content -->
+
+	<script>
+		document.getElementById('categorySelect').addEventListener('change', function() {
+			var categoryId = this.value;
+			var url = '/shop';
+			if (categoryId) {
+				url += '?category=' + categoryId;
+			}
+			window.location.href = url;
+		});
+	</script>
 
 	<script>
 		function cart(id) {

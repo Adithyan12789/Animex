@@ -59,7 +59,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-7 col-md-9">
-							<div id="colorlib-logo"><a href="/index">Animex</a></div>
+							<div id="colorlib-logo"><a href="/">Animex</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
 			            <form action="#" class="search-wrap">
@@ -73,7 +73,7 @@
 					<div class="row">
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
-								<li><a href="/index">Home</a></li>
+								<li><a href="/">Home</a></li>
 								<li class="active"><a href="/shop">Shop</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
@@ -111,7 +111,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<p class="bread"><span><a href="/index">Home</a></span> / <span>Product Details</span></p>
+						<p class="bread"><span><a href="/">Home</a></span> / <span>Product Details</span></p>
 					</div>
 				</div>
 			</div>
@@ -150,53 +150,13 @@
 								</span>
 							</p>
 							<p><%= product.description %></p>
-							<div class="size-wrap">
-								<div class="block-26 mb-2">
-									<h4>Size</h4>
-				               <ul>
-				                  <li><a href="#">7</a></li>
-				                  <li><a href="#">7.5</a></li>
-				                  <li><a href="#">8</a></li>
-				                  <li><a href="#">8.5</a></li>
-				                  <li><a href="#">9</a></li>
-				                  <li><a href="#">9.5</a></li>
-				                  <li><a href="#">10</a></li>
-				                  <li><a href="#">10.5</a></li>
-				                  <li><a href="#">11</a></li>
-				                  <li><a href="#">11.5</a></li>
-				                  <li><a href="#">12</a></li>
-				                  <li><a href="#">12.5</a></li>
-				                  <li><a href="#">13</a></li>
-				                  <li><a href="#">13.5</a></li>
-				                  <li><a href="#">14</a></li>
-				               </ul>
-				            </div>
-				            <div class="block-26 mb-4">
-									<h4>Width</h4>
-				               <ul>
-				                  <li><a href="#">M</a></li>
-				                  <li><a href="#">W</a></li>
-				               </ul>
-				            </div>
-							</div>
-                     <div class="input-group mb-4">
-                     	<span class="input-group-btn">
-                        	<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
-                           <i class="icon-minus2"></i>
-                        	</button>
-                    		</span>
-                     	<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
-                     	<span class="input-group-btn ml-1">
-                        	<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-                             <i class="icon-plus2"></i>
-                         </button>
-                     	</span>
-                  	</div>
+						</div>
+                     
                   	<div class="row">
-	                  	<div class="col-sm-12 text-center">
-							<button class="btn btn-primary view-details" onclick="cart('<%= product._id %>')">
-								addTocart<i class="fas fa-cart-plus"></i> <!-- Add to Cart Icon -->
-							</button>
+	                  	<div class="col-sm-12 text-right ml-4">
+								<button class="btn btn-primary view-details" onclick="cart('<%= product._id %>')">
+									addTocart<i class="fas fa-cart-plus"></i> <!-- Add to Cart Icon -->
+								</button>
 								</div>
 							</div>
 						</div>
@@ -538,7 +498,26 @@ $('.quantity-right-plus').click(function(e){
 
 });
 
+
+
 	</script>
+
+<script>
+    function cart(id) {
+        Swal.fire({
+            title: "Successfully added to cart!",
+            showCancelButton: false,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "OK"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/addTocart/" + id;
+            }
+        });
+    }
+</script>
+
 
 
 	</body>

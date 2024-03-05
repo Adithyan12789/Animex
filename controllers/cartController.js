@@ -54,7 +54,7 @@ const cartPage = async (req, res) => {
             userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
             await userCart.save();
         }
-        res.redirect("/index");
+        res.redirect("/");
     } catch (error) {
         console.error("Error adding item to cart:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -146,7 +146,7 @@ const checkoutPage = async (req, res) => {
 
         const userCart = await Cart.findOne({ userId }).populate("items.product");
 
-        res.render("user/checkout", { checkout: userAddress, user: userdata, totalPrice: userCart ? userCart.totalPrice : 0 });
+        res.render("user/checkout", { checkout: userAddress, user: userdata, totalPrice: userCart ? userCart.totalPrice : 0, product: userCart });
     } catch (err) {
         console.error("Error in checkoutPage:", err);
         res.status(500).send("Internal Server Error");
@@ -156,17 +156,19 @@ const checkoutPage = async (req, res) => {
 const placeOrder = async (req, res) => {
     try {
         const userId = req.session.userID;
-        const { id, totalPrice } = req.body;
+        const { addressId, totalPrice } = req.body;
+
+        console.log("23234234",addressId)
 
         // Check if an address is selected
-        if (!id) {
+        if (!addressId) {
             return res.status(400).json({ error: 'Please select an address' });
         }
 
         let userOrder = await Order.findOne({ userId });
 
         if (!userOrder) {
-            userOrder = new Order({ userId, id, totalPrice });
+            userOrder = new Order({ userId, addressId, totalPrice });
         }
 
         userOrder.totalPrice = totalPrice;
@@ -178,7 +180,9 @@ const placeOrder = async (req, res) => {
         const user = await User.findById(userId);
         const address = await Address.findOne({ userId });
 
-        const selectedAddress = address.addressDetails.find(a => id.includes(a._id.toString()));
+        const selectedAddress = address.addressDetails.find(a => addressId.includes(a._id.toString()));
+
+        console.log("sdfsdfswd", selectedAddress)
 
         if (selectedAddress) {
             const orderItems = userCart.items.map(item => ({
@@ -217,11 +221,45 @@ const placeOrder = async (req, res) => {
 };
 
 
+
+
+
+
+
+
+
+
+
+//Admin - Side
+
+
+const orderDetails = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const userId = req.session.userID;
+
+        // Find the user based on userId
+        const user = await User.findById(userId);
+
+        // Find the order details and populate the product details
+        const order = await Order.findById(id).populate("items.product");
+
+        const userCart = await Cart.findOne({ userId })
+
+        res.render("admin/orderDetails", { order, user ,totalPrice: userCart ? userCart.totalPrice : 0});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+}
+
 module.exports = {
     cart,
     cartPage,
     updateCart,
     deleteCart,
     checkoutPage,
-    placeOrder
+    placeOrder,
+    orderDetails
 };

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Animex</title>
+	<title>Animex - Cart</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -128,7 +128,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-7 col-md-9">
-							<div id="colorlib-logo"><a href="/index">Animex</a></div>
+							<div id="colorlib-logo"><a href="/">Animex</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
 							<form action="#" class="search-wrap">
@@ -143,7 +143,7 @@
 					<div class="row">
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
-								<li><a href="/index">Home</a></li>
+								<li><a href="/">Home</a></li>
 								<li><a href="/shop">Shop</a></li>
 								<li><a href="about.ejs">About</a></li>
 								<li><a href="contact.ejs">Contact</a></li>
@@ -186,7 +186,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<p class="bread"><span><a href="index.html">Home</a></span> / <span>Shopping Cart</span></p>
+						<p class="bread"><span><a href="/">Home</a></span> / <span>Shopping Cart</span></p>
 					</div>
 				</div>
 			</div>
@@ -224,13 +224,17 @@
 										<td class="quantity__item">
 											<div class="quantity">
 												<div class="pro-qty-2" style="display: flex;">
-													<button class="qty-dec" data-id="<%= item.product._id %>"><i
-															class="fa fa-minus"></i></button>
-													<input style="   width: 40px;
-													text-align: center;" type="text" value="<%= item.quantity %>"
-														data-id="<%= item.product._id %>">
-													<button class="qty-inc" data-id="<%= item.product._id %>"><i
-															class="fa fa-plus"></i></button>
+
+													<button class="qty-dec" data-id="<%= item.product._id %>">
+														<i class="fa fa-minus"></i>
+													</button>
+
+													<input style="width: 40px;text-align: center;" type="text" value="<%= item.quantity %>" data-id="<%= item.product._id %>">
+													
+													<button class="qty-inc" data-id="<%= item.product._id %>">
+														<i class="fa fa-plus"></i>
+													</button>
+													
 												</div>
 											</div>
 	

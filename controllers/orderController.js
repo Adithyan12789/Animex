@@ -2,6 +2,25 @@ const Order = require("../models/order");
 const User = require("../models/userModel");
 const Address = require("../models/address");
 
+//Admin - Side  Code
+
+const orderListPage = async (req,res) => {
+    const userId = req.session.userID;
+
+    try {
+        const orders = await Order.find({ userId }).populate("items.product");
+
+        res.render("admin/orderList", { orders });
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        res.status(500).send("Error fetching orders");
+    }
+}
+
+
+
+//User Side Code
+
 const ordersProfilePage = async (req, res) => {
     const userId = req.session.userID;
 
@@ -48,70 +67,43 @@ const orderPage = (req, res) => {
 
 
 
-const defaultAddress = async (req, res) => {
-    const userId = req.session.userID;
-    const addressId = req.body.addressId;
 
-    console.log("hi ")
-    console.log(userId)
-    console.log(addressId)
-
+// Assuming you have a route like /cancelOrder/:orderId
+const cancelOrder = async (req, res) => {
     try {
-        const userAddress = await Address.findOne({ userId });
-
-        if (!userAddress) {
-            console.log("User Details not found");
-            return res.status(404).json({ success: false, message: "User Details not found" });
-        }
-
-        userAddress.addressDetails.forEach(address => {
-            address.isDefault = userAddress._id.toString() === addressId;
-        });
-
-        await userAddress.save();
-
-        res.json({
-            success: true,
-            message: "Default Address Updated successfully",
-        });
-    } catch (error) {
-        console.error("Error updating default address:", error);
-        res.status(500).json({ success: false, error: 'Internal server error' });
-    }
-};
-
-
-const deleteOrder = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const userId = req.session.userID;
-
-        // Find the order by ID and user ID
-        const order = await Order.findOne({ _id: id, userId });
-
-        // If order not found, return 404
+        const orderId = req.params.orderId;
+        
+        // Fetch the order from the database
+        const order = await Order.findById(orderId);
+        
         if (!order) {
-            return res.status(404).send("Order not found");
+            return res.status(404).json({ error: 'Order not found' });
         }
+        
+        // Update the order status to "canceled"
+        order.orderStatus = 'canceled';
+        await order.save();``
 
-        // Delete the order
-        await order.deleteOne();
-
-        // Redirect to the order profile page
-        res.redirect("/orderProfile");
+        res.redirect("/orderProfile")
     } catch (error) {
-        console.error("Error deleting order:", error);
-        return res.status(500).json({ message: "Internal server error" });
+        console.error('Error canceling order:', error);
+        return res.status(500).json({ error: 'Internal server error' });
     }
-};
+}
+
 
 
 
 
 module.exports = {
+    //admin-side
+
+    orderListPage,
+
+
+    //User-side
     ordersProfilePage,
     trackOrderPage,
     orderPage,
-    defaultAddress,
-    deleteOrder
+    cancelOrder
 };

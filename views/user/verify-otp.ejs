@@ -80,62 +80,64 @@
 </head>
 <body>
     <!-- OTP Verification Page -->
-    <!-- OTP Verification Page -->
-<div class="container">
-    <div class="card">
-        <div class="card-body">
-            <h2 class="fw-bold mb-4 text-center" style="color: #088178;">OTP Verification</h2>
-            <p class="text-center text-muted">We've sent a verification code to your email. Please enter the code below:</p>
-
-            <!-- Add this form in your otp.ejs file -->
-            <form method="post" action="/verifyOtp">
-                <input type="hidden" name="email" value="<%= email %>">
-                <label for="otp" class="form-label">Enter OTP:</label>
-                <input type="text" name="otp" class="form-control" required>
-                <button type="submit" class="btn">Verify OTP</button>
-            </form>
-        </div>
-        <div class="card-footer">
-            <p class="mb-0">Didn't receive the code? <span id="timer">60</span> <a href="/resend-otp" id="resendLink" class="footer-link">Resend</a></p>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="fw-bold mb-4 text-center" style="color: #088178;">OTP Verification</h2>
+                <p class="text-center text-muted">We've sent a verification code to your email. Please enter the code below:</p>
+                <% if(locals.message) { %>
+                    <div class="alert alert-danger"><%= locals.message %></div>
+                <% } %>
+                <!-- Add this form in your otp.ejs file -->
+                <form method="post" action="/verifyOtp">
+                    <input type="hidden" name="email" value="<%= email %>">
+                    <label for="otp" class="form-label">Enter OTP:</label>
+                    <input type="text" name="otp" class="form-control" required>
+                    <button type="submit" class="btn">Verify OTP</button>
+                </form>
+            </div>
+            <div class="card-footer">
+                <p class="mb-0">Wait 1 minute for resend otp <span id="timer"></span> <a href="/resend-otp" id="resendLink" class="footer-link" style="display:none;">Resend</a></p>
+            </div>
         </div>
     </div>
-</div>
 
      
-<script>
-    // Function to start the OTP resend timer
-    function startTimer(duration, display) {
-        var timer = duration, minutes, seconds;
-        setInterval(function () {
-            minutes = parseInt(timer / 60, 10);
-            seconds = parseInt(timer % 60, 10);
-
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-
-            display.textContent = minutes + ":" + seconds;
-
-            if (--timer < 0) {
-                // Timer expired, show resend link
+    <script>
+        // Function to start the OTP resend timer
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+    
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+    
+                display.textContent = minutes + ":" + seconds;
+    
+                if (--timer < 0) {
+                    // Timer expired, show resend link
+                    document.getElementById('resendLink').style.display = 'inline';
+                    display.style.display = 'none'; // Hide the timer
+                }
+            }, 1000);
+        }
+    
+        // Start the timer when the page loads
+        window.onload = function () {
+            var duration = 60; // Duration in seconds
+            var display = document.querySelector('#timer');
+            startTimer(duration, display);
+            
+            // Show resend link after one minute
+            setTimeout(function () {
                 document.getElementById('resendLink').style.display = 'inline';
                 display.style.display = 'none'; // Hide the timer
-            }
-        }, 1000);
-    }
-
-    // Start the timer when the page loads
-    window.onload = function () {
-        var duration = 60; // Duration in seconds
-        var display = document.querySelector('#timer');
-        startTimer(duration, display);
-        
-        // Show resend link after one minute
-        setTimeout(function () {
-            document.getElementById('resendLink').style.display = 'inline';
-            display.style.display = 'none'; // Hide the timer
-        }, 60000); // 60 seconds = 1 minute
-    };
-</script>
+            }, 60000); // 60 seconds = 1 minute
+        };
+    </script>
+    
 
 
 

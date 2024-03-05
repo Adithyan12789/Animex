@@ -109,7 +109,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-7 col-md-9">
-							<div id="colorlib-logo"><a href="/index">Animex</a></div>
+							<div id="colorlib-logo"><a href="/">Animex</a></div>
 						</div>
 						<div class="col-sm-5 col-md-3">
 							<form action="#" class="search-wrap">
@@ -124,15 +124,18 @@
 					<div class="row">
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
-								<li class="active"><a href="/index">Home</a></li>
+								<li class="active"><a href="/">Home</a></li>
 								<li><a href="/shop">Shop</a></li>
 								<li><a href="about.ejs">About</a></li>
 								<li><a href="contact.ejs">Contact</a></li>
 								<li style="float: right;"><a href="/profile"><i
 											class="fa-regular fa-circle-user fa-2x"></i></a></li>
 								<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-								<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
-
+								<% if(user) { %>
+                                    <li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
+								<% } else { %>
+                                    <li class="login"><a href="userlogin"><i class="login-Page"></i> Login</a></li>
+                                <% } %>
 							</ul>
 						</div>
 					</div>
@@ -237,7 +240,7 @@
 				<div class="row">
 					<div class="col-sm-6 text-center">
 						<div class="featured">
-							<a href="#" class="featured-img"
+							<a href="/shop" class="featured-img"
 								style="background-image: url(/static/images/Mob6.webp);"></a>
 							<div class="desc">
 								<h2><a href="#">Shop Men's Collection</a></h2>
@@ -246,7 +249,7 @@
 					</div>
 					<div class="col-sm-6 text-center">
 						<div class="featured">
-							<a href="#" class="featured-img"
+							<a href="/shop" class="featured-img"
 								style="background-image: url(/static/images/BASIC-WASHED-HOODIE-1.webp);"></a>
 							<div class="desc">
 								<h2><a href="#">Shop Women's Collection</a></h2>

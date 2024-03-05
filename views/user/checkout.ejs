@@ -1,517 +1,641 @@
-	<!DOCTYPE HTML>
-	<html>
+		<!DOCTYPE HTML>
+		<html>
 
-	<head>
-		<title>Animex</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<head>
+			<title>Animex</title>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
 
-		<!-- Animate.css -->
-		<link rel="stylesheet" href="/static/css/animate.css">
-		<!-- Icomoon Icon Fonts-->
-		<link rel="stylesheet" href="/static/css/icomoon.css">
-		<!-- Ion Icon Fonts-->
-		<link rel="stylesheet" href="/static/css/ionicons.min.css">
-		<!-- Bootstrap  -->
-		<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+			<!-- Animate.css -->
+			<link rel="stylesheet" href="/static/css/animate.css">
+			<!-- Icomoon Icon Fonts-->
+			<link rel="stylesheet" href="/static/css/icomoon.css">
+			<!-- Ion Icon Fonts-->
+			<link rel="stylesheet" href="/static/css/ionicons.min.css">
+			<!-- Bootstrap  -->
+			<link rel="stylesheet" href="/static/css/bootstrap.min.css">
 
-		<!-- Magnific Popup -->
-		<link rel="stylesheet" href="/static/css/magnific-popup.css">
+			<!-- Magnific Popup -->
+			<link rel="stylesheet" href="/static/css/magnific-popup.css">
 
-		<!-- Flexslider  -->
-		<link rel="stylesheet" href="/static/css/flexslider.css">
+			<!-- Flexslider  -->
+			<link rel="stylesheet" href="/static/css/flexslider.css">
 
-		<!-- Owl Carousel -->
-		<link rel="stylesheet" href="/static/css/owl.carousel.min.css">
-		<link rel="stylesheet" href="/static/css/owl.theme.default.min.css">
+			<!-- Owl Carousel -->
+			<link rel="stylesheet" href="/static/css/owl.carousel.min.css">
+			<link rel="stylesheet" href="/static/css/owl.theme.default.min.css">
 
-		<!-- Date Picker -->
-		<link rel="stylesheet" href="/static/css/bootstrap-datepicker.css">
-		<!-- Flaticons  -->
-		<link rel="stylesheet" href="/static/fonts/flaticon/font/flaticon.css">
+			<!-- Date Picker -->
+			<link rel="stylesheet" href="/static/css/bootstrap-datepicker.css">
+			<!-- Flaticons  -->
+			<link rel="stylesheet" href="/static/fonts/flaticon/font/flaticon.css">
 
-		<!-- Theme style  -->
-		<link rel="stylesheet" href="/static/css/style.css">
+			<!-- Theme style  -->
+			<link rel="stylesheet" href="/static/css/style.css">
 
-		<script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
+			<script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
 
-		<style>
-			.radio-box{
-				display: flex;
-			}
-			.prod-img {
-				position: relative;
-				display: inline-block;
-				overflow: hidden;
-			}
+			<style>
+				.radio-box {
+					display: flex;
+				}
+		
+				.prod-img {
+					position: relative;
+					display: inline-block;
+					overflow: hidden;
+				}
+		
+				.addressBox {
+					padding: 50px;
+				}
+		
+				.addressBox h2 {
+					color: #333;
+					margin-bottom: 20px;
+					border-bottom: 2px solid #88c8bc;
+					padding-bottom: 10px;
+				}
+		
+				p {
+					color: black;
+					font-weight: 400;
+				}
+		
+				.prod-img i {
+					position: absolute;
+					top: 310px;
+					right: 25px;
+					font-size: 24px;
+					color: #fff;
+					z-index: 2;
+					transition: transform 0.3s ease;
+					/* Added transition property */
+				}
+		
+				.prod-img i:hover {
+					transform: scale(1.1);
+				}
+		
+				.prod-img:hover img {
+					transform: scale(1.1);
+					transition: transform 0.3s ease;
+				}
+		
+				.address-box {
+					background: #fff;
+					border-radius: 8px;
+					box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+					padding: 20px;
+					margin-bottom: 20px;
+				}
+		
+				.address-box h3 {
+					color: #333;
+					font-size: 1.2rem;
+					margin-bottom: 15px;
+					border-bottom: 2px solid #88c8bc;
+					padding-bottom: 10px;
+				}
+		
+				.address-details p {
+					color: #000000;
+					margin-bottom: 10px;
+					font-size: 0.9rem;
+					line-height: 1.6;
+					font-weight: 500;
+				}
+		
+				.action-buttons {
+					margin-left: 40px;
+				}
+		
+				/* View Details Button */
+				.view-details {
+					background-color: #007bff;
+					/* Blue color, you can adjust as needed */
+					color: #fff;
+					/* Text color */
+					padding: 10px 20px;
+					/* Add some padding for better spacing */
+					border: none;
+					/* Remove border */
+					border-radius: 5px;
+					/* Rounded corners */
+					transition: background-color 0.3s ease;
+					/* Smooth transition */
+				}
+		
+				.view-details:hover {
+					background-color: #0056b3;
+					/* Darker shade on hover */
+				}
+		
+				/* Add to Cart Icon Button */
+				.btn-update {
+					background-color: #28a745;
+					/* Green color for add to cart button */
+					color: #fff;
+					/* Text color */
+					padding: 10px 20px;
+					/* Adjust padding */
+					border: none;
+					/* Remove border */
+					border-radius: 5px;
+					/* Rounded corners */
+					cursor: pointer;
+					/* Show pointer on hover */
+					transition: background-color 0.3s ease;
+					/* Smooth transition */
+				}
+		
+				.btn-update:hover {
+					background-color: #218838;
+					/* Darker shade of green on hover */
+				}
+		
+				.profile-info {
+					background: #fff;
+					border-radius: 10px;
+					padding: 50px;
+					max-width: 800px;
+					box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+					position: relative;
+				}
+		
+				.profile-info h3 {
+					color: #333;
+					margin-bottom: 20px;
+					border-bottom: 2px solid #88c8bc;
+					padding-bottom: 10px;
+				}
+		
+				.profile-info p {
+					color: #000000;
+					margin-bottom: 15px;
+					line-height: 1.6;
+					font-weight: 500;
+				}
+		
+				.colorlib-product {
+					padding: 7em 0 0 0;
+					clear: both;
+				}
+		
+				/* Payment method styles */
+				.payment-options {
+					margin-bottom: 20px;
+				}
+		
+				.payment-label {
+					display: block;
+					position: relative;
+					padding-left: 35px;
+					margin-bottom: 12px;
+					cursor: pointer;
+					font-size: 18px;
+					user-select: none;
+				}
+		
+				.payment-label input {
+					position: absolute;
+					opacity: 0;
+					cursor: pointer;
+				}
+		
+				.checkmark {
+					position: absolute;
+					top: 0;
+					left: 0;
+					height: 25px;
+					width: 25px;
+					background-color: #eee;
+					border-radius: 50%;
+				}
+		
+				.payment-label:hover input~.checkmark {
+					background-color: #ccc;
+				}
+		
+				.payment-label input:checked~.checkmark {
+					background-color: #2196F3;
+				}
+		
+				.checkmark:after {
+					content: "";
+					position: absolute;
+					display: none;
+				}
+		
+				.payment-label input:checked~.checkmark:after {
+					display: block;
+				}
+		
+				.payment-label .checkmark:after {
+					left: 9px;
+					top: 5px;
+					width: 7px;
+					height: 14px;
+					border: solid white;
+					border-width: 0 3px 3px 0;
+					transform: rotate(45deg);
+				}
+			</style>
 
-			.addressBox{
-				padding: 50px;
-			}
+		</head>
 
-			.addressBox h2{
-				color: #333;
-				margin-bottom: 20px;
-				border-bottom: 2px solid #88c8bc;
-				padding-bottom: 10px;
-			}
+		<body>
 
-			.addressBox p{
-				color: black;
-				font-weight: 500;
-			}
+			<div class="colorlib-loader"></div>
 
-			.prod-img i {
-				position: absolute;
-				top: 310px;
-				right: 25px;
-				font-size: 24px;
-				color: #fff;
-				z-index: 2;
-				transition: transform 0.3s ease;
-				/* Added transition property */
-			}
-
-			.prod-img i:hover {
-				transform: scale(1.1);
-			}
-
-
-			.prod-img:hover img {
-				transform: scale(1.1);
-				transition: transform 0.3s ease;
-			}
-
-			.address-box {
-				background: #fff;
-				border-radius: 8px;
-				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-				padding: 20px;
-				margin-bottom: 20px;
-			}
-			.address-box h3 {
-				color: #333;
-				font-size: 1.2rem;
-				margin-bottom: 15px;
-				border-bottom: 2px solid #88c8bc;
-				padding-bottom: 10px;
-			}
-			.address-details p {
-				color: #000000;
-				margin-bottom: 10px;
-				font-size: 0.9rem;
-				line-height: 1.6;
-				font-weight: 500;
-			}
-			.action-buttons{
-				margin-left: 40px;
-			}
-
-			/* View Details Button */
-			.view-details {
-				background-color: #007bff;
-				/* Blue color, you can adjust as needed */
-				color: #fff;
-				/* Text color */
-				padding: 10px 20px;
-				/* Add some padding for better spacing */
-				border: none;
-				/* Remove border */
-				border-radius: 5px;
-				/* Rounded corners */
-				transition: background-color 0.3s ease;
-				/* Smooth transition */
-			}
-
-			.view-details:hover {
-				background-color: #0056b3;
-				/* Darker shade on hover */
-			}
-
-			/* Add to Cart Icon Button */
-			.btn-update {
-				background-color: #28a745;
-				/* Green color for add to cart button */
-				color: #fff;
-				/* Text color */
-				padding: 10px 20px;
-				/* Adjust padding */
-				border: none;
-				/* Remove border */
-				border-radius: 5px;
-				/* Rounded corners */
-				cursor: pointer;
-				/* Show pointer on hover */
-				transition: background-color 0.3s ease;
-				/* Smooth transition */
-			}
-
-			.btn-update:hover {
-				background-color: #218838;
-				/* Darker shade of green on hover */
-			}
-
-			.profile-info {
-				background: #fff;
-				border-radius: 10px;
-				padding: 50px;
-				max-width: 800px;
-				box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-				position: relative;
-			}
-
-			.profile-info h3 {
-				color: #333;
-				margin-bottom: 20px;
-				border-bottom: 2px solid #88c8bc;
-				padding-bottom: 10px;
-			}
-
-			.profile-info p {
-				color: #000000;
-				margin-bottom: 15px;
-				line-height: 1.6;
-				font-weight: 500;
-			}
-		</style>
-
-	</head>
-
-	<body>
-
-		<div class="colorlib-loader"></div>
-
-		<div id="page">
-			<nav class="colorlib-nav" role="navigation">
-				<div class="top-menu">
-					<div class="container">
-						<div class="row">
-							<div class="col-sm-7 col-md-9">
-								<div id="colorlib-logo"><a href="/index">Animex</a></div>
+			<div id="page">
+				<nav class="colorlib-nav" role="navigation">
+					<div class="top-menu">
+						<div class="container">
+							<div class="row">
+								<div class="col-sm-7 col-md-9">
+									<div id="colorlib-logo"><a href="/">Animex</a></div>
+								</div>
+								<div class="col-sm-5 col-md-3">
+									<form action="#" class="search-wrap">
+										<div class="form-group">
+											<input type="search" class="form-control search" placeholder="Search">
+											<button class="btn btn-primary submit-search text-center" type="submit"><i
+													class="icon-search"></i></button>
+										</div>
+									</form>
+								</div>
 							</div>
-							<div class="col-sm-5 col-md-3">
-								<form action="#" class="search-wrap">
-									<div class="form-group">
-										<input type="search" class="form-control search" placeholder="Search">
-										<button class="btn btn-primary submit-search text-center" type="submit"><i
-												class="icon-search"></i></button>
-									</div>
-								</form>
+							<div class="row">
+								<div class="col-sm-12 text-left menu-1">
+									<ul>
+										<li class="active"><a href="/">Home</a></li>
+										<li><a href="/shop">Shop</a></li>
+										<li><a href="about.ejs">About</a></li>
+										<li><a href="contact.ejs">Contact</a></li>
+										<li style="float: right;"><a href="/profile"><i
+													class="fa-regular fa-circle-user fa-2x"></i></a></li>
+										<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+										<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
+
+									</ul>
+								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-sm-12 text-left menu-1">
-								<ul>
-									<li class="active"><a href="/index">Home</a></li>
-									<li><a href="/shop">Shop</a></li>
-									<li><a href="about.ejs">About</a></li>
-									<li><a href="contact.ejs">Contact</a></li>
-									<li style="float: right;"><a href="/profile"><i
-												class="fa-regular fa-circle-user fa-2x"></i></a></li>
-									<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-									<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
+					</div>
+					<div class="sale">
+						<div class="container">
+							<div class="row">
+								<div class="col-sm-8 offset-sm-2 text-center">
+									<div class="row">
+										<div class="owl-carousel2">
+											<div class="item">
+												<div class="col">
+													<h3><a href="#">25% off (Almost) Everything! Use Code: Summer Sale</a></h3>
+												</div>
+											</div>
+											<div class="item">
+												<div class="col">
+													<h3><a href="#">Our biggest sale yet 50% off all T-shirt</a></h3>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</nav>
 
+				<div class="breadcrumbs">
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								<p class="bread"><span><a href="index.html">Home</a></span> / <span>Checkout</span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<form id="orderForm" action="/order" method="POST">
+					<!-- Billing details -->
+					<div class="colorlib-product">
+						<div class="container">
+							<div class="row">
+								<!-- Billing Details -->
+								<div class="col-lg-8">
+									<div class="col-md-12">
+										<div class="profile-info">
+											<h3>Billing Details</h3>
+											<p><i class="fas fa-user"></i> Name: <%= user.name %>
+											</p>
+											<p><i class="fa-solid fa-envelope"></i> Email: <%= user.email %>
+											</p>
+											<p><i class="fas fa-phone"></i> Phone: <%= user.mobile %>
+											</p>
+										</div>
+									</div>
+		
+									<div class="row addressBox">
+										
+										<h3>Select Address</h3>
+										<div class="col-md-12">
+											<div id="addressError" class="alert alert-success mt-4" style="color: black; font-weight: 500; ">
+												Please select an address.
+											</div>
+											<% if (checkout && checkout.addressDetails && checkout.addressDetails.length > 0) { %>
+												<% checkout.addressDetails.forEach((address, index) => { %>
+													<div class="address-box" id="address<%= index + 1 %>">
+														<label>
+															<div class="radio-box">
+																<input style="margin: 3px 20px 32px 0px;" type="radio" name="addressId" value="<%= address._id %>" >
+																<h3 onclick="toggleAddressDetails('<%= index + 1 %>', '<%= address._id %>')">Address <%= index + 1 %></h3>
+															</div>																											
+														</label>
+														<div class="address-details" style="display: none;">
+															<p>Address: <%= address.address1 %></p>
+															<p>Street Name: <%= address.address2 %></p>
+															<p>City: <%= address.city %></p>
+															<p>State: <%= address.state %></p>
+															<p>Postal Code: <%= address.postalCode %></p>
+															<p>Country: <%= address.country %></p>
+															<a href="/editAddress/<%= address._id %>"><button class="btn btn-secondary">Edit Address</button></a>
+														</div>
+													</div>		
+																							
+												<% }) %>
+											<% } else { %>
+												<p>No address found</p>
+											<% } %>                                        
+										</div>
+									</div>
+									
+									
+								</div>
+		
+								<!-- Payment Method -->
+								<div class="col-lg-4">
+									<div class="row">
+										<div class="w-100"></div>
+										<div class="col-md-12">
+											<div class="cart-detail">
+												<h2>Payment Method</h2>
+
+												<div class="form-group">
+													<div class="col-md-12">
+														<h3>Product Names:</h3>
+														<% if (product && product.items && product.items.length > 0) { %>
+															<% product.items.forEach(item => { %>
+																<p><%= item.product.name %></p>
+															<% }) %>
+														<% } else { %>
+															<p>No items in the cart</p>
+														<% } %>
+													</div>
+												</div>
+												
+								
+												<div class="form-group">
+													<div class="col-md-12">
+														<h3>TotalPrice - <%= totalPrice %></h3>
+														<input type="hidden" name="totalPrice" value="<%= totalPrice %>">
+													</div>
+												</div>
+								
+												<div class="form-group">
+													<div class="col-md-12">
+														<div class="radio">
+															<label><input type="radio" name="optradio" value="cash_on_delivery"> Cash on Delivery</label>
+														</div>
+													</div>
+													<div id="paymentError" class="alert alert-success mt-4" style="color: black; font-weight: 500; ">
+														Please select a payment method before placing the order.
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12 text-center">
+											
+											<!-- Your form fields -->
+											<div class="col-md-12 text-center">
+												<button type="submit" class="btn btn-primary" onclick="return placeOrder();">Place an order</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					
+				</form>
+
+				<div class="container">
+					
+					<div class="action-buttons">
+						<a href="/addAddress"><button class="btn btn-primary">Add New Address</button></a>
+					</div>
+				</div>
+				
+				</div>
+
+				<footer id="colorlib-footer" role="contentinfo">
+					<div class="container">
+						<div class="row row-pb-md">
+							<div class="col footer-col colorlib-widget">
+								<h4>About Footwear</h4>
+								<p>Even the all-powerful Pointing has no control about the blind texts it is an almost
+									unorthographic life</p>
+								<p>
+								<ul class="colorlib-social-icons">
+									<li><a href="#"><i class="icon-twitter"></i></a></li>
+									<li><a href="#"><i class="icon-facebook"></i></a></li>
+									<li><a href="#"><i class="icon-linkedin"></i></a></li>
+									<li><a href="#"><i class="icon-dribbble"></i></a></li>
+								</ul>
+								</p>
+							</div>
+							<div class="col footer-col colorlib-widget">
+								<h4>Customer Care</h4>
+								<p>
+								<ul class="colorlib-footer-links">
+									<li><a href="#">Contact</a></li>
+									<li><a href="#">Returns/Exchange</a></li>
+									<li><a href="#">Gift Voucher</a></li>
+									<li><a href="#">Wishlist</a></li>
+									<li><a href="#">Special</a></li>
+									<li><a href="#">Customer Services</a></li>
+									<li><a href="#">Site maps</a></li>
+								</ul>
+								</p>
+							</div>
+							<div class="col footer-col colorlib-widget">
+								<h4>Information</h4>
+								<p>
+								<ul class="colorlib-footer-links">
+									<li><a href="#">About us</a></li>
+									<li><a href="#">Delivery Information</a></li>
+									<li><a href="#">Privacy Policy</a></li>
+									<li><a href="#">Support</a></li>
+									<li><a href="#">Order Tracking</a></li>
+								</ul>
+								</p>
+							</div>
+
+							<div class="col footer-col">
+								<h4>News</h4>
+								<ul class="colorlib-footer-links">
+									<li><a href="blog.html">Blog</a></li>
+									<li><a href="#">Press</a></li>
+									<li><a href="#">Exhibitions</a></li>
+								</ul>
+							</div>
+
+							<div class="col footer-col">
+								<h4>Contact Information</h4>
+								<ul class="colorlib-footer-links">
+									<li>291 South 21th Street, <br> Suite 721 New York NY 10016</li>
+									<li><a href="tel://1234567920">+ 1235 2355 98</a></li>
+									<li><a href="mailto:info@yoursite.com">info@yoursite.com</a></li>
+									<li><a href="#">yoursite.com</a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="sale">
-					<div class="container">
+					<div class="copy">
 						<div class="row">
-							<div class="col-sm-8 offset-sm-2 text-center">
-								<div class="row">
-									<div class="owl-carousel2">
-										<div class="item">
-											<div class="col">
-												<h3><a href="#">25% off (Almost) Everything! Use Code: Summer Sale</a></h3>
-											</div>
-										</div>
-										<div class="item">
-											<div class="col">
-												<h3><a href="#">Our biggest sale yet 50% off all T-shirt</a></h3>
-											</div>
-										</div>
-									</div>
-								</div>
+							<div class="col-sm-12 text-center">
+								<p>
+									<span><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+										Copyright &copy;
+										<script>document.write(new Date().getFullYear());</script> All rights reserved | This
+										template is made with <i class="icon-heart" aria-hidden="true"></i> by <a
+											href="https://colorlib.com" target="_blank">Colorlib</a>
+										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+									</span>
+									<span class="block">Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a>
+										, <a href="http://pexels.com/" target="_blank">Pexels.com</a></span>
+								</p>
 							</div>
 						</div>
 					</div>
-				</div>
-			</nav>
-
-			<div class="breadcrumbs">
-				<div class="container">
-					<div class="row">
-						<div class="col">
-							<p class="bread"><span><a href="index.html">Home</a></span> / <span>Checkout</span></p>
-						</div>
-					</div>
-				</div>
+				</footer>
 			</div>
 
-
-			<form id="orderForm" action="/order" method="POST">
-				<!-- Billing details -->
-				<div class="colorlib-product">
-					<div class="container">
-						<div class="row">
-							<!-- Billing Details -->
-							<div class="col-lg-8">
-								<div class="col-md-12">
-									<div class="profile-info">
-										<h3>Billing Details</h3>
-										<p><i class="fas fa-user"></i> Name: <%= user.name %>
-										</p>
-										<p><i class="fa-solid fa-envelope"></i> Email: <%= user.email %>
-										</p>
-										<p><i class="fas fa-phone"></i> Phone: <%= user.mobile %>
-										</p>
-									</div>
-								</div>
-	
-								<div class="row addressBox">
-									<h3>Select Address</h3>
-									<div class="col-md-12">
-										<% if (checkout && checkout.addressDetails && checkout.addressDetails.length > 0) { %>
-											<% checkout.addressDetails.forEach((address, index) => { %>
-												<div class="address-box" id="address<%= index + 1 %>">
-													<label>
-														<div class="radio-box">
-															<input style="margin: 3px 20px 32px 0px;" type="radio" name="addressId" value="<%= address._id %>" onclick="setDefault('<%= address._id %>')" <%= address.isDefault ? 'checked' : '' %>>
-															<h3 onclick="toggleAddressDetails('<%= index + 1 %>', '<%= address._id %>')">Address <%= index + 1 %></h3>
-														</div>																											
-													</label>
-													<div class="address-details" style="display: none;">
-														<input type="hidden" name="id" value="<%= address._id %>">
-														<p>Address: <%= address.address1 %></p>
-														<p>Street Name: <%= address.address2 %></p>
-														<p>City: <%= address.city %></p>
-														<p>State: <%= address.state %></p>
-														<p>Postal Code: <%= address.postalCode %></p>
-														<p>Country: <%= address.country %></p>
-														<a href="/editAddress/<%= address._id %>"><button class="btn btn-secondary">Edit Address</button></a>
-													</div>
-												</div>												
-											<% }) %>
-										<% } else { %>
-											<p>No address found</p>
-										<% } %>                                        
-									</div>
-								</div>
-								
-								<div class="action-buttons">
-									<a href="/addAddress"><button class="btn btn-primary">Add New Address</button></a>
-								</div>
-							</div>
-	
-							<!-- Payment Method -->
-							<div class="col-lg-4">
-								<div class="row">
-									<div class="w-100"></div>
-									<div class="col-md-12">
-										<div class="cart-detail">
-											<h2>Payment Method</h2>
-							
-											<div class="form-group">
-												<div class="col-md-12">
-													<h3>TotalPrice - <%= totalPrice %></h3>
-													<input type="hidden" name="totalPrice" value="<%= totalPrice %>">
-												</div>
-											</div>
-							
-											<div class="form-group">
-												<div class="col-md-12">
-													<div class="radio">
-														<label><input type="radio" name="optradio" value="cash_on_delivery"> Cash on Delivery</label>
-													</div>
-												</div>
-											</div>
-											
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12 text-center">
-										<!-- Your form fields -->
-										<button type="submit" class="btn btn-primary">Place an order</button>
-									</div>
-								</div>
-							</div>
-							
-						</div>
-					</div>
-				</div>
-			</form>
+			<div class="gototop js-top">
+				<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
 			</div>
 
-			<footer id="colorlib-footer" role="contentinfo">
-				<div class="container">
-					<div class="row row-pb-md">
-						<div class="col footer-col colorlib-widget">
-							<h4>About Footwear</h4>
-							<p>Even the all-powerful Pointing has no control about the blind texts it is an almost
-								unorthographic life</p>
-							<p>
-							<ul class="colorlib-social-icons">
-								<li><a href="#"><i class="icon-twitter"></i></a></li>
-								<li><a href="#"><i class="icon-facebook"></i></a></li>
-								<li><a href="#"><i class="icon-linkedin"></i></a></li>
-								<li><a href="#"><i class="icon-dribbble"></i></a></li>
-							</ul>
-							</p>
-						</div>
-						<div class="col footer-col colorlib-widget">
-							<h4>Customer Care</h4>
-							<p>
-							<ul class="colorlib-footer-links">
-								<li><a href="#">Contact</a></li>
-								<li><a href="#">Returns/Exchange</a></li>
-								<li><a href="#">Gift Voucher</a></li>
-								<li><a href="#">Wishlist</a></li>
-								<li><a href="#">Special</a></li>
-								<li><a href="#">Customer Services</a></li>
-								<li><a href="#">Site maps</a></li>
-							</ul>
-							</p>
-						</div>
-						<div class="col footer-col colorlib-widget">
-							<h4>Information</h4>
-							<p>
-							<ul class="colorlib-footer-links">
-								<li><a href="#">About us</a></li>
-								<li><a href="#">Delivery Information</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-								<li><a href="#">Support</a></li>
-								<li><a href="#">Order Tracking</a></li>
-							</ul>
-							</p>
-						</div>
+			
+		<!-- JavaScript imports -->
+		<script src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/popper.min.js"></script>
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script src="/static/js/jquery.easing.1.3.js"></script>
+		<script src="/static/js/jquery.waypoints.min.js"></script>
+		<script src="/static/js/jquery.flexslider-min.js"></script>
+		<script src="/static/js/owl.carousel.min.js"></script>
+		<script src="/static/js/jquery.magnific-popup.min.js"></script>
+		<script src="/static/js/magnific-popup-options.js"></script>
+		<script src="/static/js/bootstrap-datepicker.js"></script>
+		<script src="/static/js/jquery.stellar.min.js"></script>
+		<script src="/static/js/main.js"></script>
 
-						<div class="col footer-col">
-							<h4>News</h4>
-							<ul class="colorlib-footer-links">
-								<li><a href="blog.html">Blog</a></li>
-								<li><a href="#">Press</a></li>
-								<li><a href="#">Exhibitions</a></li>
-							</ul>
-						</div>
+		<!-- Your custom scripts here -->
 
-						<div class="col footer-col">
-							<h4>Contact Information</h4>
-							<ul class="colorlib-footer-links">
-								<li>291 South 21th Street, <br> Suite 721 New York NY 10016</li>
-								<li><a href="tel://1234567920">+ 1235 2355 98</a></li>
-								<li><a href="mailto:info@yoursite.com">info@yoursite.com</a></li>
-								<li><a href="#">yoursite.com</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="copy">
-					<div class="row">
-						<div class="col-sm-12 text-center">
-							<p>
-								<span><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-									Copyright &copy;
-									<script>document.write(new Date().getFullYear());</script> All rights reserved | This
-									template is made with <i class="icon-heart" aria-hidden="true"></i> by <a
-										href="https://colorlib.com" target="_blank">Colorlib</a>
-									<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-								</span>
-								<span class="block">Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a>
-									, <a href="http://pexels.com/" target="_blank">Pexels.com</a></span>
-							</p>
-						</div>
-					</div>
-				</div>
-			</footer>
-		</div>
-
-		<div class="gototop js-top">
-			<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
-		</div>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 		
-	<!-- JavaScript imports -->
-	<script src="/static/js/jquery.min.js"></script>
-	<script src="/static/js/popper.min.js"></script>
-	<script src="/static/js/bootstrap.min.js"></script>
-	<script src="/static/js/jquery.easing.1.3.js"></script>
-	<script src="/static/js/jquery.waypoints.min.js"></script>
-	<script src="/static/js/jquery.flexslider-min.js"></script>
-	<script src="/static/js/owl.carousel.min.js"></script>
-	<script src="/static/js/jquery.magnific-popup.min.js"></script>
-	<script src="/static/js/magnific-popup-options.js"></script>
-	<script src="/static/js/bootstrap-datepicker.js"></script>
-	<script src="/static/js/jquery.stellar.min.js"></script>
-	<script src="/static/js/main.js"></script>
-
-	<!-- Your custom scripts here -->
-
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-		<!-- Your HTML content -->
-
 		<script>
-			function order(id) {
-				Swal.fire({
-					title: "place order",
-					showCancelButton: false,
-					confirmButtonColor: "#3085d6",
-					cancelButtonColor: "#d33",
-					confirmButtonText: "ok"
-				}).then((result) => {
-					if (result.isConfirmed) {
-						window.location.href = "/order";
-					}
-				});
+			function placeOrder() {
+				// Check if any address is selected
+				var addressSelected = document.querySelector('input[name="addressId"]:checked');
+				var paymentSelected = document.querySelector('input[name="optradio"]:checked');
+		
+				if (!addressSelected || !paymentSelected) {
+					// Show the error message for address
+					document.getElementById('addressError').style.display = 'block';
+					// Show the error message for payment method
+					document.getElementById('paymentError').style.display = 'block';
+					return false; // Prevent the form from submitting
+				} else {
+					// Hide the error message for address if an address is selected
+					document.getElementById('addressError').style.display = 'none';
+					// Hide the error message for payment method if a payment method is selected
+					document.getElementById('paymentError').style.display = 'none';
+					// Allow the form to submit
+					return true;
+				}
 			}
 		</script>
-
-<script>
-    function toggleAddressDetails(addressIndex, addressId) {
-        var addressDetails = document.getElementById('address' + addressIndex).getElementsByClassName('address-details')[0];
-        if (addressDetails.style.display === 'none') {
-            addressDetails.style.display = 'block';
-        } else {
-            addressDetails.style.display = 'none';
-        }
-
-        // Call setDefault function to update default address
-        setDefault(addressId);
-    }
-
-    function setDefault(addressId) {
-        // Make AJAX request to update default address
-        fetch('/defaultAddress', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ addressId: addressId })
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('Default address updated successfully');
-            } else {
-                console.error('Error updating default address:', response.statusText);
-            }
-        })
-        .catch(error => {
-            console.error('Error updating default address:', error);
-        });
-    }
-</script>
+		
+		
 
 
+			<!-- Your HTML content -->
+
+			<script>
+				function order(id) {
+					Swal.fire({
+						title: "place order",
+						showCancelButton: false,
+						confirmButtonColor: "#3085d6",
+						cancelButtonColor: "#d33",
+						confirmButtonText: "ok"
+					}).then((result) => {
+						if (result.isConfirmed) {
+							window.location.href = "/order";
+						}
+					});
+				}
+			</script>
+
+	<script>
+		function toggleAddressDetails(addressIndex, addressId) {
+			var addressDetails = document.getElementById('address' + addressIndex).getElementsByClassName('address-details')[0];
+			if (addressDetails.style.display === 'none') {
+				addressDetails.style.display = 'block';
+			} else {
+				addressDetails.style.display = 'none';
+			}
+
+			// Call setDefault function to update default address
+			setDefault(addressId);
+		}
+
+		function setDefault(addressId) {
+			// Make AJAX request to update default address
+			fetch('/defaultAddress', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ addressId: addressId })
+			})
+			.then(response => {
+				if (response.ok) {
+					console.log('Default address updated successfully');
+				} else {
+					console.error('Error updating default address:', response.statusText);
+				}
+			})
+			.catch(error => {
+				console.error('Error updating default address:', error);
+			});
+		}
+	</script>
 
 
 
 
-	</body>
 
-	</html>
+
+		</body>
+
+		</html>

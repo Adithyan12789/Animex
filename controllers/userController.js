@@ -27,12 +27,16 @@ const loadregister = function (req, res) {
   }
 };
 
-const loginload = function (req, res) {
-  if (req.session.user) {
-    res.redirect("/index");
-  } else {
-    res.render("user/login");
-  }
+const loadlogin = (req,res) => {
+  res.render("user/login");
+}
+
+const loaduserHome = async function (req, res) {
+  const productdata = await Product.find({ isPublished: true }).populate("category");
+  const listedProducts = productdata.filter(product => {
+    return product.category && product.category.isListed;
+  });
+  res.render("user/index",{product: listedProducts, user:req.session.user});
 };
 
 const loguser = async (req, res) => {
@@ -56,7 +60,7 @@ const loguser = async (req, res) => {
       if (passwordMatch) {
         req.session.user = loggeduser;
         req.session.userID = loggeduser._id;
-        return res.redirect("/index");
+        return res.redirect("/");
       } else {
         return res.render("user/login", { errmessage: "Incorrect password. Please try again." });
       }
@@ -142,32 +146,32 @@ const resendOTP = async (req, res) => {
 };
 
 
-const loaduserHome = async function (req, res) {
-  try {
-    let isAuthenticated = false;
+// const loaduserHome = async function (req, res) {
+//   try {
+//     let isAuthenticated = false;
 
-    if (req.session.user) {
-      const userdata = await User.findOne({ _id: req.session.user });
-      const productdata = await Product.find({ isPublished: true }).populate("category");
+//     if (req.session.user) {
+//       const userdata = await User.findOne({ _id: req.session.user });
+//       const productdata = await Product.find({ isPublished: true }).populate("category");
 
-      const listedProducts = productdata.filter(product => {
-        return product.category && product.category.isListed;
-      });
+//       const listedProducts = productdata.filter(product => {
+//         return product.category && product.category.isListed;
+//       });
       
-      if (userdata && listedProducts) {
-        isAuthenticated = true;
-        res.render("user/index", { user: userdata, isAuthenticated: isAuthenticated, product: listedProducts });
-      } else {
-        res.redirect("/");
-      }
-    } else {
-      res.render("user/index", { isAuthenticated: isAuthenticated, product: listedProducts });
-    }
-  } catch (err) {
-    console.log(err.message);
-    res.redirect("/");
-  }
-};
+//       if (userdata && listedProducts) {
+//         isAuthenticated = true;
+//         res.render("user/index", { user: userdata, isAuthenticated: isAuthenticated, product: listedProducts });
+//       } else {
+//         res.redirect("/");
+//       }
+//     } else {
+//       res.render("user/index", { isAuthenticated: isAuthenticated, product: listedProducts });
+//     }
+//   } catch (err) {
+//     console.log(err.message);
+//     res.redirect("/");
+//   }
+// };
 
 
 
@@ -268,7 +272,7 @@ const editprofile = async (req,res)=>{
 //Shop Page
 
 const shopPage = async (req,res) => {
-  const perPage = 4; 
+  const perPage = 6; 
     const page = req.query.page || 1;
     try {
         const totalProducts = await Product.countDocuments();
@@ -300,7 +304,7 @@ const shopPage = async (req,res) => {
 }
  
 const getShopPagination = async(req,res) => {
-  const perPage = 4; 
+  const perPage = 6; 
     const page = req.query.page || 1;
     try {
         const totalProducts = await Product.countDocuments();
@@ -325,6 +329,29 @@ const getShopPagination = async(req,res) => {
     }
 }
 
+const filterByCategory = async (req, res) => {
+  try {
+      // Extract category query parameter from the request
+      const category = req.query.category;
+
+      // Query the database to find products matching the specified category
+      let products;
+      if (category) {
+          products = await Product.find({ category: category }).exec();
+      } else {
+          // If no category is specified, return all products
+          products = await Product.find().exec();
+      }
+
+      // Send the filtered products as JSON response
+      res.json(products);
+  } catch (error) {
+      // Handle errors
+      console.error("Error filtering products by category:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 
 
 //Product Details
@@ -335,7 +362,7 @@ const productDetails = async (req, res) => {
     const product = await Product.findById(proid).populate("category");
     if (!product) {
       console.log("Product not found");
-      return res.redirect("/index");
+      return res.redirect("/");
     }
 
     res.render("user/product-detail", { product: product });
@@ -446,7 +473,8 @@ module.exports = {
 
   loadregister,
   insertUser,
-  loginload,
+  // loginload,
+  loadlogin,
   loguser,
   loaduserHome,
   logoutuser,
@@ -459,6 +487,7 @@ module.exports = {
   shopPage,
   productDetails,
   getShopPagination,
+  filterByCategory,
 
   //user profile
   userProfile,
