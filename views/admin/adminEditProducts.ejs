@@ -108,7 +108,7 @@
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
                                     <textarea id="description" name="description" class="form-control"
-                                        placeholder="Enter description" required rows="3"></textarea>
+                                        placeholder="Enter description" value="<%= product.description %>" required rows="3"></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="category" class="form-label">Category</label>
@@ -131,9 +131,7 @@
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Select Image</label>
                                     <input type="file" id="image" name="image" class="form-control" required multiple>
-                                    <img src="/static/uploads/<%= product.image[0] %>" width="100" class="mt-1">
-                                    <img src="/static/uploads/<%= product.image[1] %>" width="100" class="mt-1">
-                                    <img src="/static/uploads/<%= product.image[2] %>" width="100" class="mt-1">
+                                    
                                 </div>
                                 
                                 <div class="mb-3">

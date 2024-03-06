@@ -158,8 +158,6 @@ const placeOrder = async (req, res) => {
         const userId = req.session.userID;
         const { addressId, totalPrice } = req.body;
 
-        console.log("23234234",addressId)
-
         // Check if an address is selected
         if (!addressId) {
             return res.status(400).json({ error: 'Please select an address' });
@@ -209,6 +207,22 @@ const placeOrder = async (req, res) => {
             });
 
             await order.save();
+
+
+            for(const item of order.items){
+                await Product.findByIdAndUpdate(
+                    item.product,
+                    {
+                        $inc: {
+                            stock: -item.quantity
+                        }
+                    },
+                    {
+                        new: true
+                    }
+                )
+            }
+
         } else {
             return res.status(400).json({ error: 'Please select a valid address' });
         }

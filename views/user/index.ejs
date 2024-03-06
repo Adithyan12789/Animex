@@ -305,7 +305,22 @@
 				</div>
 				<div class="row">
 					<div class="col-md-12 text-center">
-						<p><a href="#" class="btn btn-primary btn-lg">Shop All Products</a></p>
+						<div class="block-27">
+					   <ul>
+						   <li><a href="/shop?page=<%= currentPage - 1 %>"><i class="ion-ios-arrow-back"></i></a></li>
+						  <% for(i = 1 ; i <= totalPages ; i++){ %>
+							<li class="<%= currentPage == i ? "active": "" %> ">
+								<a href="/shop?page=<%= i %>"><span><%= i %></span></a>
+							</li>
+						  <% } %>
+						  <li><a href="/shop?page=<%= currentPage + 1 %>"><i class="ion-ios-arrow-forward"></i></a></li>
+					   </ul>
+					</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 text-center mt-5">
+						<p><a href="/shop" class="btn btn-primary btn-lg">Shop All Products</a></p>
 					</div>
 				</div>
 			</div>

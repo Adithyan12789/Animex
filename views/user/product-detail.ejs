@@ -136,9 +136,9 @@
 					</div>
 					<div class="col-sm-4">
 						<div class="product-desc">
-							<h3><%= product.name %></h3>
-							<h3><%= product.category.name %></h3>
-							<p class="price">
+							<h3 style="padding-top: 30px;"><%= product.name %></h3>
+							<h3 style="padding-top: 15px;"><%= product.category.name %></h3>
+							<p class="price mt-4">
 								<span>₹<%= product.price %></span> 
 								<span class="rate">
 									<i class="icon-star-full"></i>
@@ -149,12 +149,12 @@
 									(74 Rating)
 								</span>
 							</p>
-							<p><%= product.description %></p>
+							<p style="padding-top: 30px;"><%= product.description %></p>
 						</div>
                      
                   	<div class="row">
-	                  	<div class="col-sm-12 text-right ml-4">
-								<button class="btn btn-primary view-details" onclick="cart('<%= product._id %>')">
+	                  	<div class="col-sm-12 text-right ml-4 mt-4">
+								<button class="btn btn-primary view-details" style="width: 100%;" onclick="cart('<%= product._id %>')">
 									addTocart<i class="fas fa-cart-plus"></i> <!-- Add to Cart Icon -->
 								</button>
 								</div>
@@ -163,7 +163,7 @@
 					</div>
 				</div>
 
-				<div class="row">
+				<div class="container">
 					<div class="col-sm-12">
 						<div class="row">
 							<div class="col-md-12 pills">

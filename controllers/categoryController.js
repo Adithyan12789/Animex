@@ -67,7 +67,7 @@ const CategoriesRoute = async function(req, res) {
   const getEditCategory = async (req,res)=>{
     if(req.session.admin){
       const id = req.query.categoryid
-     const getCategorydetails = await Category.findById({_id:id})
+     const getCategorydetails = await Category.findById(id)
       res.render("admin/adminEditCategories",{editCategory:getCategorydetails})
   
     }

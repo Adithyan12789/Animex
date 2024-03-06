@@ -179,9 +179,9 @@
 											<h3>Category</h3>
 											<hr>
 											<ul>
-												<li><a href="#">T-shirt</a></li>
-												<li><a href="#">Hoodie</a></li>
-												<li><a href="#">Shirt</a></li>
+												<li><a href="/shop?category=T-shirt">T-shirt</a></li>
+												<li><a href="/shop?category=Hoodie">Hoodie</a></li>
+												<li><a href="/shop?category=Shirt">Shirt</a></li>
 											</ul>
 										</div>
 									</div>
@@ -367,14 +367,21 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 	<script>
 		document.getElementById('categorySelect').addEventListener('change', function() {
-			var categoryId = this.value;
-			var url = '/shop';
-			if (categoryId) {
-				url += '?category=' + categoryId;
-			}
-			window.location.href = url;
-		});
-	</script>
+    var selectedCategory = this.value;
+    var productElements = document.querySelectorAll('.col-md-3.col-lg-3.mb-4.text-center');
+
+    productElements.forEach(function(product) {
+        var category = product.getAttribute('data-category');
+
+        if (selectedCategory === 'all' || category === selectedCategory) {
+            product.style.display = 'block';
+        } else {
+            product.style.display = 'none';
+        }
+    });
+});
+
+	</script>	
 
 	<script>
 		function cart(id) {

@@ -160,9 +160,13 @@ const editProduct = async (req, res) => {
 
         // Assuming req.body.category contains the name of the category
         const categoryName = req.body.category;
+
+        console.log("12334556",categoryName)
         
         // Find the category document based on its name
-        const category = await Category.findOne({ name: categoryName });
+        const category = await Category.findOne({ _id: categoryName });
+
+        console.log("dfsdfsf",category)
 
         // Prepare the product update object
         const productUpdate = {
