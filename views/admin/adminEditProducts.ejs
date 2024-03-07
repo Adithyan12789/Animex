@@ -17,7 +17,15 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/static/assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
-    <link href="/static/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="/static/admin-assets/css/main.css" rel="stylesheet" type="text/css" />\
+
+    <style>
+        .small-image {
+    max-width: 100px; /* Adjust the maximum width as per your requirement */
+    height: auto; /* Maintain aspect ratio */
+}
+
+    </style>
 </head>
 
 <body>
@@ -107,8 +115,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea id="description" name="description" class="form-control"
-                                        placeholder="Enter description" value="<%= product.description %>" required rows="3"></textarea>
+                                    <textarea id="description"  name="description" class="form-control"
+                                        placeholder="Enter description" required rows="3"><%= product.description %>
+                                    </textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="category" class="form-label">Category</label>
@@ -130,10 +139,12 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Select Image</label>
-                                    <input type="file" id="image" name="image" class="form-control" required multiple>
-                                    
-                                </div>
-                                
+                                    <input type="file" id="image" name="image" class="form-control" multiple>
+                                    <!-- Display existing images -->
+                                    <% product.image.forEach((image, index) => { %>
+                                            <img class="img-fluid small-image" src="/static/uploads/<%= image %>" alt="Product Image">
+                                    <% }) %>
+                                </div>                                                             
                                 <div class="mb-3">
                                     <button type="submit" class="btn btn-primary">Update Product</button>
                                 </div>

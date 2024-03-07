@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
+    trackingId: {
+        type: String,
+        default: function(){
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        },
+        unique: true
+    },
+
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

@@ -117,7 +117,7 @@
                             <tbody>
                                 <% orders.forEach(order => { %>
                                 <tr>
-                                    <td><%= order._id %></td>
+                                    <td>ord_<%= order.trackingId %></td>
                                     
                                     <td>
                                      <% order.items.forEach(order => { %>

@@ -4,16 +4,39 @@ const Address = require("../models/address");
 
 //Admin - Side  Code
 
-const orderListPage = async (req,res) => {
-    const userId = req.session.userID;
+const adminOrdersProfilePage = async (req, res) => {
+    // const userId = req.session.userID;
 
     try {
-        const orders = await Order.find({ userId }).populate("items.product");
+        const orders = await Order.find().populate("items.product");
 
         res.render("admin/orderList", { orders });
     } catch (error) {
         console.error("Error fetching orders:", error);
         res.status(500).send("Error fetching orders");
+    }
+};
+
+  
+const adminTrackOrderPage = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const userId = req.session.userID;
+
+        // Find the user based on userId
+        const user = await User.findById(userId);
+
+        // Find the order based on the provided id and populate the items
+        const order = await Order.findOne({ _id: id }).populate("items.product");
+
+        console.log("order: ",order)
+
+        // Render the "user/trackOrder" view with the user and order data
+        res.render("admin/orderDetails", { user, order });
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error");
     }
 }
 
@@ -82,7 +105,7 @@ const cancelOrder = async (req, res) => {
         
         // Update the order status to "canceled"
         order.orderStatus = 'canceled';
-        await order.save();``
+        await order.save();
 
         res.redirect("/orderProfile")
     } catch (error) {
@@ -98,7 +121,8 @@ const cancelOrder = async (req, res) => {
 module.exports = {
     //admin-side
 
-    orderListPage,
+    adminOrdersProfilePage,
+    adminTrackOrderPage,
 
 
     //User-side

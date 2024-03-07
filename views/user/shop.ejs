@@ -1,53 +1,33 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-	<title>Animex - shop</title>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+    <title>Animex - Shop</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/animate.css">
+    <link rel="stylesheet" href="/static/css/icomoon.css">
+    <link rel="stylesheet" href="/static/css/ionicons.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/magnific-popup.css">
+    <link rel="stylesheet" href="/static/css/flexslider.css">
+    <link rel="stylesheet" href="/static/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/static/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="/static/fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="/static/css/style.css">
 
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
-	
-	<!-- Animate.css -->
-	<link rel="stylesheet" href="/static/css/animate.css">
-	<!-- Icomoon Icon Fonts-->
-	<link rel="stylesheet" href="/static/css/icomoon.css">
-	<!-- Ion Icon Fonts-->
-	<link rel="stylesheet" href="/static/css/ionicons.min.css">
-	<!-- Bootstrap  -->
-	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
-
-	<!-- Magnific Popup -->
-	<link rel="stylesheet" href="/static/css/magnific-popup.css">
-
-	<!-- Flexslider  -->
-	<link rel="stylesheet" href="/static/css/flexslider.css">
-
-	<!-- Owl Carousel -->
-	<link rel="stylesheet" href="/static/css/owl.carousel.min.css">
-	<link rel="stylesheet" href="/static/css/owl.theme.default.min.css">
-	
-	<!-- Date Picker -->
-	<link rel="stylesheet" href="/static/css/bootstrap-datepicker.css">
-	<!-- Flaticons  -->
-	<link rel="stylesheet" href="/static/fonts/flaticon/font/flaticon.css">
-
-	<!-- Theme style  -->
-	<link rel="stylesheet" href="/static/css/style.css">
-
-	<style>
-
-        /* Apply Animation to Rating Elements */
+    <style>
         .rating {
-			margin-top: 10px;
-			margin-bottom: 20px;
+            margin-top: 10px;
+            margin-bottom: 20px;
         }
 
-		.checked{
-			color: yellow;	
-		}
+        .checked {
+            color: yellow;
+        }
 
-        /* Other existing styles */
         .prod-img {
             position: relative;
             display: inline-block;
@@ -55,8 +35,8 @@
         }
 
         .prod-img:hover img {
-            transform: scale(1.1); /* adjust the scale factor as needed */
-            transition: transform 0.3s ease; /* adjust the transition duration as needed */
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
         }
 
         .side.border.mb-1 ul li a {
@@ -77,355 +57,324 @@
             font-weight: 500;
             height: 1px;
         }
-    </style>
-
-	</head>
-	<body>
-		
-	<div class="colorlib-loader"></div>
-
-	<div id="page">
-		<nav class="colorlib-nav" role="navigation">
-			<div class="top-menu">
-				<div class="container">
-					<div class="row">
-						<div class="col-sm-7 col-md-9">
-							<div id="colorlib-logo"><a href="/">Animex</a></div>
-						</div>
-						<div class="col-sm-5 col-md-3">
-			            <form action="#" class="search-wrap">
-			               <div class="form-group">
-			                  <input type="search" class="form-control search" placeholder="Search">
-			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-			               </div>
-			            </form>
-			         </div>
-		         </div>
-					<div class="row">
-						<div class="col-sm-12 text-left menu-1">
-							<ul>
-								<li><a href="/">Home</a></li>
-								<li class="active"><a href="/shop">Shop</a></li>
-								<li><a href="about.ejs">About</a></li>
-								<li><a href="contact.ejs">Contact</a></li>
-								<li style="float: right;"><a href="/profile"><i
-									class="fa-regular fa-circle-user fa-2x"></i></a></li>
-								<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li> 
-								<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="sale">
-				<div class="container">
-					<div class="row">
-						<div class="col-sm-8 offset-sm-2 text-center">
-							<div class="row">
-								<div class="owl-carousel2">
-									<div class="item">
-										<div class="col">
-											<h3><a href="#">25% off (Almost) Everything! Use Code: Summer Sale</a></h3>
-										</div>
-									</div>
-									<div class="item">
-										<div class="col">
-											<h3><a href="#">Our biggest sale yet 50% off all summer shoes</a></h3>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</nav>
-
-		<div class="breadcrumbs">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<p class="bread"><span><a href="/">Home</a></span> / <span>Shop</span></p>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="breadcrumbs-two">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<div class="breadcrumbs-img" style="background-image: url(/static/images/ROMAN-SHIRT-1.webp);">
-							<h2>Men's</h2>
-						</div>
-						<div class="menu text-center">
-							<p><a href="#">New Arrivals</a> <a href="#">Best Sellers</a> <a href="#">Popularity</a> <a href="#">Featured</a></p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="colorlib-product">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12 col-xl-12">
-						
-						<div class="row row-pb-md" style="justify-content: end;">
-							<div class="col-lg-3 col-xl-3">
-								<div class="row">
-									<div class="col-sm-12">
-										<div class="side border mb-1">
-											<h3>Category</h3>
-											<hr>
-											<ul>
-												<li><a href="/shop?category=T-shirt">T-shirt</a></li>
-												<li><a href="/shop?category=Hoodie">Hoodie</a></li>
-												<li><a href="/shop?category=Shirt">Shirt</a></li>
-											</ul>
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="side border mb-1">
-											<h3>Sort</h3>
-											<hr>
-											<ul>
-												<li><a href="#">Price: low to high</a></li>
-												<li><a href="#">Price: high to low</a></li>
-												<li><a href="#">Average ratings</a></li>
-												<li><a href="#">aA - zZ</a></li>
-												<li><a href="#">zZ - aA</a></li>
-											</ul>
-										</div>
-										
-									</div>
-								</div>
-							</div>
-							<% products.forEach(product => { %>
-							<div class="col-md-3 col-lg-3 mb-4 text-center">
-								<div class="product-entry border">
-									<a href="/product-details/<%= product._id %>" class="prod-img">
-										<img src="/static/uploads/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
-									</a>
-									<div class="desc">
-										<h2><a href="#"><%= product.name %></a></h2>
-										<% if (product.category) { %>
-											<h2><a href="#"><%= product.category.name %></a></h2>
-										<% } else { %>
-											<p>No category</p>
-										<% } %>
-										<span class="price">₹<%= product.price %></span>
-
-										<!-- Inside the loop where you display products -->
-                                        <div class="rating">
-                                        <!-- Static rating for demonstration purposes -->
-                                            <span class="fa fa-star checked"></span>
-                                            <span class="fa fa-star checked"></span>
-                                            <span class="fa fa-star checked"></span>
-                                            <span class="fa fa-star"></span>
-                                            <span class="fa fa-star"></span>
-                                        </div>
-										<button class="btn btn-primary view-details" onclick="cart('<%= product._id %>')">
-											addTocart<i class="fas fa-cart-plus"></i> <!-- Add to Cart Icon -->
-										</button>
-									</div>
-								</div>
-							</div>
-							<% }) %>
-						</div>				
-						<div class="row">
-							<div class="col-md-12 text-center">
-								<div class="block-27">
-							   <ul>
-								   <li><a href="/shop?page=<%= currentPage - 1 %>"><i class="ion-ios-arrow-back"></i></a></li>
-								  <% for(i = 1 ; i <= totalPages ; i++){ %>
-									<li class="<%= currentPage == i ? "active": "" %> ">
-										<a href="/shop?page=<%= i %>"><span><%= i %></span></a>
-									</li>
-								  <% } %>
-								  <li><a href="/shop?page=<%= currentPage + 1 %>"><i class="ion-ios-arrow-forward"></i></a></li>
-							   </ul>
-							</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="colorlib-partner">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
-						<h2>Trusted Partners</h2>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col partner-col text-center">
-						<img src="/static/images/brand-1.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
-					</div>
-					<div class="col partner-col text-center">
-						<img src="/static/images/brand-2.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
-					</div>
-					<div class="col partner-col text-center">
-						<img src="/static/images/brand-3.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
-					</div>
-					<div class="col partner-col text-center">
-						<img src="/static/images/brand-4.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
-					</div>
-					<div class="col partner-col text-center">
-						<img src="/static/images/brand-5.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<footer id="colorlib-footer" role="contentinfo">
-			<div class="container">
-				<div class="row row-pb-md">
-					<div class="col footer-col colorlib-widget">
-						<h4>About Footwear</h4>
-						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
-						<p>
-							<ul class="colorlib-social-icons">
-								<li><a href="#"><i class="icon-twitter"></i></a></li>
-								<li><a href="#"><i class="icon-facebook"></i></a></li>
-								<li><a href="#"><i class="icon-linkedin"></i></a></li>
-								<li><a href="#"><i class="icon-dribbble"></i></a></li>
-							</ul>
-						</p>
-					</div>
-					<div class="col footer-col colorlib-widget">
-						<h4>Customer Care</h4>
-						<p>
-							<ul class="colorlib-footer-links">
-								<li><a href="#">Contact</a></li>
-								<li><a href="#">Returns/Exchange</a></li>
-								<li><a href="#">Gift Voucher</a></li>
-								<li><a href="#">Wishlist</a></li>
-								<li><a href="#">Special</a></li>
-								<li><a href="#">Customer Services</a></li>
-								<li><a href="#">Site maps</a></li>
-							</ul>
-						</p>
-					</div>
-					<div class="col footer-col colorlib-widget">
-						<h4>Information</h4>
-						<p>
-							<ul class="colorlib-footer-links">
-								<li><a href="#">About us</a></li>
-								<li><a href="#">Delivery Information</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-								<li><a href="#">Support</a></li>
-								<li><a href="#">Order Tracking</a></li>
-							</ul>
-						</p>
-					</div>
-
-					<div class="col footer-col">
-						<h4>News</h4>
-						<ul class="colorlib-footer-links">
-							<li><a href="blog.html">Blog</a></li>
-							<li><a href="#">Press</a></li>
-							<li><a href="#">Exhibitions</a></li>
-						</ul>
-					</div>
-
-					<div class="col footer-col">
-						<h4>Contact Information</h4>
-						<ul class="colorlib-footer-links">
-							<li>291 South 21th Street, <br> Suite 721 New York NY 10016</li>
-							<li><a href="tel://1234567920">+ 1235 2355 98</a></li>
-							<li><a href="mailto:info@yoursite.com">info@yoursite.com</a></li>
-							<li><a href="#">yoursite.com</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="copy">
-				<div class="row">
-					<div class="col-sm-12 text-center">
-						<p>
-							<span><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></span> 
-							<span class="block">Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a> , <a href="http://pexels.com/" target="_blank">Pexels.com</a></span>
-						</p>
-					</div>
-				</div>
-			</div>
-		</footer>
-	</div>
-
-	<div class="gototop js-top">
-		<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
-	</div>
-
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-	<!-- Your HTML content -->
-
-	<script>
-		document.getElementById('categorySelect').addEventListener('change', function() {
-    var selectedCategory = this.value;
-    var productElements = document.querySelectorAll('.col-md-3.col-lg-3.mb-4.text-center');
-
-    productElements.forEach(function(product) {
-        var category = product.getAttribute('data-category');
-
-        if (selectedCategory === 'all' || category === selectedCategory) {
-            product.style.display = 'block';
-        } else {
-            product.style.display = 'none';
+        .actives{
+            background-color: aquamarine;
         }
-    });
-});
+    </style>
+</head>
+<body>
+<div class="colorlib-loader"></div>
 
-	</script>	
+<div id="page">
+    <nav class="colorlib-nav" role="navigation">
+        <div class="top-menu">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-7 col-md-9">
+                        <div id="colorlib-logo"><a href="/">Animex</a></div>
+                    </div>
+                    <div class="col-sm-5 col-md-3">
+                        <form action="#" class="search-wrap">
+                            <div class="form-group">
+                                <input type="search" class="form-control search" placeholder="Search">
+                                <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 text-left menu-1">
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li class="active"><a href="/shop">Shop</a></li>
+                            <li><a href="about.ejs">About</a></li>
+                            <li><a href="contact.ejs">Contact</a></li>
+                            <li style="float: right;"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
+                            <% if(user) { %>
+								<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
+							<% } else { %>
+								<li class="login"><a href="userlogin"><i class="login-Page"></i> Login</a></li>
+							<% } %>
+                            <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sale">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 offset-sm-2 text-center">
+                        <div class="row">
+                            <div class="owl-carousel2">
+                                <div class="item">
+                                    <div class="col">
+                                        <h3><a href="#">25% off (Almost) Everything! Use Code: Summer Sale</a></h3>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="col">
+                                        <h3><a href="#">Our biggest sale yet 50% off all summer shoes</a></h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-	<script>
-		function cart(id) {
-			Swal.fire({
-				title: "Successfully add to cart!",
-				showCancelButton: false,
-				confirmButtonColor: "#3085d6",
-				cancelButtonColor: "#d33",
-				confirmButtonText: "ok"
-			}).then((result) => {
-				if (result.isConfirmed) {
-					window.location.href = "/addTocart/" + id;
-				}
-			});
-		}
-	</script>
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p class="bread"><span><a href="/">Home</a></span> / <span>Shop</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	
-	<script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
-	
-	<!-- jQuery -->
-	<script src="/static/js/jquery.min.js"></script>
-   <!-- popper -->
-   <script src="/static/js/popper.min.js"></script>
-   <!-- bootstrap 4.1 -->
-   <script src="/static/js/bootstrap.min.js"></script>
-   <!-- jQuery easing -->
-   <script src="/static/js/jquery.easing.1.3.js"></script>
-	<!-- Waypoints -->
-	<script src="/static/js/jquery.waypoints.min.js"></script>
-	<!-- Flexslider -->
-	<script src="/static/js/jquery.flexslider-min.js"></script>
-	<!-- Owl carousel -->
-	<script src="/static/js/owl.carousel.min.js"></script>
-	<!-- Magnific Popup -->
-	<script src="/static/js/jquery.magnific-popup.min.js"></script>
-	<script src="/static/js/magnific-popup-options.js"></script>
-	<!-- Date Picker -->
-	<script src="/static/js/bootstrap-datepicker.js"></script>
-	<!-- Stellar Parallax -->
-	<script src="/static/js/jquery.stellar.min.js"></script>
-	<!-- Main -->
-	<script src="/static/js/main.js"></script>
+    <div class="breadcrumbs-two">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="breadcrumbs-img" style="background-image: url(/static/images/ROMAN-SHIRT-1.webp);">
+                        <h2>Men's</h2>
+                    </div>
+                    <div class="menu text-center">
+                        <p><a href="#">New Arrivals</a> <a href="#">Best Sellers</a> <a href="#">Popularity</a> <a href="#">Featured</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	</body>
+    <div class="colorlib-product">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-xl-12">
+                    <div class="row row-pb-md" style="justify-content: end;">
+                        <div class="col-lg-3 col-xl-3">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="side border mb-1">
+                                        <h3>Category</h3>
+                                        <hr>
+                                        <ul>
+                                            <% categories.forEach(category => { %>
+                                            <li>
+                                                <a href="/shop?category=<%= category._id %>" class="<%= selectedCategory ==  category._id ? 'actives' : '' %>">
+                                                    <%= category.name %>
+                                                </a>
+                                            </li>
+                                            <% }) %>
+                                        </ul>                                        
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="side border mb-1">
+                                        <h3>Sort</h3>
+                                        <hr>
+                                        <ul>
+                                            <li><a href="#">Price: low to high</a></li>
+                                            <li><a href="#">Price: high to low</a></li>
+                                            <li><a href="#">Average ratings</a></li>
+                                            <li><a href="#">aA - zZ</a></li>
+                                            <li><a href="#">zZ - aA</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Display products -->
+                        <% products.forEach(product => { %> 
+                        <div class="col-md-3 col-lg-3 mb-4 text-center">
+                            <div class="product-entry border">
+                                <a href="/product-details/<%= product._id %>" class="prod-img">
+                                    <img src="/static/uploads/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+                                </a>
+                                <div class="desc">
+                                    <h2><a href="#"><%= product.name %></a></h2>
+                                    <% if (product.category) { %>
+                                    <h2><a href="#"><%= product.category.name %></a></h2>
+                                    <% } else { %>
+                                    <p>No category</p>
+                                    <% } %>
+                                    <span class="price">₹<%= product.price %></span>
+                                    <!-- Inside the loop where you display products -->
+                                    <div class="rating">
+                                        <!-- Static rating for demonstration purposes -->
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                    </div>
+                                    <button class="btn btn-primary view-details" onclick="cart('<%= product._id %>')">
+                                        addTocart<i class="fas fa-cart-plus"></i> <!-- Add to Cart Icon -->
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                        <!-- Pagination -->
+                        <div class="col-md-12 text-center">
+                            <div class="block-27">
+                                <ul>
+                                    <li><a href="/shop?page=<%= currentPage - 1 %>"><i class="ion-ios-arrow-back"></i></a></li>
+                                    <% for(i = 1 ; i <= totalPages ; i++){ %>
+                                    <li class="<%= currentPage == i ? "active": "" %> ">
+                                        <a href="/shop?page=<%= i %>"><span><%= i %></span></a>
+                                    </li>
+                                    <% } %>
+                                    <li><a href="/shop?page=<%= currentPage + 1 %>"><i class="ion-ios-arrow-forward"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="colorlib-partner">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
+                    <h2>Trusted Partners</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col partner-col text-center">
+                    <img src="/static/images/brand-1.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
+                </div>
+                <div class="col partner-col text-center">
+                    <img src="/static/images/brand-2.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
+                </div>
+                <div class="col partner-col text-center">
+                    <img src="/static/images/brand-3.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
+                </div>
+                <div class="col partner-col text-center">
+                    <img src="/static/images/brand-4.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
+                </div>
+                <div class="col partner-col text-center">
+                    <img src="/static/images/brand-5.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="colorlib-footer" role="contentinfo">
+        <div class="container">
+            <div class="row row-pb-md">
+                <div class="col footer-col colorlib-widget">
+                    <h4>About Footwear</h4>
+                    <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
+                    <p>
+                        <ul class="colorlib-social-icons">
+                            <li><a href="#"><i class="icon-twitter"></i></a></li>
+                            <li><a href="#"><i class="icon-facebook"></i></a></li>
+                            <li><a href="#"><i class="icon-linkedin"></i></a></li>
+                            <li><a href="#"><i class="icon-dribbble"></i></a></li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="col footer-col colorlib-widget">
+                    <h4>Customer Care</h4>
+                    <p>
+                        <ul class="colorlib-footer-links">
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Returns/Exchange</a></li>
+                            <li><a href="#">Gift Voucher</a></li>
+                            <li><a href="#">Wishlist</a></li>
+                            <li><a href="#">Special</a></li>
+                            <li><a href="#">Customer Services</a></li>
+                            <li><a href="#">Site maps</a></li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="col footer-col colorlib-widget">
+                    <h4>Information</h4>
+                    <p>
+                        <ul class="colorlib-footer-links">
+                            <li><a href="#">About us</a></li>
+                            <li><a href="#">Delivery Information</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Order Tracking</a></li>
+                        </ul>
+                    </p>
+                </div>
+
+                <div class="col footer-col">
+                    <h4>News</h4>
+                    <ul class="colorlib-footer-links">
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Exhibitions</a></li>
+                    </ul>
+                </div>
+
+                <div class="col footer-col">
+                    <h4>Contact Information</h4>
+                    <ul class="colorlib-footer-links">
+                        <li>291 South 21th Street, <br> Suite 721 New York NY 10016</li>
+                        <li><a href="tel://1234567920">+ 1235 2355 98</a></li>
+                        <li><a href="mailto:info@yoursite.com">info@yoursite.com</a></li>
+                        <li><a href="#">yoursite.com</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="copy">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <p>
+                        <span>&copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></span>
+                        <span class="block">Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a> , <a href="http://pexels.com/" target="_blank">Pexels.com</a></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<div class="gototop js-top">
+    <a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function cart(id) {
+        Swal.fire({
+            title: "Successfully add to cart!",
+            showCancelButton: false,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ok"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/addTocart/" + id;
+            }
+        });
+    }
+</script>
+
+<script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery.easing.1.3.js"></script>
+<script src="/static/js/jquery.waypoints.min.js"></script>
+<script src="/static/js/jquery.flexslider-min.js"></script>
+<script src="/static/js/owl.carousel.min.js"></script>
+<script src="/static/js/jquery.magnific-popup.min.js"></script>
+<script src="/static/js/magnific-popup-options.js"></script>
+<script src="/static/js/bootstrap-datepicker.js"></script>
+<script src="/static/js/jquery.stellar.min.js"></script>
+<script src="/static/js/main.js"></script>
+</body>
 </html>
-

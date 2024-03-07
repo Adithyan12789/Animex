@@ -287,82 +287,112 @@
   const shopPage = async (req, res) => {
     const perPage = 6; 
     const page = req.query.page || 1;
+    const category = req.query.category;
     try {
-      let totalProducts;
-      let products;
-      let listedProducts;
-      let selectedCategory = null;
+        let totalProducts;
+        let products;
+        let listedProducts;
+        let selectedCategory = null;
 
-      // Extract category query parameter from the request
-      const category = req.query.category;
+        
 
-      // Count total number of products
-      if (category) {
-        totalProducts = await Product.countDocuments({ category: category });
-        // Query the database to find products matching the specified category
-        products = await Product.find({ category: category })
-          .populate("category")
-          .skip(perPage * page - perPage)
-          .limit(perPage)
-          .exec();
-        selectedCategory = category;
-      } else {
-        totalProducts = await Product.countDocuments();
-        // Query the database to find all products
-        products = await Product.find()
-          .populate("category")
-          .skip(perPage * page - perPage)
-          .limit(perPage)
-          .exec();
-      }
+        // Count total number of products
+        if (category) {
+          console.log("asfdasd",category) 
+            totalProducts = await Product.countDocuments({ category: category });
+            // Query the database to find products matching the specified category
 
-      // Filter out products that are not listed
-      listedProducts = products.filter(product => {
-        return product.category && product.category.isListed;
-      });
+            console.log("asdasdasda",totalProducts)
+            products = await Product.find({ category: category })
+            .populate("category")
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+            .exec();
 
-      const totalPages = Math.ceil(totalProducts / perPage);
+            console.log("bdgvbdfdf",category  )
+            selectedCategory = category;
+        } else {
+            totalProducts = await Product.countDocuments();
+            // Query the database to find all products
+            products = await Product.find()
+                .populate("category")
+                .skip(perPage * page - perPage)
+                .limit(perPage)
+                .exec();
+        }
 
-      res.render("user/shop", {
-        title: "Product Page",
-        products: listedProducts,
-        selectedCategory: selectedCategory,
-        totalPages: totalPages,
-        currentPage: page,
-        perPages: perPage,
-      });
+        // Filter out products that are not listed
+        listedProducts = products.filter(product => {
+            return product.category && product.category.isListed;
+        });
+
+        const totalPages = Math.ceil(totalProducts / perPage);
+
+        const categories = await Category.find();
+
+        res.render("user/shop", {
+            title: "Product Page",
+            products: listedProducts,
+            selectedCategory: selectedCategory,
+            categories:categories,
+            totalPages: totalPages,
+            currentPage: page,
+            perPages: perPage,
+            user:req.session.user
+        });
     } catch (error) {
-      console.error("Error fetching products:", error);
-      res.status(500).render("error", { message: "Error fetching products" });
+        console.error("Error fetching products:", error);
     }
-  }
+}
+
+
 
   
-  const getShopPagination = async(req,res) => {
-    const perPage = 6; 
-      const page = req.query.page || 1;
-      try {
-          const totalProducts = await Product.countDocuments();
+  const getShopPagination = async (req, res) => {
+    const perPage = 6;
+    const page = req.query.page || 1;
+    try {
+        let totalProducts;
+        let products;
+        let selectedCategory = null;
 
-          const products = await Product.find()
-              .skip(perPage * page - perPage)
-              .limit(perPage)
-              .exec();
+        // Extract category query parameter from the request
+        const category = req.query.category;
 
-          const totalPages = Math.ceil(totalProducts / perPage);
+        // Count total number of products
+        if (category) {
+            totalProducts = await Product.countDocuments({ category: category });
+            // Query the database to find products matching the specified category
+            products = await Product.find({ category: category })
+                .skip(perPage * page - perPage)
+                .limit(perPage)
+                .exec();
+            selectedCategory = category;
+        } else {
+            totalProducts = await Product.countDocuments();
+            // Query the database to find all products
+            products = await Product.find()
+                .skip(perPage * page - perPage)
+                .limit(perPage)
+                .exec();
+        }
 
-          res.render("user/shop", {
-              title: "Product Page",
-              products: products,
-              totalPages: totalPages,
-              currentPage: page,
-              perPages: perPage
-          });
-      } catch (error) {
-          console.error("Error fetching products:", error);
-          res.status(500).render("error", { message: "Error fetching products" });
-      }
-  }
+        const totalPages = Math.ceil(totalProducts / perPage);
+
+        res.render("user/shop", {
+            title: "Product Page",
+            products: products,
+            selectedCategory: selectedCategory,
+            totalPages: totalPages,
+            currentPage: page,
+            perPages: perPage,
+            user:req.session.user
+        });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).render("error", { message: "Error fetching products" });
+    }
+}
 
 
 

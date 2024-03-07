@@ -95,7 +95,7 @@
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Order detail</h2>
-                    <p>Details for Order ID:  <%= order._id %></p>
+                    <p>Details for Order ID:  <%= order.trackingId %></p>
                 </div>
             </div>
             <div class="card">
@@ -105,16 +105,14 @@
                             <span>
                                 <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2020, 4:34PM</b>
                             </span> <br>
-                            <small class="text-muted">Order ID: <%= order._id %></small>
+                            <small class="text-muted">Order ID: <%= order.trackingId %></small>
                         </div>
                         
                     </div>
                     <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
-                        <option>Change status</option>
-                        <option>Awaiting payment</option>
-                        <option>Confirmed</option>
-                        <option>Shipped</option>
-                        <option>Delivered</option>
+                        <option>Pending</option>
+                        <option>paid</option>
+                        <option onclick="cancelOrder('<%= order.trackingId %>')">Cancelled</option>
                     </select>   
                 </header> <!-- card-header end// -->
                 
@@ -184,7 +182,7 @@
                                             </td>
                                             <td> ₹ <%= product.product.price %> </td>
                                             <td> <%= product.quantity %> </td>
-                                            <td class="text-end"> <%= totalPrice %> </td>
+                                            <td class="text-end"> ₹ <%= product.product.price * product.quantity %> %> </td>
                                         </tr>
                                         <% }) %>
                                     </tbody>
@@ -219,6 +217,25 @@
             </div>
         </footer>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            function  cancelOrder(orderId) {
+    Swal.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete"
+    }).then((result) => {
+        if (result.isConfirmed) {
+        window.location.href = "/cancelOrder/" + orderId;
+        }
+    });
+    }
+        </script>
     <script src="admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="admin-assets/js/vendors/select2.min.js"></script>

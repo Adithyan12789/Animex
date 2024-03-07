@@ -49,7 +49,7 @@ router.get("/publishProduct/:id",admin, productController.publishProducts);
 
 //Order page
 
-router.get("/orderList",admin, orderController.orderListPage);
-router.get("/orderDetails/:id",admin, cartController.orderDetails);
+router.get('/orderList', admin, orderController.adminOrdersProfilePage); // Orders page
+router.get('/orderDetails/:id',admin, orderController.adminTrackOrderPage); // Orders page
 
 module.exports = router;

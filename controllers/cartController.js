@@ -4,6 +4,7 @@ const User = require('../models/userModel');
 const Address = require('../models/address');
 const Order = require('../models/order');
 
+
 const cart = async (req, res) => {
     try {
         const userId = req.session.userID;
@@ -11,6 +12,7 @@ const cart = async (req, res) => {
             path: "items.product",
             message: "Product",
         });
+        console.log("wefwfw",userCart)
         res.status(200).render("user/cart", { cart: userCart, user: req.session.user });
     } catch (error) {
         console.error("Error fetching user's cart:", error);
@@ -208,6 +210,11 @@ const placeOrder = async (req, res) => {
 
             await order.save();
 
+            await Cart.findOneAndUpdate(
+                { userId: user._id },
+                { $set: { items: [], totalPrice: 0 } }
+            );
+
 
             for(const item of order.items){
                 await Product.findByIdAndUpdate(
@@ -244,29 +251,29 @@ const placeOrder = async (req, res) => {
 
 
 
-//Admin - Side
+// //Admin - Side
 
 
-const orderDetails = async (req, res) => {
-    try {
-        const id = req.params.id;
+// const orderDetails = async (req, res) => {
+//     try {
+//         const id = req.params.id;
 
-        const userId = req.session.userID;
+//         const userId = req.session.userID;
 
-        // Find the user based on userId
-        const user = await User.findById(userId);
+//         // Find the user based on userId
+//         const user = await User.findById(userId);
 
-        // Find the order details and populate the product details
-        const order = await Order.findById(id).populate("items.product");
+//         // Find the order details and populate the product details
+//         const order = await Order.findById(id).populate("items.product");
 
-        const userCart = await Cart.findOne({ userId })
+//         const userCart = await Cart.findOne({ userId })
 
-        res.render("admin/orderDetails", { order, user ,totalPrice: userCart ? userCart.totalPrice : 0});
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-}
+//         res.render("admin/orderDetails", { order, user ,totalPrice: userCart ? userCart.totalPrice : 0});
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).send('Server Error');
+//     }
+// }
 
 module.exports = {
     cart,
@@ -275,5 +282,5 @@ module.exports = {
     deleteCart,
     checkoutPage,
     placeOrder,
-    orderDetails
+    // orderDetails
 };
