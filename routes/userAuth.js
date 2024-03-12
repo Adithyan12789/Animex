@@ -70,4 +70,5 @@ router.get("/addTowishlist/:id", user, userController.wishlistPage)
 router.get('/removeWishlist/:id', user, userController.deleteWishlist);
 
 
+
 module.exports = router;

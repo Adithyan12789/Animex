@@ -109,11 +109,15 @@
                         </div>
                         
                     </div>
-                    <!-- <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
-                        <option>Pending</option>
-                        <option>paid</option>
-                        <option>Cancelled</option>
-                    </select>    -->
+                    <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                        <select id="statusSelect" class="form-select d-inline-block mb-lg-0 mb-15 mw-200" name="newStatus" onchange="updateOrderStatus('<%= order._id %>')">
+                            <option>Change status</option>
+                            <option value="Pending" <%= order.orderStatus === "Pending" ? "selected" : '' %>>Processing Order</option>
+                            <option value="Shipped" <%= order.orderStatus === "Shipped" ? "selected" : '' %>>Shipped</option>
+                            <option value="Delivered" <%= order.orderStatus === "Delivered" ? "selected" : '' %>>Delivered</option>
+                            <option value="Cancelled" <%= order.orderStatus === "Cancelled" ? "selected" : '' %>>Cancelled</option>
+                        </select>                        
+                    </div>
                 </header> <!-- card-header end// -->
                 
                 <div class="card-body">
@@ -126,7 +130,11 @@
                                 <div class="text">
                                     <h6 class="mb-1">Customer</h6>
                                     <p class="mb-1">
-                                        <%= user.name %> <br> <%= user.email %> <br> +91 <%= user.mobile %>
+                                        <% if (user) { %>
+                                            <%= user.name %> <br> <%= user.email %> <br> +91 <%= user.mobile %>
+                                        <% }else { %>
+                                            <h2>There is no users</h2>
+                                        <% } %>
                                     </p>
                                 </div>
                             </article>
@@ -139,7 +147,7 @@
                                 <div class="text">
                                     <h6 class="mb-1">Order info</h6>
                                     <p>Payment Method: COD</p>
-                                    <p>Status: <%= order.orderStatus %></p>
+                                    <p>Status: <%= order.paymentStatus %></p>
                                 </div>
                             </article>
                         </div> <!-- col// -->
@@ -218,7 +226,52 @@
         </footer>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Inside the <head> tag -->
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function updateOrderStatus(orderId) {
+    const newStatus = document.getElementById("statusSelect").value;
+    fetch('/update_order_status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ orderId, newStatus })
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        // Handle success response (if needed)
+        Swal.fire({
+            title: 'Success!',
+            text: data.message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    })
+    .catch(error => {
+        // Handle error
+        console.error('Error updating order status:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Failed to update order status',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+
+</script>
+
+
+    
 
         <script>
             function  cancelOrder(orderId) {

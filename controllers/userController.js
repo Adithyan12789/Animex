@@ -846,10 +846,10 @@ const ordersProfilePage = async (req, res) => {
   }
 };
 
-const trackOrderPage = async (req, res) => {
-  const id = req.params.id;
+  const trackOrderPage = async (req, res) => {
+    const id = req.params.id;
 
-  try {
+    try {
       const userId = req.session.userID;
 
       // Find the user based on userId
@@ -858,21 +858,45 @@ const trackOrderPage = async (req, res) => {
       // Find the order based on the provided id and populate the items
       const order = await Order.findOne({ _id: id }).populate("items.product");
 
-      console.log("order: ",order)
+  
 
       // Find the cart document for the user
-   const cart = await Cart.findOne({ userId: req.session.userID });
-   let cartItemCount = 0;
-   if (cart) {
-       cartItemCount = cart.items.length; // Get the count of items in the cart
-   }
+      const cart = await Cart.findOne({ userId: req.session.userID });
+      let cartItemCount = 0;
+      if (cart) {
+        cartItemCount = cart.items.length; // Get the count of items in the cart
+      }
+
+      let pending, shipped, delivered, cancelled
+
+      console.log("order status: ",order.orderStatus)
+
+      if(order.orderStatus === "Pending"){
+        pending = "#F78200"
+      }else if(order.orderStatus === "Shipped"){
+        shipped = "#FFAD00"
+      }else if(order.orderStatus === "Delivered"){
+        delivered = "#00FF2D"
+      }else if(order.orderStatus === "Cancelled"){
+        cancelled = "#FF0000"
+      }
+
       // Render the "user/trackOrder" view with the user and order data
-      res.render("user/trackOrder", { user, order,count :cartItemCount });
-  } catch (error) {
+      res.render("user/trackOrder", {
+        user,
+        order,
+        count: cartItemCount,
+        pending,
+        shipped,
+        delivered,
+        cancelled
+      });
+    } catch (error) {
       console.error("Error:", error);
       res.status(500).send("Internal Server Error");
-  }
-}
+    }
+  };
+
 
 
 const orderPage = async (req, res) => {

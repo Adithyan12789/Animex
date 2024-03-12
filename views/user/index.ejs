@@ -93,6 +93,21 @@
 .btn-update:hover {
     background-color: #218838; /* Darker shade of green on hover */
 }
+.out-of-stock-message {
+    font-weight: bold;
+    color: #ff0000; /* Red color */
+    font-size: 18px;
+    animation: pulse 1s infinite alternate; /* Add a pulsating animation */
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
 
 	</style>
 
@@ -273,8 +288,7 @@
 							<div class="col-lg-4 mb-4 text-center">
 								<div class="product-entry border">
 									<div class="prod-img">
-										<img src="/static/uploads/<%= item.image[0] %>" class="img-fluid"
-											alt="Free html5 bootstrap 4 template">
+										<img src="/static/uploads/<%= item.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
 									</div>
 									<div class="desc">
 										<h2><a href="#">
@@ -289,14 +303,14 @@
 												<% } %>
 											<span class="price">₹<%= item.price %></span>
 												<!-- Inside the loop where the "View Details" button is generated -->
-												<div class="buttons">
-													<button class="btn btn-primary view-details" onclick="cart('<%= item._id %>')">
-														Add to Cart <i class="fas fa-cart-plus"></i>
-													</button>
-													<button class="btn btn-primary view-details" onclick="wishlist('<%= item._id %>')">
-														<i class="fa-solid fa-heart" style="color: crimson;"></i> Wishlist
-													</button>
-												</div>   
+												<% if (item.stock <= 0) { %>
+													<p class="out-of-stock-message">Out of Stock</p>
+												<% } else { %>
+													<div class="buttons">
+														<button class="btn btn-primary view-details" onclick="cart('<%= item._id %>')">Add to Cart <i class="fas fa-cart-plus"></i></button>
+														<button class="btn btn-primary view-details" onclick="wishlist('<%= item._id %>')"><i class="fa-solid fa-heart" style="color: crimson;"></i> Wishlist</button>
+													</div>
+												<% } %>	
 									</div>
 								</div>
 							</div>

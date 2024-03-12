@@ -170,11 +170,16 @@
 						</div>
                      
                   	<div class="row">
-	                  	<div class="col-sm-12 text-right ml-4 mt-4">
-							<button class="btn btn-primary view-details" style="width: 100%;" onclick="cart('<%= product._id %>')">
-								Add to Cart
-							</button>											
-						</div>
+	                  	<% if (product.stock > 0) { %>
+							<div class="col-sm-12 text-right ml-4 mt-4">
+								<button class="btn btn-primary view-details mb-4" style="width: 100%; " onclick="wishlist('<%= product._id %>')">
+									Wishlist
+								</button>
+								<button class="btn btn-primary view-details" style="width: 100%;" onclick="cart('<%= product._id %>')">
+									Add to Cart
+								</button>											
+							</div>
+							<% } %>
 					</div>
 				</div>
 
@@ -448,6 +453,20 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			}).then((result) => {
 				if (result.isConfirmed) {
 					window.location.href = "/addTocart/" + id;
+				}
+			});
+		}
+
+		function wishlist(id) {
+			Swal.fire({
+				title: "Successfully add to Wishlist!",
+				showCancelButton: false,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "ok"
+			}).then((result) => {
+				if (result.isConfirmed) {
+					window.location.href = "/addTowishlist/" + id;
 				}
 			});
 		}

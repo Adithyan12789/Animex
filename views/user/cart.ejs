@@ -223,21 +223,25 @@
 											<%= item.product.price %>
 										</td>
 										<td class="quantity__item">
+											<% if (item.product.stock > 0) { %>
 											<div class="quantity">
-												<div class="pro-qty-2" style="display: flex;">
+													<div class="pro-qty-2" style="display: flex;">
 
-													<button class="qty-dec" data-id="<%= item.product._id %>">
-														<i class="fa fa-minus"></i>
-													</button>
-
-													<input style="width: 40px;text-align: center;" type="number	" value="<%= item.quantity %>" data-id="<%= item.product._id %>" readonly>
-													
-													<button class="qty-inc" data-id="<%= item.product._id %>">
-														<i class="fa fa-plus"></i>
-													</button>
-													
-												</div>
+														<button class="qty-dec" data-id="<%= item.product._id %>">
+															<i class="fa fa-minus"></i>
+														</button>
+	
+														<input style="width: 40px;text-align: center;" type="number	" value="<%= item.quantity %>" data-id="<%= item.product._id %>" readonly>
+														
+														<button class="qty-inc" data-id="<%= item.product._id %>">
+															<i class="fa fa-plus"></i>
+														</button>
+														
+													</div>
 											</div>
+											<% }else{ %>
+												<p style="font-weight: 500; color: red; font-size: 15px;">Out Of Stock</p>
+											<% } %>
 	
 										</td>
 										<td class="cart__price" data-id="<%= item.product._id %>">Rs <%= item.product.price * item.quantity %>

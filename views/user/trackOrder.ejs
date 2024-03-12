@@ -1,248 +1,269 @@
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Animex - Track Order</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet" />
-        <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="/static/css/style.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-JDOvPXhfZgE/bs+FMqRf1rVHzAIn2tD5z5Q3zYqlv7qIYk5Nb57Ala9b2Di1D3FJf58po05MRV31/KBtCJnH7A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <style>
-            /* Add any additional styling specific to the track order page here */
-            .order-container {
-                background: #fff;
-                border-radius: 10px;
-                padding: 20px;
-                margin: 65px auto;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-                position: relative;
-            }
-            .order-container h3 {
-                color: #333;
-                margin-bottom: 20px;
-                border-bottom: 2px solid #88c8bc;
-                padding-bottom: 10px;
-            }
-            .order-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-            }
-            .order-table th, .order-table td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-            .order-table th {
-                background-color: #f2f2f2;
-            }
-            .order-table img {
-                max-width: 50px;
-                max-height: 50px;
-                vertical-align: middle;
-            }
-            .order-table td.product-name {
-                max-width: 200px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            .order-table td.total {
-                font-weight: bold;
-            }
-             td{
-                color: black;
-                font-weight: 500;
-            }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Animex - Track Order</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-JDOvPXhfZgE/bs+FMqRf1rVHzAIn2tD5z5Q3zYqlv7qIYk5Nb57Ala9b2Di1D3FJf58po05MRV31/KBtCJnH7A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Add any additional styling specific to the track order page here */
+        .order-container {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 65px auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .order-container h3 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #88c8bc;
+            padding-bottom: 10px;
+        }
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .order-table th, .order-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .order-table th {
+            background-color: #f2f2f2;
+        }
+        .order-table img {
+            max-width: 50px;
+            max-height: 50px;
+            vertical-align: middle;
+        }
+        .order-table td.product-name {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .order-table td.total {
+            font-weight: bold;
+        }
+         td{
+            color: black;
+            font-weight: 500;
+        }
 
-            p{
-                color: black;
-                font-weight: 500;
-            }
-            .user-info, .shipping-address, .payment-info {
-                margin-bottom: 30px;
-            }
-            .user-info h4, .shipping-address h4, .payment-info h4 {
-                color: #333;
-                margin-bottom: 15px;
-                border-bottom: 1px solid #ccc;
-                padding-bottom: 5px;
-            }
-            .sidebar {
-                background: #f8f9fa;
-                border-right: 1px solid #ddd;
-                padding: 20px;
-                height: 100%;
-                position: fixed;
-                left: 0;
-                top: 0;
-                overflow-y: auto;
-                margin-top: 185px;
-            }
-            .sidebar h4 {
-                margin-bottom: 20px;
-                color: #333;
-                border-bottom: 2px solid #88c8bc;
-                padding-bottom: 10px;
-            }
-            .sidebar ul {
-                list-style: none;
-                padding-left: 0;
-            }
-            .sidebar ul li {
-                margin-bottom: 10px;
-            }
-            .sidebar li a {
-                color: #333;
-                text-decoration: none;
-                display: block;
-                padding: 10px;
-                border-radius: 5px;
-                transition: background-color 0.3s ease;
-            }
-            .sidebar li a:hover {
-                background-color: #88c8bc;
-                color: #fff;
-            }
-            .active{
-                background-color: #88c8bc;
-                border-radius: 5px;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="page">
-            <nav class="colorlib-nav" role="navigation">
-                <div class="top-menu">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-7 col-md-9">
-                                <div id="colorlib-logo"><a href="/">Animex</a></div>
-                            </div>
-                            <div class="col-sm-5 col-md-3">
-                                <form action="#" class="search-wrap">
-                                    <div class="form-group">
-                                        <input type="search" class="form-control search" placeholder="Search">
-                                        <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
+        p{
+            color: black;
+            font-weight: 500;
+        }
+        .user-info, .shipping-address, .payment-info {
+            margin-bottom: 30px;
+        }
+        .user-info h4, .shipping-address h4, .payment-info h4 {
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .sidebar {
+            background: #f8f9fa;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            margin-top: 185px;
+        }
+        .sidebar h4 {
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #88c8bc;
+            padding-bottom: 10px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar li a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .sidebar li a:hover {
+            background-color: #88c8bc;
+            color: #fff;
+        }
+        /* Add any additional styling specific to the order progress bar here */
+.progress-bar {
+  font-weight: bold;
+  text-align: center;
+}
+
+
+    </style>
+</head>
+<body>
+    <div id="page">
+        <nav class="colorlib-nav" role="navigation">
+            <div class="top-menu">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-7 col-md-9">
+                            <div id="colorlib-logo"><a href="/">Animex</a></div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12 text-left menu-1">
-                                <ul>
-                                    <li><a href="/">Home</a></li>
-                                    <li><a href="/shop">Shop</a></li>   
-                                    <li><a href="about.ejs">About</a></li>
-                                    <li><a href="contact.ejs">Contact</a></li>
-                                    <li style="float: right;"><a href="/profile"><i class="fas fa-user-circle fa-2x"></i></a></li>
-                                    <li style="float: right;"><a href="/wishlist"><i class="fa-solid fa-heart fa-2x"></i></a></li>
-                                    <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
-                                    <li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
-                                </ul>
-                            </div>
+                        <div class="col-sm-5 col-md-3">
+                            <form action="#" class="search-wrap">
+                                <div class="form-group">
+                                    <input type="search" class="form-control search" placeholder="Search">
+                                    <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </div>
-            </nav>
-            <hr>
-            <div class="container-fluid">
-                <div class="row mt-5">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-3">
-                        <% if (user) { %>
-                            <div class="user-info">
-                                <h4>User Information</h4>
-                                <p><strong>Name:</strong> <%= user.name %></p>
-                                <p><strong>Email:</strong> <%= user.email %></p>
-                                <p><strong>Phone:</strong> <%= user.mobile %></p>
-                            </div>
-                        <% } else { %>
-                            <p>User information not available</p>
-                        <% } %>                        
-                    </div>                    
-                    <div class="col-md-3">
-                        <div class="shipping-address">
-                            <h4>Shipping Address</h4>
-                                        <p><strong>Address:</strong> <%= order.billingDetails.address1 %></p>
-                                        <p><strong>Street Name:</strong> <%= order.billingDetails.address2 %></p>
-                                        <p><strong>City:</strong> <%= order.billingDetails.city %></p>
-                                        <p><strong>Pin Code:</strong> <%= order.billingDetails.postalCode %></p>
-                                        <p><strong>Country:</strong> <%= order.billingDetails.country %></p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="payment-info">
-                            <h4>Payment Information</h4>
-                            <p><strong>Cash On Delivery</strong></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="sidebar">
-                            <h4>Account Settings</h4>
+                    <div class="row">
+                        <div class="col-sm-12 text-left menu-1">
                             <ul>
-                                <li ><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
-                                <li ><a href="/addressManage"><i class="fas fa-address-book"></i> Address Management</a></li>
-                                <li class="active"><a href="/orderProfile"><i class="fas fa-list"></i> Orders</a></li>
+                                <li><a href="/">Home</a></li>
+                                <li><a href="/shop">Shop</a></li>   
+                                <li><a href="about.ejs">About</a></li>
+                                <li><a href="contact.ejs">Contact</a></li>
+                                <li style="float: right;"><a href="/profile"><i class="fas fa-user-circle fa-2x"></i></a></li>
+                                <li style="float: right;"><a href="/wishlist"><i class="fa-solid fa-heart fa-2x"></i></a></li>
+                                <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
+                                <li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
                             </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-10">
-                        <div class="order-container">
-                            <h3>Order Details</h3>
-                            <table class="order-table">
-                                <thead>
-                                    <tr>
-                                        <th>Image</th>
-                                        <th>Product Name</th>
-                                        <th>Unit Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% if (order.items){ %>
-                                        <% order.items.forEach(product => { %>
-                                            <tr>
-                                                <td><img src="/static/uploads/<%= product.product.image[0]%>" alt="<%= product.name %>"></td>
-                                                <td class="product-name"><%= product.product.name %></td>
-                                                <td>$<%= product.product.price %></td>
-                                                <td><%= product.quantity %></td>
-                                                <td>$<%= product.product.price * product.quantity %></td>
-                                            </tr>
-                                        <% }) %>
-                                    <% } else { %>
-                                        <tr>
-                                            <td colspan="5"><p>No products</p></td>
-                                        </tr>
-                                    <% } %>
-                                </tbody>                                
-                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </nav>
+        <hr>
+        <div class="container-fluid">
+            <div class="row mt-5">
+                <div class="col-md-8 offset-md-2">
+                    <div class="progress" style="height: 2rem;">
+                        <% if (cancelled) { %>
+                            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 100%; background-color: <%= cancelled %>;" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">cancelled</div>
+                        <% }else{ %>
+                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 33%; background-color: <%= pending %>;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Processing Order</div>
+                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 33%; background-color: <%= shipped %>;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Shipped</div>
+                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 34%; background-color: <%= delivered %>;" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">Delivered</div>
+                        <% } %>
+                    </div>                      
+                </div>                
+            </div>
+            
+            <br>
+            <br>
 
-        <script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="/static/js/jquery.min.js"></script>
-        <script src="/static/js/popper.min.js"></script>
-        <script src="/static/js/bootstrap.min.js"></script>
-        <script>
-            // JavaScript to format and display order date
-            document.addEventListener('DOMContentLoaded', function () {
-                // Replace the example date string with the actual order date
-                var orderDateStr = "2024-03-01T12:00:00Z"; // Example date string
-                var orderDate = new Date(orderDateStr);
-                var options = { year: 'numeric', month: 'long', day: 'numeric' };
-                var formattedDate = orderDate.toLocaleDateString("en-US", options);
-                document.getElementById("orderDate").textContent = formattedDate;
-            });
-        </script>
-    </body>
-    </html>
+            <div class="row mt-5">
+                <div class="col-md-2"></div>
+                <div class="col-md-3">
+                    <% if (user) { %>
+                        <div class="user-info">
+                            <h4>User Information</h4>
+                            <p><strong>Name:</strong> <%= user.name %></p>
+                            <p><strong>Email:</strong> <%= user.email %></p>
+                            <p><strong>Phone:</strong> <%= user.mobile %></p>
+                        </div>
+                    <% } else { %>
+                        <p>User information not available</p>
+                    <% } %>                        
+                </div>                    
+                <div class="col-md-3">
+                    <div class="shipping-address">
+                        <h4>Shipping Address</h4>
+                                    <p><strong>Address:</strong> <%= order.billingDetails.address1 %></p>
+                                    <p><strong>Street Name:</strong> <%= order.billingDetails.address2 %></p>
+                                    <p><strong>City:</strong> <%= order.billingDetails.city %></p>
+                                    <p><strong>Pin Code:</strong> <%= order.billingDetails.postalCode %></p>
+                                    <p><strong>Country:</strong> <%= order.billingDetails.country %></p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="payment-info">
+                        <h4>Payment Information</h4>
+                        <p><strong>Cash On Delivery</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="sidebar">
+                        <h4>Account Settings</h4>
+                        <ul>
+                            <li ><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
+                            <li ><a href="/addressManage"><i class="fas fa-address-book"></i> Address Management</a></li>
+                            <li class="actives"><a href="/orderProfile"><i class="fas fa-list"></i> Orders</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-10">
+                    <div class="order-container">
+                        <h3>Order Details</h3>
+                        <table class="order-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Product Name</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (order.items){ %>
+                                    <% order.items.forEach(product => { %>
+                                        <tr>
+                                            <td><img src="/static/uploads/<%= product.product.image[0]%>" alt="<%= product.name %>"></td>
+                                            <td class="product-name"><%= product.product.name %></td>
+                                            <td>$<%= product.product.price %></td>
+                                            <td><%= product.quantity %></td>
+                                            <td>$<%= product.product.price * product.quantity %></td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="5"><p>No products</p></td>
+                                    </tr>
+                                <% } %>
+                            </tbody>                                
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script>
+        // JavaScript to format and display order date
+        document.addEventListener('DOMContentLoaded', function () {
+            // Replace the example date string with the actual order date
+            var orderDateStr = "2024-03-01T12:00:00Z"; // Example date string
+            var orderDate = new Date(orderDateStr);
+            var options = { year: 'numeric', month: 'long', day: 'numeric' };
+            var formattedDate = orderDate.toLocaleDateString("en-US", options);
+            document.getElementById("orderDate").textContent = formattedDate;
+        });
+    </script>
+</body>
+</html>

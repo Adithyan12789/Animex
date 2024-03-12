@@ -50,6 +50,7 @@ router.get("/publishProduct/:id",admin, productController.publishProducts);
 
 router.get('/orderList', admin, orderController.adminOrdersProfilePage); // Orders page
 router.get('/orderDetails/:id',admin, orderController.adminTrackOrderPage); // Orders page
+router.post('/update_order_status', admin,orderController.updateOrderStatus);
 router.get('/deleteOrder/:orderId', admin, orderController.deleteOrder); // Add Address page
 
 module.exports = router;

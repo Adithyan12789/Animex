@@ -45,6 +45,31 @@ const adminTrackOrderPage = async (req, res) => {
 //User Side Code
 
 
+const updateOrderStatus = async (req,res) => {
+    try {
+
+        console.log("sdfsdfsdfsdf");
+        const orderId = req.body.orderId;
+        const newStatus = req.body.newStatus;
+
+        console.log(orderId)
+        console.log(newStatus)
+
+        // Find the order by orderId and update its status
+        const order = await Order.findByIdAndUpdate(orderId, { orderStatus: newStatus }, { new: true });
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        return res.status(200).json({ message: 'Order status updated successfully', order });
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
 // Assuming you have a route like /cancelOrder/:orderId
 const cancelOrder = async (req, res) => {
     try {
@@ -58,7 +83,7 @@ const cancelOrder = async (req, res) => {
         }
         
         // Update the order status to "canceled"
-        order.orderStatus = 'canceled';
+        order.paymentStatus = 'canceled';
         await order.save();
 
         res.redirect("/orderProfile")
@@ -80,7 +105,7 @@ const deleteOrder = async (req, res) => {
         }
         
         // Update the order status to "canceled"
-        order.orderStatus = 'canceled';
+        order.paymentStatus = 'canceled';
         await order.save();
 
         res.redirect("/orderList")
@@ -102,7 +127,7 @@ module.exports = {
 
 
     //User-side
-
+    updateOrderStatus,
     cancelOrder,
     deleteOrder
 };

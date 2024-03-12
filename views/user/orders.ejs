@@ -156,8 +156,8 @@
                                         <th>Order ID</th>
                                         <th>Date</th>
                                         <th>Total Amount</th>
-                                        <th>Payment Status</th>
                                         <th>Order Status</th>
+                                        <th>Payment Status</th>
                                         <th style="padding-left: 120px">Action</th>
                                     </tr>
                                 </thead>
@@ -168,12 +168,12 @@
                                                 <td>ord_<%=order.trackingId %></td>
                                                 <td><%= new Date(order.orderDate).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
                                                 <td><%= order.totalPrice %></td>
-                                                <td>Pending</td>
+                                                <td><%= order.orderStatus %></td>
                                                 <td>
-                                                <% if (order.orderStatus) { %>
-                                                    <%= order.orderStatus %>
+                                                <% if (order.paymentStatus) { %>
+                                                    <%= order.paymentStatus %>
                                                 <% }else{ %>
-                                                    <p>there is no orderStatus</p>
+                                                    <p>there is no paymentStatus</p>
                                                 <% } %>
                                                 </td>
                                                 <td>

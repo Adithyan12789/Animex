@@ -60,6 +60,21 @@
         .active{
             color: aquamarine;
         }
+        .out-of-stock-message {
+    font-weight: bold;
+    color: #ff0000; /* Red color */
+    font-size: 18px;
+    animation: pulse 1s infinite alternate; /* Add a pulsating animation */
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
     </style>
 </head>
 <body>
@@ -192,8 +207,10 @@
                         <% products.forEach(product => { %> 
                         <div class="col-md-3 col-lg-3 mb-4 text-center">
                             <div class="product-entry border">
-                                <a href="/product-details/<%= product._id %>" class="prod-img">
-                                    <img src="/static/uploads/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+                                <a href="/product-details/<%= product._id %>">
+                                    <div class="prod-img">
+                                        <img src="/static/uploads/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+                                    </div>
                                 </a>
                                 <div class="desc">
                                     <h2><a href="#"><%= product.name %></a></h2>
@@ -212,9 +229,15 @@
                                         <span class="fa fa-star"></span>
                                         <span class="fa fa-star"></span>
                                     </div>
-                                    <button class="btn btn-primary view-details" onclick="cart('<%= product._id %>')">
-                                        addTocart<i class="fas fa-cart-plus"></i> <!-- Add to Cart Icon -->
-                                    </button>
+                                    <!-- Inside the loop where the "View Details" button is generated -->
+												<% if (product.stock <= 0) { %>
+													<p class="out-of-stock-message">Out of Stock</p>
+												<% } else { %>
+													<div class="buttons">
+														<button class="btn btn-primary view-details" onclick="cart('<%= product._id %>')">Add to Cart <i class="fas fa-cart-plus"></i></button>
+														<button class="btn btn-primary view-details" onclick="wishlist('<%= product._id %>')"><i class="fa-solid fa-heart" style="color: crimson;"></i></button>
+													</div>
+												<% } %> 
                                 </div>
                             </div>
                         </div>
