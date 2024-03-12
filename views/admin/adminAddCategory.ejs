@@ -106,13 +106,15 @@
           <div class="row">
             <form action="/addCategory" method="post">
               <div class="mb-4">
-                <label for="category_name" class="form-label">Name</label>
-                <input type="text" placeholder="Enter category name" class="form-control" id="category_name" name="name" required/>
-              </div>
-              <div class="mb-4">
-                <label for="category_description" class="form-label">Description</label>
-                <textarea placeholder="Enter category description" class="form-control" id="category_description" name="description" required></textarea>
-              </div>
+                <label class="form-label">Category</label>
+                <input type="text" placeholder="Type here" name="name" class="form-control" id="product_name" required onkeyup="validateName()">
+                 <span id="name-error" style="font-size: 14px;"></span> <!-- Corrected ID -->
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Description</label>
+                <textarea placeholder="Type here" class="form-control" name="description" rows="4" id="product_description" required onkeyup="validateDescription()"></textarea>
+                <span id="descriptionError" style="font-size: 14px;"></span>
+            </div>
               <div class="d-grid">
                 <button type="submit" class="btn btn-primary">Add category</button>
               </div>
@@ -136,6 +138,58 @@
       </div>
     </footer>
   </main>
+
+
+
+  <script>
+    setTimeout(() => {
+      document.getElementById("error").style.display = "none";
+    }, 3000);
+    var nameError = document.getElementById("name-error");
+    var descriptionError = document.getElementById("description-error");
+    var submitError = document.getElementById("submit-error");
+
+    function validateName() {
+var name = document.getElementById("product_name").value.trim();
+var nameError = document.getElementById("name-error"); // Corrected ID
+
+if (name.length === 0) {
+    nameError.innerHTML = "Product name is required";
+    nameError.style.color = "red";
+    return false;
+}
+
+nameError.innerHTML = "Valid";
+nameError.style.color = "green";
+return true;
+}
+
+function validateDescription() {
+var desc = document.getElementById("product_description").value.trim();
+var descriptionError = document.getElementById("descriptionError");
+
+if (desc.length === 0) {
+    descriptionError.innerHTML = "Description is required";
+    descriptionError.style.color = "red";
+    return false;
+}
+descriptionError.innerHTML = "Valid";
+    descriptionError.style.color = "green";
+    return true;
+}
+
+        function validateForm() {
+          if (!validateName() || !validateDescription()) {
+            submitError.style.display = "block";
+            submitError.innerHTML = "Please enter all the fields to submit ";
+            submitError.style.color = "red";
+            setTimeout(function () {
+              submitError.style.display = "none";
+            }, 3000);
+            return false;
+          }
+        }
+      </script>
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

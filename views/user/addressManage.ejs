@@ -86,13 +86,14 @@
             padding: 10px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            font-weight: 500;
         }
         .sidebar li a:hover {
             background-color: #88c8bc;
             color: #fff;
         }
         .active{
-            background-color: #88c8bc;
+            color: #88c8bc;
             border-radius: 5px;
         }
     </style>
@@ -110,7 +111,7 @@
                             <form action="#" class="search-wrap">
                                 <div class="form-group">
                                     <input type="search" class="form-control search" placeholder="Search">
-                                    <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+                                    <button class="btn btn-primary submit-search text-center" type="submit"><i class="fas fa-search"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -118,13 +119,15 @@
                     <div class="row">
                         <div class="col-sm-12 text-left menu-1">
                             <ul>
+                                
                                 <li><a href="/">Home</a></li>
-                                <li><a href="/shop">Shop</a></li>    
+                                <li><a href="/shop">Shop</a></li>   
                                 <li><a href="about.ejs">About</a></li>
                                 <li><a href="contact.ejs">Contact</a></li>
-                                <li style="float: right;"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
-                                <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                                <li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li> 
+                                <li style="float: right;" class="active"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
+                                <li style="float: right;" ><a href="/wishlist"><i class="fa-solid fa-heart fa-2x"></i></a></li>
+                                <li class="cart"><a href="/cart"><i class="fas fa-shopping-cart fa-lg"></i> Cart [<%= count  %>]</a></li>
+                                <li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
                             </ul>
                         </div>
                     </div>
@@ -138,9 +141,9 @@
                     <div class="sidebar">
                         <h4>Account Settings</h4>
                         <ul>
-                            <li><a href="/profile">Profile</a></li>
-                            <li class="active"><a href="/addressManage">Address Management</a></li>
-                            <li><a href="/orderProfile">Orders</a></li>
+                            <li ><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
+                            <li class="active"><a href="/addressManage"><i class="fas fa-address-book"></i> Address Management</a></li>
+                            <li><a href="/orderProfile"><i class="fas fa-list"></i> Orders</a></li>
                         </ul>
                     </div>
                 </div>
@@ -175,6 +178,8 @@
             </div>
         </div>
     </div>
+
+    <script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

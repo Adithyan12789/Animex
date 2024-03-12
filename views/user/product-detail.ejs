@@ -80,7 +80,15 @@
 								<li class="active"><a href="/shop">Shop</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
-								<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+								<li style="float: right;"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
+								<li style="float: right;"><a href="/wishlist"><i class="fa-regular fa-heart fa-2x"></i></a></li>
+								<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
+								
+								<% if(user) { %>
+                                    <li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
+								<% } else { %>
+                                    <li class="login"><a href="/userlogin"><i class="login-Page"></i> Login</a></li>
+                                <% } %>
 							</ul>
 						</div>
 					</div>
@@ -153,15 +161,19 @@
 								</span>
 							</p>
 							<p style="padding-top: 30px;"><%= product.description %></p>
+
+							<p>Availability:
+								<span class="availability-text <%= product.stock < 1 ? 'text-danger' : (product.stock === 1 ? 'text-danger' : 'text-success') %> ml-5">
+									<%= product.stock < 1 ? 'Out of stock' : (product.stock === 1 ? '1 item in stock' : product.stock + ' items in stock') %>
+								</span>
+							</p>
 						</div>
                      
                   	<div class="row">
 	                  	<div class="col-sm-12 text-right ml-4 mt-4">
-								<button class="btn btn-primary view-details" style="width: 100%;" onclick="cart('<%= product._id %>')">
-									addTocart<i class="fas fa-cart-plus"></i> <!-- Add to Cart Icon -->
-								</button>
-								</div>
-							</div>
+							<button class="btn btn-primary view-details" style="width: 100%;" onclick="cart('<%= product._id %>')">
+								Add to Cart
+							</button>											
 						</div>
 					</div>
 				</div>
@@ -440,6 +452,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			});
 		}
 	</script>
+
+<script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
 	
 	<!-- jQuery -->
 	<script src="/static/js/jquery.min.js"></script>

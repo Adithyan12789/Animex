@@ -101,15 +101,16 @@
                         </div>
                         <div class="card-body">
                             <form action="/adminAddProduct" method="post" enctype="multipart/form-data">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" id="name" name="name" class="form-control"
-                                        placeholder="Enter name" required>
+                                <div class="mb-4">
+                                    <label class="form-label">Product title</label>
+                                    <input type="text" placeholder="Type here" name="name" class="form-control" id="product_name" required onkeyup="validateName()">
+                                   <span id="name-error" style="font-size: 14px;"></span>
+
                                 </div>
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea id="description" name="description" class="form-control"
-                                        placeholder="Enter description" rows="3"></textarea>
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea placeholder="Type here" class="form-control" name="description" rows="4" id="product_description" required onkeyup="validateDescription()"></textarea>
+                                    <span id="description-error" style="font-size: 14px;"></span>
                                 </div>
                                 <div class="mb-3">
                                     <label for="category" class="form-label">Category</label>
@@ -119,19 +120,21 @@
                                         <% }) %>
                                     </select>
                                 </div>                                
-                                <div class="mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="number" id="price" name="price" class="form-control"
-                                        placeholder="Enter price" min="0" step="0.01" required>
+                                <div class="mb-4">
+                                    <label class="form-label">New Cost</label>
+                                    <input type="text" placeholder="₹00.0" name="price" class="form-control" id="product_price" required onkeyup="validatePrice()"> <!-- Corrected function name -->
+                                    <span id="price-error" style="font-size: 14px;"></span> <!-- Corrected ID -->
                                 </div>
-                                <div class="mb-3">
-                                    <label for="stock" class="form-label">Stock</label>
-                                    <input type="number" id="stock" name="stock" class="form-control"
-                                        placeholder="Enter stock" min="0" required>
+                                <div class="mb-4">
+                                    <label class="form-label">Stocks</label>
+                                    <input type="text" placeholder="stocks" name="stock" class="form-control" id="product_stock" required onkeyup="validateStock()"> <!-- Corrected function name -->
+                                    <span id="stock-error" style="font-size: 14px;"></span> <!-- Corrected ID -->
                                 </div>
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Select Image</label>
-                                    <input type="file" id="image" name="image" class="form-control" required multiple>
+                                    <input type="file" id="imageInput" name="image" class="form-control" required multiple>
+                                </div>
+                                <div id="imagePreviewContainer" style="width: 100px;"></div>
                                 </div>
                                 <div class="mb-3">
                                     <button type="submit" class="btn btn-primary">Add Product</button>
@@ -156,6 +159,137 @@
                 </div>
             </footer>
     </main>
+
+    <script>
+        // Function to preview selected images
+        function previewImages() {
+            var previewContainer = document.getElementById('imagePreviewContainer');
+            var files = document.getElementById('imageInput').files;
+        
+            previewContainer.innerHTML = '';
+        
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+        
+                reader.onload = function(e) {
+                    var image = document.createElement('img');
+                    image.className = 'preview-image';
+                    image.src = e.target.result;
+                    previewContainer.appendChild(image);
+                };
+        
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Event listener for file input change
+        document.getElementById('imageInput').addEventListener('change', previewImages);
+        </script>
+
+    <script>
+        var nameError = document.getElementById("name-error");
+        var descriptionError = document.getElementById("description-error");
+        var priceError = document.getElementById("price-error");
+        var imageError = document.getElementById("image-error");
+        var stockError = document.getElementById("stock-error");
+        var submitError = document.getElementById("submit-error");
+    
+        function validateName() {
+          var name = document.getElementById("product_name").value.trim();
+          if (name.length === 0) {
+            nameError.innerHTML = "Product name is required";
+            nameError.style.color = "red";
+            return false;
+          }
+          nameError.innerHTML = "Valid";
+          nameError.style.color = "green";
+          return true;
+        }
+    
+        function validateDescription() {
+    var descriptionInput = document.getElementById("product_description");
+    var desc = descriptionInput.value.trim();
+    var descriptionError = document.getElementById("description-error");
+
+    // Check if the description is empty
+    if (desc.length === 0) {
+        descriptionError.innerHTML = "Description is required";
+        descriptionError.style.color = "red";
+        return false;
+    }
+    // Check if the description length exceeds a maximum limit (e.g., 500 characters)
+    var maxLength = 500;
+    if (desc.length > maxLength) {
+        descriptionError.innerHTML = "Description should not exceed " + maxLength + " characters";
+        descriptionError.style.color = "red";
+        return false;
+    }
+
+    // Clear any previous error messages and indicate valid input
+    descriptionError.innerHTML = "Valid";
+    descriptionError.style.color = "green";
+    return true;
+}
+
+
+function validatePrice() {
+    var price = document.getElementById("product_price").value.trim();
+    var priceError = document.getElementById("price-error"); // Corrected ID
+
+    if (price.length === 0 || isNaN(price) || parseFloat(price) <= 0) {
+        priceError.innerHTML = "Price is required and must be a positive number";
+        priceError.style.color = "red";
+        return false;
+    }
+
+    priceError.innerHTML = "Valid";
+    priceError.style.color = "green";
+    return true;
+}
+
+function validateStock() {
+    var stock = document.getElementById("product_stock").value.trim();
+    var stockError = document.getElementById("stock-error"); // Corrected ID
+
+    if (stock.length === 0 || isNaN(stock) || parseInt(stock) < 0) {
+        stockError.innerHTML = "Stock is required and must be a non-negative number";
+        stockError.style.color = "red";
+        return false;
+    }
+
+    stockError.innerHTML = "Valid";
+    stockError.style.color = "green";
+    return true;
+}
+
+ function validateImage() {
+        var imageInput = document.getElementById("product_image");
+     
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.webp)$/i;
+    
+        if (imageInput.files.length === 0) {
+          imageError.innerHTML = "Image is required";
+          imageError.style.color = "red";
+          return false;
+        }
+    
+        var file = imageInput.files[0];
+        if (!allowedExtensions.exec(file.name)) {
+          imageError.innerHTML = "Only JPG, JPEG, PNG, or GIF files are allowed";
+          imageError.style.color = "red";
+          return false;
+        }
+    
+        imageError.innerHTML = "Valid";
+        imageError.style.color = "green";
+        return true;
+      }
+
+
+
+</script>
+
     <script src="/static/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/static/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/static/admin-assets/js/vendors/select2.min.js"></script>

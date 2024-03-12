@@ -1,151 +1,370 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Montserrat', sans-serif;
+                background-color: #f9f9f9;
+            }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f9f9f9;
-        }
+            .container {
+                margin-top: 50px;
+            }
 
-        .container {
-            margin-top: 50px;
-        }
+            .card {
+                border: none;
+                border-radius: 15px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                background-color: #fff;
+            }
 
-        .card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
+            .card-header {
+                color: #fff;
+                background-color: #088178;
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+                padding: 1.5rem;
+                text-align: center;
+            }
 
-        .card-header {
-            color: #fff;
-            background-color: #088178;
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-        }
+            .card-body {
+                padding: 1.5rem;
+            }
 
-        .card-body {
-            padding: 1.5rem;
-        }
+            .form-label {
+                font-weight: bold;
+            }
 
-        .form-label {
-            font-weight: bold;
-        }
+            .form-control {
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                padding: 10px;
+                font-size: 14px;
+            }
 
-        .form-control {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            padding: 10px;
-            font-size: 14px;
-        }
+            .btn {
+                background-color: #088178;
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                padding: 12px;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+                width: 100%;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
 
-        .btn {
-            background-color: #088178;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            width: 100%;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
+            .btn:hover {
+                background-color: #096861;
+            }
 
-        .btn:hover {
-            background-color: #096861;
-        }
+            .card-footer {
+                border-bottom-left-radius: 15px;
+                border-bottom-right-radius: 15px;
+                padding: 1.5rem;
+                text-align: center;
+                font-size: 14px;
+                background-color: #fff;
+                color: #333;
+            }
 
-        .card-footer {
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            font-size: 14px;
-            background-color: #fff;
-            color: #333;
-        }
+            .card-footer p {
+                margin-top: -25px;
+            }
 
-        .card-footer p {
-            margin-top: -25px;
-        }
+            .footer-link {
+                color: #088178;
+            }
 
-        .footer-link {
-            color: #088178;
-        }
+            .footer-link:hover {
+                text-decoration: underline;
+            }
 
-        .footer-link:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="mb-0">Sign Up</h3>
-                    </div>
-                    <div class="card-body">
-                        <form id="regform" action="/register" method="post">
-                            <% if(locals.message) { %>
-                                <div class="alert alert-warning" role="alert">
-                                    <%= locals.message %>
+            /* Additional custom CSS styles for validation errors */
+            .error-message {
+                color: red;
+                font-size: 14px;
+                margin-top: 5px;
+            }
+
+            .valid-message {
+                color: green;
+                font-size: 14px;
+                margin-top: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="mb-0">Sign Up</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="regform" action="/register" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label">Full Name</label>
+                                    <input class="form-control" placeholder="Your Full Name" name="name" type="text" id="contact-name" required onkeyup="validateName()">
+                                    <span id="name-error" class="error-message"></span>
                                 </div>
-                            <% } %>
-
-                            <div class="mb-3">
-                                <label for="typeNameX" class="form-label">Name</label>
-                                <input type="text" placeholder="Enter your name" id="typeNameX" class="form-control" name="name" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="typeEmailX" class="form-label">Email</label>
-                                <input type="email" placeholder="Enter your email" id="typeEmailX" class="form-control" name="email" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="typeMobileX" class="form-label">Mobile</label>
-                                <input type="tel" placeholder="Enter your mobile" id="typeMobileX" class="form-control" name="mob" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="typePasswordX" class="form-label">Password</label>
-                                <input type="password" placeholder="Enter your password" id="typePasswordX" class="form-control" name="password" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="typeConfirmPasswordX" class="form-label">Confirm Password</label>
-                                <input type="password" placeholder="Confirm your password" id="typeConfirmPasswordX" class="form-control" required>
-                            </div>
-
-                            <button class="btn" type="submit">Sign Up</button>
-                        </form>
-                    </div>
-                    <div class="card-footer">
-                        <p class="mb-0">Already have an account? <a href="/userlogin" class="footer-link">Login</a></p>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input class="form-control" placeholder="Your email" name="email" type="text" id="contact-email" required onkeyup="validateEmail()">
+                                    <span id="email-error" class="error-message"></span>
+                                </div> <!-- form-group// -->
+                                <div class="mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <div class="row gx-2">
+                                        <div class="col-4"> <input class="form-control" value="+91" type="text"> </div>
+                                        <div class="col-8"> <input class="form-control" placeholder="Phone" name="mobile" type="text" id="contact-phone" required onkeyup="validatePhone()"> 
+                                            <span id="phone-error" class="error-message"></span>
+                                        </div>
+                                    </div>
+                                </div> <!-- form-group// -->
+                                <div class="mb-3">
+                                    <label class="form-label">Create password</label>
+                                    <input class="form-control" placeholder="Password" name="password" type="password" id="contact-password" required onkeyup="validatePassword()">
+                                    <span id="password-error" class="error-message"></span>
+                                </div>
+                                <div class="mb-3">
+                                <label class="form-label">Confirm password</label>
+                                <input class="form-control" placeholder="Password" name="confirmPassword" type="password" id="confirm-password" required onkeyup="validatePassword()">
+                                <span id="confirm-password-error" class="error-message"></span>
+                            </div> <!-- form-group// -->
+                                <div class="mb-3">
+                                    <p class="small text-center text-muted">By signing up, you confirm that you’ve read and accepted our User Notice and Privacy Policy.</p>
+                                </div> <!-- form-group  .// -->
+                                <div class="mb-4">
+                                    <button type="submit" class="btn btn-primary w-100" onclick="return validateForm()"> Register </button>
+                                    <span id="submit-error" class="error-message"></span>
+                                </div> <!-- form-group// -->
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <p class="mb-0">Already have an account? <a href="/userlogin" class="footer-link">Login</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        // Your JavaScript code here
-    </script>
+        <script>
+            var nameError = document.getElementById("name-error");
+            var emailError = document.getElementById("email-error");
+            var phoneError = document.getElementById("phone-error");
+            var passwordError = document.getElementById("password-error");
+            var submitError = document.getElementById("submit-error");
+            var confirmPassError = document.getElementById("confirm-password-error");
+        
+            function validateName() {
+            var name = document.getElementById("contact-name").value.trim();
+            var nameError = document.getElementById("name-error");
+        
+            // Check if the name is empty
+            if (name.length === 0) {
+            nameError.innerHTML = "Name is required";
+            nameError.style.color = "red";
+            return false;
+            }
+        
+            // Check if the name starts or ends with whitespace
+            if (/^\s|\s$/.test(name)) {
+            nameError.innerHTML = "Name should not start or end with a space";
+            nameError.style.color = "red";
+            return false;
+            }
+        
+            // Check if the name contains only alphabets or spaces
+            if (!/^[A-Za-z ]+$/.test(name)) {
+            nameError.innerHTML = "Name should contain alphabets only";
+            nameError.style.color = "red";
+            return false;
+            }
+        
+            // Check if the name contains at least two parts (first name and last name)
+            var nameParts = name.split(" ");
+            if (nameParts.length < 2) {
+            nameError.innerHTML = "Please enter your full name";
+            nameError.style.color = "red";
+            return false;
+            }
+        
+            // Check if each part of the name is at least 2 characters long
+            for (var i = 0; i < nameParts.length; i++) {
+            if (nameParts[i].length < 2) {
+                nameError.innerHTML = "Each part of the name should be at least 2 characters long";
+                nameError.style.color = "red";
+                return false;
+            }
+            }
+        
+            // Check if the name contains any invalid characters or consecutive spaces
+            if (!/^[\w\s]+$/.test(name)) {
+            nameError.innerHTML = "Invalid characters or consecutive spaces detected";
+            nameError.style.color = "red";
+            return false;
+            }
+        
+            // If all checks pass, the name is valid
+            nameError.innerHTML = "Valid";
+            nameError.style.color = "green";
+            return true;
+        }
+        
+        
+        
+        function validateEmail() {
+            var email = document.getElementById("contact-email").value.trim();
+            var emailError = document.getElementById("email-error");
+        
+            if (email.length === 0) {
+            emailError.innerHTML = "Email is required";
+            emailError.style.color = "red";
+            return false;
+            }
+        
+            // Regular expression for a comprehensive email validation
+            var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        
+            if (!emailRegex.test(email)) {
+            emailError.innerHTML = "Email is invalid";
+            emailError.style.color = "red";
+            return false;
+            }
+        
+            // Additional check to verify that the domain has at least one dot
+            var domain = email.split("@")[1];
+            if (!domain.includes(".")) {
+            emailError.innerHTML = "Invalid domain in email";
+            emailError.style.color = "red";
+            return false;
+            }
+        
+            // Additional check to ensure the length of local part and domain part is within limits
+            var localPart = email.split("@")[0];
+            if (localPart.length > 64) {
+            emailError.innerHTML = "Local part of email is too long";
+            emailError.style.color = "red";
+            return false;
+            }
+        
+            if (domain.length > 253) {
+            emailError.innerHTML = "Domain part of email is too long";
+            emailError.style.color = "red";
+            return false;
+            }
+        
+            // Additional check to ensure the TLD is valid
+            var tld = domain.split(".").pop();
+            if (tld.length < 2 || tld.length > 63) {
+            emailError.innerHTML = "Invalid top-level domain (TLD)";
+            emailError.style.color = "red";
+            return false;
+            }
+        
+            emailError.innerHTML = "Valid";
+            emailError.style.color = "green";
+            return true;
+        }
+        
+        
+            function validatePhone() {
+            var phone = document.getElementById("contact-phone").value.trim();
+        
+            if (phone.length == 0) {
+                phoneError.innerHTML = "Phone number is required";
+                phoneError.style.color = "red";
+                return false;
+            }
+        
+            if (!phone.match(/^[6-9][0-9]{9}$/)) {
+                phoneError.innerHTML = "Invalid phone number";
+                phoneError.style.color = "red";
+                return false;
+            }
+        
+            phoneError.innerHTML = "Valid";
+            phoneError.style.color = "green";
+            return true;
+            }
+        
+            function validatePassword() {
+            var password = document.getElementById("contact-password").value.trim();
+        
+            if (password.length === 0) {
+                passwordError.innerHTML = "Password is required";
+                passwordError.style.color = "red";
+                return false;
+            }
+            if (
+                password.length < 8 ||
+                !/[a-zA-Z]/.test(password) ||
+                !/\d/.test(password) ||
+                !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+            ) {
+                passwordError.innerHTML =
+                "Password must be at least 8 characters <br> Password must contain at least one letter <br> Password must contain at least one number <br> Password must contain at least one special character";
+                passwordError.style.color = "red";
+                return false;
+            }
+        
+            passwordError.innerHTML = "Strong Password";
+            passwordError.style.color = "green";
+            return true;
+            }
+        
+            function validateConfirmPassword() {
+            var password = document.getElementById("contact-password").value.trim();
+            var confirmPassword = document
+                .getElementById("confirm-password")
+                .value.trim();
+        
+            if (confirmPassword.length === 0) {
+                confirmPassError.innerHTML = "Confirm Password is required";
+                confirmPassError.style.color = "red";
+                return false;
+            }
+        
+            if (password !== confirmPassword) {
+                confirmPassError.innerHTML = "Passwords do not match";
+                confirmPassError.style.color = "red";
+                return false;
+            }
+        
+            confirmPassError.innerHTML = "Valid";
+            confirmPassError.style.color = "green";
+            return true;
+            }
+        
+            function validateForm() {
+            if (
+                !validateName() ||
+                !validateEmail() ||
+                !validatePhone() ||
+                !validatePassword() ||
+                !validateConfirmPassword()
+            ) {
+                submitError.style.display = "block";
+                submitError.innerHTML = "Please enter all the fields to submit ";
+                submitError.style.color = "red";
+                setTimeout(function () {
+                submitError.style.display = "none";
+                }, 3000);
+                return false;
+            }
+            }
+        </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
-</body>
-</html>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+    </body>
+    </html>

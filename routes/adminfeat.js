@@ -5,7 +5,6 @@ const productController = require("../controllers/productController");
 const customerController = require("../controllers/customerController");
 const categoryController = require("../controllers/categoryController");
 const orderController = require("../controllers/orderController");
-const cartController = require("../controllers/cartController");
 const admin = require('../middleware/adminHandle');
 const uploadImage = require("../middleware/multer");
 
@@ -51,5 +50,6 @@ router.get("/publishProduct/:id",admin, productController.publishProducts);
 
 router.get('/orderList', admin, orderController.adminOrdersProfilePage); // Orders page
 router.get('/orderDetails/:id',admin, orderController.adminTrackOrderPage); // Orders page
+router.get('/deleteOrder/:orderId', admin, orderController.deleteOrder); // Add Address page
 
 module.exports = router;

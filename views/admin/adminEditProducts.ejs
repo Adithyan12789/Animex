@@ -108,16 +108,16 @@
                         </div>
                         <div class="card-body">
                             <form action="/adminUpdateProduct/<%= product._id %>" method="post" enctype="multipart/form-data">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" id="name" name="name" class="form-control"
-                                        placeholder="Enter name" value="<%= product.name %>" required>
+                                <div class="mb-4">
+                                    <label class="form-label">Product title</label>
+                                    <input type="text" placeholder="Type here" value="<%= product.name %>" name="name" class="form-control" id="product_name" required onkeyup="validateName()">
+                                   <span id="name-error" style="font-size: 14px;"></span>
+
                                 </div>
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea id="description"  name="description" class="form-control"
-                                        placeholder="Enter description" required rows="3"><%= product.description %>
-                                    </textarea>
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea placeholder="Type here"  class="form-control" name="description" rows="4" id="product_description" required onkeyup="validateDescription()"><%= product.description %></textarea>
+                                    <span id="description-error" style="font-size: 14px;"></span>
                                 </div>
                                 <div class="mb-3">
                                     <label for="category" class="form-label">Category</label>
@@ -126,16 +126,16 @@
                                             <option value="<%= category._id %>"><%= category.name %></option>
                                         <% }) %>
                                     </select>
-                                </div>                                                                                              
-                                <div class="mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="number" id="price" name="price" class="form-control"
-                                        placeholder="Enter price" min="0" step="0.01"  value="<%= product.price %>" required>
+                                </div>                                
+                                <div class="mb-4">
+                                    <label class="form-label">New Cost</label>
+                                    <input type="text" placeholder="₹00.0" value="<%= product.price %>" name="price" class="form-control" id="product_price" required onkeyup="validatePrice()"> <!-- Corrected function name -->
+                                    <span id="price-error" style="font-size: 14px;"></span> <!-- Corrected ID -->
                                 </div>
-                                <div class="mb-3">
-                                    <label for="stock" class="form-label">Stock</label>
-                                    <input type="number" id="stock" name="stock" class="form-control"
-                                        placeholder="Enter stock" min="0"  value="<%= product.stock %>" required>
+                                <div class="mb-4">
+                                    <label class="form-label">Stocks</label>
+                                    <input type="text" placeholder="stocks" value="<%= product.stock %>" name="stock" class="form-control" id="product_stock" required onkeyup="validateStock()"> <!-- Corrected function name -->
+                                    <span id="stock-error" style="font-size: 14px;"></span> <!-- Corrected ID -->
                                 </div>
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Select Image</label>
@@ -168,6 +168,81 @@
                 </div>
             </footer>
     </main>
+
+    <script>
+        var nameError = document.getElementById("name-error");
+        var descriptionError = document.getElementById("description-error");
+        var priceError = document.getElementById("price-error");
+        var stockError = document.getElementById("stock-error");
+    
+        function validateName() {
+          var name = document.getElementById("product_name").value.trim();
+          if (name.length === 0) {
+            nameError.innerHTML = "Product name is required";
+            nameError.style.color = "red";
+            return false;
+          }
+          nameError.innerHTML = "Valid";
+          nameError.style.color = "green";
+          return true;
+        }
+    
+        function validateDescription() {
+    var descriptionInput = document.getElementById("product_description");
+    var desc = descriptionInput.value.trim();
+    var descriptionError = document.getElementById("description-error");
+
+    // Check if the description is empty
+    if (desc.length === 0) {
+        descriptionError.innerHTML = "Description is required";
+        descriptionError.style.color = "red";
+        return false;
+    }
+    // Check if the description length exceeds a maximum limit (e.g., 500 characters)
+    var maxLength = 500;
+    if (desc.length > maxLength) {
+        descriptionError.innerHTML = "Description should not exceed " + maxLength + " characters";
+        descriptionError.style.color = "red";
+        return false;
+    }
+
+    // Clear any previous error messages and indicate valid input
+    descriptionError.innerHTML = "Valid";
+    descriptionError.style.color = "green";
+    return true;
+}
+
+
+function validatePrice() {
+    var price = document.getElementById("product_price").value.trim();
+    var priceError = document.getElementById("price-error"); // Corrected ID
+
+    if (price.length === 0 || isNaN(price) || parseFloat(price) <= 0) {
+        priceError.innerHTML = "Price is required and must be a positive number";
+        priceError.style.color = "red";
+        return false;
+    }
+
+    priceError.innerHTML = "Valid";
+    priceError.style.color = "green";
+    return true;
+}
+
+function validateStock() {
+    var stock = document.getElementById("product_stock").value.trim();
+    var stockError = document.getElementById("stock-error"); // Corrected ID
+
+    if (stock.length === 0 || isNaN(stock) || parseInt(stock) < 0) {
+        stockError.innerHTML = "Stock is required and must be a non-negative number";
+        stockError.style.color = "red";
+        return false;
+    }
+
+    stockError.innerHTML = "Valid";
+    stockError.style.color = "green";
+    return true;
+}
+      </script>
     <script src="/static/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/static/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/static/admin-assets/js/vendors/select2.min.js"></script>

@@ -57,8 +57,8 @@
             font-weight: 500;
             height: 1px;
         }
-        .actives{
-            background-color: aquamarine;
+        .active{
+            color: aquamarine;
         }
     </style>
 </head>
@@ -90,12 +90,13 @@
                             <li><a href="about.ejs">About</a></li>
                             <li><a href="contact.ejs">Contact</a></li>
                             <li style="float: right;"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
+                            <li style="float: right;"><a href="/wishlist"><i class="fa-regular fa-heart fa-2x"></i></a></li>
                             <% if(user) { %>
-								<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
+								<li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
 							<% } else { %>
 								<li class="login"><a href="userlogin"><i class="login-Page"></i> Login</a></li>
 							<% } %>
-                            <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                            <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
                         </ul>
                     </div>
                 </div>
@@ -177,12 +178,12 @@
                                         <h3>Sort</h3>
                                         <hr>
                                         <ul>
-                                            <li><a href="#">Price: low to high</a></li>
-                                            <li><a href="#">Price: high to low</a></li>
+                                            <li><a href="/priceFilter/<%= categories._id %>?sort=lowToHigh" class="<%= sort === 'lowToHigh' ? 'actives' : '' %>">Price: low to high</a></li>
+                                            <li><a href="/priceFilter/<%= categories._id %>?sort=highToLow" class="<%= sort === 'highToLow' ? 'actives' : '' %>">Price: high to low</a></li>
                                             <li><a href="#">Average ratings</a></li>
                                             <li><a href="#">aA - zZ</a></li>
                                             <li><a href="#">zZ - aA</a></li>
-                                        </ul>
+                                        </ul>                                                                                                                     
                                     </div>
                                 </div>
                             </div>

@@ -1,15 +1,6 @@
 const Address = require("../models/address");
 
-const addressManagement = async (req, res) => {
-  try {
-    const userId = req.session.userID;
-    const address = await Address.find({ userId });
-    res.render("user/addressManage", { address });
-  } catch (error) {
-    console.error("Error rendering address management page:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
+
 
 const addAddressPage = async (req, res) => {
   try {
@@ -141,7 +132,6 @@ const deleteAddressPage = async (req, res) => {
 };
 
 module.exports = {
-  addressManagement,
   addAddressPage,
   postAddAddressPage,
   editAddressPage,

@@ -90,6 +90,7 @@
       border-radius: 5px;
       transition: background-color 0.3s ease;
       font-family: "Montserrat", sans-serif; /* Change the font family */
+      font-weight: 500;
     }
     .sidebar li a:hover {
       background-color: #88c8bc; /* Change background color on hover */
@@ -132,11 +133,13 @@
             <form action="/editUserProfile" method="POST">
               <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" value="<%= editUser.name %>" required />
+                <input type="text"  id="contact-name" name="name" value="<%= editUser.name %>" required  onkeyup="validateName()"/>
+                <span id="name-error" class="error-message"></span>
               </div>
               <div class="form-group">
                 <label for="phone">Phone:</label>
-                <input type="tel" id="phone" name="phone" value="+91<%= editUser.mobile %>" required />
+                <input type="text" id="contact-phone" name="mobile" value="+91<%= editUser.mobile %>" required  onkeyup="validatePhone()"/>
+                <span id="phone-error" class="error-message"></span>
               </div>
               <div class="form-group">
                 <label for="currentPassword">Current Password:</label>
@@ -149,7 +152,8 @@
               <div class="form-group">
                 <label for="confirmPassword">Confirm Password:</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" required />
-              </div>
+                <span id="confirm-password-error" class="error-message"></span>
+              </div>              
               <button type="submit" class="update-button">Update</button>
             </form>
           </div>
@@ -160,40 +164,86 @@
 
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const form = document.querySelector(".edit-profile-form");
-  
-      form.addEventListener("submit", function (event) {
-        const name = document.getElementById("name").value;
-        const phone = document.getElementById("phone").value;
-        const currentPassword = document.getElementById("currentPassword").value;
-        const newPassword = document.getElementById("newPassword").value;
-        const confirmPassword = document.getElementById("confirmPassword").value;
-  
-        // Simple validation example
-        if (name.trim() === "") {
-          alert("Please enter your name.");
-          event.preventDefault();
-          return;
+
+var nameError = document.getElementById("name-error");
+var phoneError = document.getElementById("phone-error");
+
+     function validateName() {
+        var name = document.getElementById("contact-name").value.trim();
+        var nameError = document.getElementById("name-error");
+      
+        // Check if the name is empty
+        if (name.length === 0) {
+          nameError.innerHTML = "Name is required";
+          nameError.style.color = "red";
+          return false;
         }
-  
-        if (phone.trim() === "") {
-          alert("Please enter your phone number.");
-          event.preventDefault();
-          return;
+      
+        // Check if the name starts or ends with whitespace
+        if (/^\s|\s$/.test(name)) {
+          nameError.innerHTML = "Name should not start or end with a space";
+          nameError.style.color = "red";
+          return false;
         }
-  
-        // Additional validation rules can be added as needed
-  
-        // Password validation example
-        if (newPassword !== confirmPassword) {
-          alert("New password and confirm password do not match.");
-          event.preventDefault();
-          return;
+      
+        // Check if the name contains only alphabets or spaces
+        if (!/^[A-Za-z ]+$/.test(name)) {
+          nameError.innerHTML = "Name should contain alphabets only";
+          nameError.style.color = "red";
+          return false;
         }
-      });
-    });
+      
+        // Check if the name contains at least two parts (first name and last name)
+        var nameParts = name.split(" ");
+        if (nameParts.length < 2) {
+          nameError.innerHTML = "Please enter your full name";
+          nameError.style.color = "red";
+          return false;
+        }
+      
+        // Check if each part of the name is at least 2 characters long
+        for (var i = 0; i < nameParts.length; i++) {
+          if (nameParts[i].length < 2) {
+            nameError.innerHTML = "Each part of the name should be at least 2 characters long";
+            nameError.style.color = "red";
+            return false;
+          }
+        }
+      
+        // Check if the name contains any invalid characters or consecutive spaces
+        if (!/^[\w\s]+$/.test(name)) {
+          nameError.innerHTML = "Invalid characters or consecutive spaces detected";
+          nameError.style.color = "red";
+          return false;
+        }
+      
+        // If all checks pass, the name is valid
+        nameError.innerHTML = "Valid";
+        nameError.style.color = "green";
+        return true;
+      }
+
+      function validatePhone() {
+          var phone = document.getElementById("contact-phone").value.trim();
+      
+          if (phone.length == 0) {
+            phoneError.innerHTML = "Phone number is required";
+            phoneError.style.color = "red";
+            return false;
+          }
+      
+          if (!phone.match(/^[6-9][0-9]{9}$/)) {
+            phoneError.innerHTML = "Invalid phone number";
+            phoneError.style.color = "red";
+            return false;
+          }
+      
+          phoneError.innerHTML = "Valid";
+          phoneError.style.color = "green";
+          return true;
+        }
   </script>
+  
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="/static/js/jquery.min.js"></script>

@@ -103,6 +103,7 @@
             transition: background-color 0.3s ease;
             font-family: "Montserrat", sans-serif;
             /* Change the font family */
+            font-weight: 500;
         }
 
         .sidebar li a:hover {
@@ -145,33 +146,35 @@
                         <h3>Edit Address</h3>
                         <% if (address) { %>
                             <form action="/updateAddress/<%= address._id %>" method="POST">
-                                <div class="form-group">
-                                    <label for="address1">Address</label>
-                                    <input type="text" id="address1" name="address1" value="<%= address.address1 %>"
-                                        required />
+                                <div class="form-group ">
+                                    <label>Address <span class="required">*</span></label>
+                                    <input required="" class="form-control square" name="address1" value="<%= address.address1 %>" type="text" oninput="validateAddress(this)">
+                                    <div class="error-message" id="address-error"></div>
+                                </div>
+                                <div class="form-group ">
+                                    <label>Street Address <span class="required">*</span></label>
+                                    <input required="" class="form-control square" name="address2"  value="<%= address.address2 %>" type="text" oninput="validateStreet(this)">
+                                    <div class="error-message" id="street-error"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="address2">Street Name</label>
-                                    <input type="text" id="address2" name="address2" value="<%= address.address2 %>"
-                                        required />
+                                    <label>City <span class="required">*</span></label>
+                                    <input required="" class="form-control square" name="city"  value="<%= address.city %>" type="text" oninput="validateCity(this)">
+                                    <div class="error-message" id="city-error"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="state">state:</label>
-                                    <input type="text" id="state" name="state" value="<%= address.state %>" required />
+                                    <label>State <span class="required">*</span></label>
+                                    <input required="" class="form-control square" name="state"  value="<%= address.state %>" type="text" oninput="validateState(this)">
+                                    <div class="error-message" id="state-error"></div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="city">City:</label>
-                                    <input type="text" id="city" name="city" value="<%= address.city %>" required />
+                                <div class="form-group ">
+                                    <label>ZIP Code <span class="required">*</span></label>
+                                    <input required="" class="form-control square" name="postalCode"  value="<%= address.postalCode %>" type="text" oninput="validateZIP(this)">
+                                    <div class="error-message" id="zip-error"></div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="postalcode">Postal code:</label>
-                                    <input type="text" id="postalcode" name="postalcode"
-                                        value="<%= address.postalCode %>" required />
-                                </div>
-                                <div class="form-group">
-                                    <label for="country">Country:</label>
-                                    <input type="text" id="country" name="country" value="<%= address.country %>"
-                                        required />
+                                <div class="form-group ">
+                                    <label>Country <span class="required">*</span></label>
+                                    <input required="" class="form-control square" name="country"  value="<%= address.country %>" type="text" oninput="validateCountry(this)">
+                                    <div class="error-message" id="country-error"></div>
                                 </div>
                                 <button type="submit" class="update-button">
                                     Update Address
@@ -187,42 +190,91 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const form = document.querySelector(".edit-address-form");
-      
-          form.addEventListener("submit", function (event) {
-            const address1 = document.getElementById("address1").value;
-            const address2 = document.getElementById("address2").value;
-            const state = document.getElementById("state").value;
-            const city = document.getElementById("city").value;
-            const postalcode = document.getElementById("postalcode").value;
-            const country = document.getElementById("country").value;
-      
-            // Simple validation example
-            if (address1.trim() === "") {
-              alert("Please enter your address.");
-              event.preventDefault();
-              return;
+        function validateAddress(input) {
+            var value = input.value.trim();
+            var errorField = input.nextElementSibling;
+            if (value === "") {
+                errorField.innerHTML = "<span style='color: red;'>Address is required</span>";
+            } else {
+                errorField.innerHTML = "<span style='color: green;'>Valid</span>";
             }
-      
-            if (address2.trim() === "") {
-              alert("Please enter your street name.");
-              event.preventDefault();
-              return;
+            validateForm();
+        }
+    
+        function validateStreet(input) {
+            var value = input.value.trim();
+            var errorField = input.nextElementSibling;
+            if (value === "") {
+                errorField.innerHTML = "<span style='color: red;'>Street Address is required</span>";
+            } else {
+                errorField.innerHTML = "<span style='color: green;'>Valid</span>";
             }
-      
-            // Additional validation rules can be added as needed
-      
-            // Postal code validation example
-            const postalCodeRegex = /^\d{5}$/;
-            if (!postalCodeRegex.test(postalcode)) {
-              alert("Please enter a valid postal code (5 digits).");
-              event.preventDefault();
-              return;
+            validateForm();
+        }
+    
+        function validateCity(input) {
+            var value = input.value.trim();
+            var errorField = input.nextElementSibling;
+            if (value === "") {
+                errorField.innerHTML = "<span style='color: red;'>City is required</span>";
+            } else {
+                errorField.innerHTML = "<span style='color: green;'>Valid</span>";
             }
-          });
-        });
-      </script>
+            validateForm();
+        }
+    
+        function validateState(input) {
+            var value = input.value.trim();
+            var errorField = input.nextElementSibling;
+            if (value === "") {
+                errorField.innerHTML = "<span style='color: red;'>State is required</span>";
+            } else {
+                errorField.innerHTML = "<span style='color: green;'>Valid</span>";
+            }
+            validateForm();
+        }
+    
+        function validateZIP(input) {
+            var value = input.value.trim();
+            var errorField = input.nextElementSibling;
+            var zipPattern = /^\d{6}$|^\d{6}-\d{5}$/; // US ZIP code pattern
+            if (value === "") {
+                errorField.innerHTML = "<span style='color: red;'>ZIP Code is required</span>";
+            } else if (!zipPattern.test(value)) {
+                errorField.innerHTML = "<span style='color: red;'>Invalid ZIP Code</span>";
+            } else {
+                errorField.innerHTML = "<span style='color: green;'>Valid</span>";
+            }
+            validateForm();
+        }
+    
+        function validateCountry(input) {
+            var value = input.value.trim();
+            var errorField = input.nextElementSibling;
+            if (value === "") {
+                errorField.innerHTML = "<span style='color: red;'>Country is required</span>";
+            } else {
+                errorField.innerHTML = "<span style='color: green;'>Valid</span>";
+            }
+            validateForm();
+        }
+    
+        function validateForm() {
+            var submitBtn = document.getElementById("submit-btn");
+            var inputs = document.querySelectorAll("input[required]");
+            var isValid = true;
+            inputs.forEach(function(input) {
+                var value = input.value.trim();
+                var errorField = input.nextElementSibling;
+                if (value === "") {
+                    isValid = false;
+                } else if (errorField.textContent.includes("Invalid")) {
+                    isValid = false;
+                }
+            });
+            submitBtn.disabled = !isValid;
+        }
+    </script>
       
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
         integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw=="

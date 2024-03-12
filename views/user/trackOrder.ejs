@@ -138,7 +138,8 @@
                                     <li><a href="about.ejs">About</a></li>
                                     <li><a href="contact.ejs">Contact</a></li>
                                     <li style="float: right;"><a href="/profile"><i class="fas fa-user-circle fa-2x"></i></a></li>
-                                    <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+                                    <li style="float: right;"><a href="/wishlist"><i class="fa-solid fa-heart fa-2x"></i></a></li>
+                                    <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
                                     <li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
                                 </ul>
                             </div>
@@ -184,9 +185,9 @@
                         <div class="sidebar">
                             <h4>Account Settings</h4>
                             <ul>
-                                <li><a href="/profile">Profile</a></li>
-                                <li><a href="/addressManage">Address Management</a></li>
-                                <li class="active"><a href="/orderPage">Orders</a></li>
+                                <li ><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
+                                <li ><a href="/addressManage"><i class="fas fa-address-book"></i> Address Management</a></li>
+                                <li class="active"><a href="/orderProfile"><i class="fas fa-list"></i> Orders</a></li>
                             </ul>
                         </div>
                     </div>
@@ -226,6 +227,8 @@
                 </div>
             </div>
         </div>
+
+        <script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="/static/js/jquery.min.js"></script>
         <script src="/static/js/popper.min.js"></script>

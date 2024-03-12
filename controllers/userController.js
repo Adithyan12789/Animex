@@ -1,11 +1,14 @@
   const nodemailer = require('nodemailer');
   const User = require('../models/userModel');
-  const Product = require('../models/products');
   const Category = require('../models/category');
   const randomstring = require('randomstring');
   const bcrypt = require("bcrypt");
   const Address = require('../models/address');
   const saltpassword = 10;
+  const Cart = require("../models/Cart");
+  const Product = require('../models/products');
+  const Wishlist = require('../models/wishlist');
+  const Order = require('../models/order');
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -45,8 +48,16 @@
     const listedProducts = productdata.filter(product => {
       return product.category && product.category.isListed;
     });
+
+   // Find the cart document for the user
+   const cart = await Cart.findOne({ userId: req.session.userID });
+   let cartItemCount = 0;
+   if (cart) {
+       cartItemCount = cart.items.length; // Get the count of items in the cart
+   }
+
     res.render("user/index",{product: listedProducts,totalPages: totalPages,
-      currentPage: page, user:req.session.user});
+      currentPage: page, user:req.session.user, count: cartItemCount});
   };
 
   const loguser = async (req, res) => {
@@ -102,7 +113,7 @@
         const user = new User({
           name: req.body.name,
           email: req.body.email,
-          mobile: req.body.mob,
+          mobile: req.body.mobile,
           password: hashPassword,
           isAdmin: 0,
           otp: otp1,
@@ -283,33 +294,27 @@
 
 
   //Shop Page
-
   const shopPage = async (req, res) => {
     const perPage = 6; 
     const page = req.query.page || 1;
     const category = req.query.category;
+    const sort = req.query.sort; // Retrieve sort parameter from query
+
     try {
         let totalProducts;
         let products;
         let listedProducts;
         let selectedCategory = null;
 
-        
-
         // Count total number of products
         if (category) {
-          console.log("asfdasd",category) 
             totalProducts = await Product.countDocuments({ category: category });
             // Query the database to find products matching the specified category
-
-            console.log("asdasdasda",totalProducts)
             products = await Product.find({ category: category })
-            .populate("category")
-            .skip(perPage * page - perPage)
-            .limit(perPage)
-            .exec();
-
-            console.log("bdgvbdfdf",category  )
+                .populate("category")
+                .skip(perPage * page - perPage)
+                .limit(perPage)
+                .exec();
             selectedCategory = category;
         } else {
             totalProducts = await Product.countDocuments();
@@ -321,6 +326,13 @@
                 .exec();
         }
 
+        // Apply sorting if specified
+        if (sort === 'lowToHigh') {
+            products.sort((a, b) => a.price - b.price);
+        } else if (sort === 'highToLow') {
+            products.sort((a, b) => b.price - a.price);
+        }
+
         // Filter out products that are not listed
         listedProducts = products.filter(product => {
             return product.category && product.category.isListed;
@@ -330,20 +342,31 @@
 
         const categories = await Category.find();
 
+        // Find the cart document for the user
+        const cart = await Cart.findOne({ userId: req.session.userID });
+        let cartItemCount = 0;
+        if (cart) {
+            cartItemCount = cart.items.length; // Get the count of items in the cart
+        }
+
         res.render("user/shop", {
             title: "Product Page",
             products: listedProducts,
             selectedCategory: selectedCategory,
-            categories:categories,
+            categories: categories,
             totalPages: totalPages,
             currentPage: page,
-            perPages: perPage,
-            user:req.session.user
+            perPage: perPage,
+            user: req.session.user,
+            count: cartItemCount,
+            sort: sort // Pass the sort variable
         });
     } catch (error) {
         console.error("Error fetching products:", error);
+        res.status(500).send("Error fetching products");
     }
 }
+
 
 
 
@@ -409,7 +432,14 @@
         return res.redirect("/");
       }
 
-      res.render("user/product-detail", { product: product });
+      // Find the cart document for the user
+   const cart = await Cart.findOne({ userId: req.session.userID });
+   let cartItemCount = 0;
+   if (cart) {
+       cartItemCount = cart.items.length; // Get the count of items in the cart
+   }
+
+      res.render("user/product-detail", { product: product,count :cartItemCount, user :req.session.userID });
     } catch (err) {
       console.log(err.message);
       res.status(500).send("Internal Server Error");
@@ -424,7 +454,13 @@
         const userdata = await User.findById(req.session.user)
         console.log(userdata)
         if (userdata) {
-          res.render("user/profile", { users: userdata });
+            // Find the cart document for the user
+   const cart = await Cart.findOne({ userId: req.session.userID });
+   let cartItemCount = 0;
+   if (cart) {
+       cartItemCount = cart.items.length; // Get the count of items in the cart
+   }
+          res.render("user/profile", { users: userdata,count :cartItemCount });
         } else {
           console.log("User not found");
           res.redirect("/");
@@ -508,7 +544,435 @@
         return res.status(500).send("Internal Server Error");
       }
     };
-    
+
+
+//Address Page
+
+const addressManagement = async (req, res) => {
+  try {
+    const userId = req.session.userID;
+    const address = await Address.find({ userId });
+
+    const cart = await Cart.findOne({ userId: req.session.userID });
+   let cartItemCount = 0;
+   if (cart) {
+       cartItemCount = cart.items.length; // Get the count of items in the cart
+   }
+    res.render("user/addressManage", { address, count : cartItemCount });
+  } catch (error) {
+    console.error("Error rendering address management page:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+
+
+
+    //Cart Controller
+
+
+
+
+const cart = async (req, res) => {
+    try {
+        const userId = req.session.userID;
+        const userCart = await Cart.findOne({ userId }).populate({
+            path: "items.product",
+            message: "Product",
+        });
+        console.log("wefwfw",userCart)
+
+         // Find the cart document for the user
+   const cart = await Cart.findOne({ userId: req.session.userID });
+   let cartItemCount = 0;
+   if (cart) {
+       cartItemCount = cart.items.length; // Get the count of items in the cart
+   }
+        res.status(200).render("user/cart", { cart: userCart, user: req.session.user, count :cartItemCount });
+    } catch (error) {
+        console.error("Error fetching user's cart:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+const cartPage = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const userId = req.session.userID;
+        const quantity = 1;
+
+        const product = await Product.findById(productId);
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        let userCart = await Cart.findOne({ userId });
+
+        if (!userCart) {
+            const newCart = new Cart({
+                userId,
+                items: [{
+                    product: productId,
+                    price: product.price,
+                    quantity: quantity
+                }],
+                totalPrice: product.price * quantity
+            });
+
+            userCart = await newCart.save();
+        } else {
+            const existingItem = userCart.items.find(item => item.product.toString() === productId.toString());
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                userCart.items.push({ product: productId, price: product.price, quantity: quantity });
+            }
+            userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            await userCart.save();
+        }
+        res.redirect("/");
+    } catch (error) {
+        console.error("Error adding item to cart:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+const updateCart = async (req, res) => {
+    try {
+        const userId = req.session.userID;
+        const productId = req.body.productId;
+        const action = req.body.action;
+
+        let userCart = await Cart.findOne({ userId }).populate('items.product');
+
+        if (!userCart) {
+            return res.status(404).json({ success: false, message: "User cart not found" });
+        }
+
+        const item = userCart.items.find(item => item.product._id.toString() === productId);
+
+        if (!item) {
+            return res.status(404).json({ success: false, message: "Product not found in the cart" });
+        }
+
+        const product = await Product.findById(productId);
+        const maxQuantity = product.stock;
+
+        if (action === "increment") {
+            if (item.quantity < maxQuantity) {
+                item.quantity += 1;
+                item.price = item.product.price
+                userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+                await userCart.save();
+            } else {
+                return res.json({ success: false, message: "Maximum quantity reached for this product" });
+            }
+        } else if (action === "decrement" && item.quantity > 1) {
+            item.quantity -= 1;
+            item.price = item.product.price
+            userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            await userCart.save();
+        } else {
+            return res.json({ success: false, message: "Invalid action or quantity" });
+        }
+
+        await userCart.save();
+
+        return res.json({
+            success: true,
+            item,
+            totalPrice: userCart.items.reduce((total, item) => total + item.product.price * item.quantity, 0)
+        });
+    } catch (error) {
+        console.error("Error updating cart:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+};
+
+const deleteCart = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const userId = req.session.userID;
+        const userCart = await Cart.findOne({ userId });
+
+        if (!userCart) return res.status(404).json({ message: "Cart not found" });
+
+        const itemIndex = userCart.items.findIndex(item => item._id.toString() === id);
+        if (itemIndex === -1) return res.status(404).json({ message: "Item not found in the cart" });
+
+        userCart.items.splice(itemIndex, 1);
+        userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+        await userCart.save();
+
+        res.redirect("/cart");
+    } catch (error) {
+        console.error("Error deleting cart:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+const checkoutPage = async (req, res) => {
+    try {
+        const userId = req.session.userID;
+
+        const userdata = await User.findById(userId);
+
+        const userAddress = await Address.findOne({ userId });
+
+        const userCart = await Cart.findOne({ userId }).populate("items.product");
+
+        // Find the cart document for the user
+   const cart = await Cart.findOne({ userId: req.session.userID });
+   let cartItemCount = 0;
+   if (cart) {
+       cartItemCount = cart.items.length; // Get the count of items in the cart
+   }
+
+        res.render("user/checkout", { count :cartItemCount, checkout: userAddress, user: userdata, totalPrice: userCart ? userCart.totalPrice : 0, product: userCart });
+    } catch (err) {
+        console.error("Error in checkoutPage:", err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+const placeOrder = async (req, res) => {
+    try {
+        const userId = req.session.userID;
+        const { addressId, totalPrice } = req.body;
+
+        // Check if an address is selected
+        if (!addressId) {
+            return res.status(400).json({ error: 'Please select an address' });
+        }
+
+        let userOrder = await Order.findOne({ userId });
+
+        if (!userOrder) {
+            userOrder = new Order({ userId, addressId, totalPrice });
+        }
+
+        userOrder.totalPrice = totalPrice;
+
+        const userCart = await Cart.findOne({ userId }).populate('items.product');
+
+        console.log("Cart:", userCart);
+
+        const user = await User.findById(userId);
+        const address = await Address.findOne({ userId });
+
+        const selectedAddress = address.addressDetails.find(a => addressId.includes(a._id.toString()));
+
+        console.log("sdfsdfswd", selectedAddress)
+
+        if (selectedAddress) {
+            const orderItems = userCart.items.map(item => ({
+                product: item.product._id,
+                price: item.product.price,
+                quantity: item.quantity
+            }));
+
+            const order = new Order({
+                userId,
+                totalPrice,
+                billingDetails: {
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone,
+                    address1: selectedAddress.address1,
+                    address2: selectedAddress.address2,
+                    state: selectedAddress.state,
+                    city: selectedAddress.city,
+                    postalCode: selectedAddress.postalCode,
+                    country: selectedAddress.country
+                },
+                items: orderItems
+            });
+
+            await order.save();
+
+            await Cart.findOneAndUpdate(
+                { userId: user._id },
+                { $set: { items: [], totalPrice: 0 } }
+            );
+
+
+            for(const item of order.items){
+                await Product.findByIdAndUpdate(
+                    item.product,
+                    {
+                        $inc: {
+                            stock: -item.quantity
+                        }
+                    },
+                    {
+                        new: true
+                    }
+                )
+            }
+
+        } else {
+            return res.status(400).json({ error: 'Please select a valid address' });
+        }
+
+        res.redirect("/orderPage");
+    } catch (error) {
+        console.error("Error placing order:", error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+const ordersProfilePage = async (req, res) => {
+  const userId = req.session.userID;
+
+  try {
+      const orders = await Order.find({ userId });
+
+      // Find the cart document for the user
+   const cart = await Cart.findOne({ userId: req.session.userID });
+   let cartItemCount = 0;
+   if (cart) {
+       cartItemCount = cart.items.length; // Get the count of items in the cart
+   }
+
+      res.render("user/orders", { orders, count: cartItemCount });
+  } catch (error) {
+      console.error("Error fetching orders:", error);
+      res.status(500).send("Error fetching orders");
+  }
+};
+
+const trackOrderPage = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+      const userId = req.session.userID;
+
+      // Find the user based on userId
+      const user = await User.findById(userId);
+
+      // Find the order based on the provided id and populate the items
+      const order = await Order.findOne({ _id: id }).populate("items.product");
+
+      console.log("order: ",order)
+
+      // Find the cart document for the user
+   const cart = await Cart.findOne({ userId: req.session.userID });
+   let cartItemCount = 0;
+   if (cart) {
+       cartItemCount = cart.items.length; // Get the count of items in the cart
+   }
+      // Render the "user/trackOrder" view with the user and order data
+      res.render("user/trackOrder", { user, order,count :cartItemCount });
+  } catch (error) {
+      console.error("Error:", error);
+      res.status(500).send("Internal Server Error");
+  }
+}
+
+
+const orderPage = async (req, res) => {
+  // Find the cart document for the user
+  const cart = await Cart.findOne({ userId: req.session.userID });
+  let cartItemCount = 0;
+  if (cart) {
+      cartItemCount = cart.items.length; // Get the count of items in the cart
+  }
+  res.render("user/orderPlaced", {count: cartItemCount});
+};
+
+
+//Wishlist Controller
+
+const wishlist = async (req, res) => {
+  try {
+      const userId = req.session.userID;
+      const userWishlist = await Wishlist.findOne({ userId }).populate({
+          path: "items.product",
+          message: "Product",
+      });
+      
+      let cart = await Cart.findOne({ userId: req.session.userID });
+      let cartItemCount = 0;
+      if (cart) {
+          cartItemCount = cart.items.length; // Get the count of items in the cart
+      }
+
+      res.status(200).render("user/add-to-wishlist", { wishlist: userWishlist, user: req.session.user, count: cartItemCount });
+  } catch (error) {
+      console.error("Error fetching user's wishlist:", error);
+      res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const wishlistPage = async (req, res) => {
+  try {
+      const productId = req.params.id;
+      const userId = req.session.userID;
+      const quantity = 1;
+
+      const product = await Product.findById(productId);
+
+      if (!product) {
+          return res.status(404).json({ message: "Product not found" });
+      }
+
+      let userWishlist = await Wishlist.findOne({ userId });
+
+      if (!userWishlist) {
+          const newWishlist = new Wishlist({
+              userId,
+              items: [{
+                  product: productId,
+                  price: product.price,
+                  quantity: quantity
+              }],
+              totalPrice: product.price * quantity
+          });
+
+          userWishlist = await newWishlist.save();
+      } else {
+          const existingItem = userWishlist.items.find(item => item.product.toString() === productId.toString());
+          if (existingItem) {
+              existingItem.quantity += quantity;
+          } else {
+              userWishlist.items.push({ product: productId, price: product.price, quantity: quantity });
+          }
+          userWishlist.totalPrice = userWishlist.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+          await userWishlist.save();
+      }
+      res.redirect("/");
+  } catch (error) {
+      console.error("Error adding item to wishlist:", error);
+      res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const deleteWishlist = async (req, res) => {
+  try {
+      const id = req.params.id;
+      const userId = req.session.userID;
+      const userWishlist = await Wishlist.findOne({ userId });
+
+      if (!userWishlist) return res.status(404).json({ message: "Wishlist not found" });
+
+      const itemIndex = userWishlist.items.findIndex(item => item._id.toString() === id);
+      if (itemIndex === -1) return res.status(404).json({ message: "Item not found in the wishlist" });
+
+      userWishlist.items.splice(itemIndex, 1);
+      userWishlist.totalPrice = userWishlist.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+      await userWishlist.save();
+
+      res.redirect("/wishlist");
+  } catch (error) {
+      console.error("Error deleting wishlist:", error);
+      res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 
   module.exports = {
@@ -536,5 +1000,24 @@
     userProfile,
     editUserProfile,
     postEditProfile,
+    addressManagement,
 
+
+    //cart 
+
+    cart,
+    cartPage,
+    updateCart,
+    deleteCart,
+    checkoutPage,
+    placeOrder,
+    ordersProfilePage,
+    trackOrderPage,
+    orderPage,
+
+    //wishlist
+
+    wishlist,
+    wishlistPage,
+    deleteWishlist
   };

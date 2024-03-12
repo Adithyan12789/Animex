@@ -149,9 +149,10 @@
 								<li><a href="contact.ejs">Contact</a></li>
 								<li style="float: right;"><a href="/profile"><i
 											class="fa-regular fa-circle-user fa-2x"></i></a></li>
-								<li class="cart active"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a>
+											<li style="float: right;"><a href="/wishlist"><i class="fa-regular fa-heart fa-2x"></i></a></li>
+								<li class="cart active"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
 								</li>
-								<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
+								<li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
 
 							</ul>
 						</div>
@@ -229,7 +230,7 @@
 														<i class="fa fa-minus"></i>
 													</button>
 
-													<input style="width: 40px;text-align: center;" type="text" value="<%= item.quantity %>" data-id="<%= item.product._id %>">
+													<input style="width: 40px;text-align: center;" type="number	" value="<%= item.quantity %>" data-id="<%= item.product._id %>" readonly>
 													
 													<button class="qty-inc" data-id="<%= item.product._id %>">
 														<i class="fa fa-plus"></i>

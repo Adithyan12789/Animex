@@ -18,6 +18,12 @@
     <link rel="shortcut icon" type="image/x-icon" href="/static/assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="/static/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .btn.btn-primary{
+            padding: 8px 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -136,6 +142,7 @@
                                     <td><%= new Date(order.orderDate).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
                                     <td>
                                         <a href="/orderDetails/<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>
+                                        <button class="btn btn-sm btn-primary" onclick="deleteOrder('<%= order._id %>')">Cancel Order</button>
                                     </td>
                                 </tr>
                                 <% }) %>
@@ -160,6 +167,26 @@
             </div>
         </footer>
     </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            function deleteOrder(orderId) {
+    Swal.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete"
+    }).then((result) => {
+        if (result.isConfirmed) {
+        window.location.href = "/deleteOrder/" + orderId;
+        }
+    });
+    }
+        </script>
     <script src="/static/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/static/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/static/admin-assets/js/vendors/select2.min.js"></script>

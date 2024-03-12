@@ -66,8 +66,9 @@
 								<li><a href="contact.ejs">Contact</a></li>
 								<li style="float: right;"><a href="/profile"><i
 											class="fa-regular fa-circle-user fa-2x"></i></a></li>
-								<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-								<li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
+											<li style="float: right;"><a href="/wishlist"><i class="fa-regular fa-heart fa-2x"></i></a></li>
+								<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
+								<li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
 
 							</ul>
 						</div>
@@ -203,6 +204,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<div class="gototop js-top">
 		<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
 	</div>
+
+	<script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
 	
 	<!-- jQuery -->
 	<script src="/static/js/jquery.min.js"></script>

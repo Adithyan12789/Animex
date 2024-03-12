@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 const nocache = require("nocache");
 const userauthRoute = require("./routes/userAuth");
-const userfeatRoute = require("./routes/userfeat");
 const adminfeatRoute = require("./routes/adminfeat");
 const session = require("express-session");
 const mongoose = require("mongoose");
@@ -40,7 +39,6 @@ app.use(
 app.use(nocache());
 
 app.use("/", userauthRoute);
-app.use("/userhome", userfeatRoute);
 app.use("/", adminfeatRoute);
 
 app.listen(PORT, () => {

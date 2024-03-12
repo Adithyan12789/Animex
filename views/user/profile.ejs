@@ -80,13 +80,14 @@
             padding: 10px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            font-weight: 500;
         }
         .sidebar li a:hover {
             background-color: #88c8bc;
             color: #fff;
         }
         .active{
-            background-color: #88c8bc;
+            color: #88c8bc;
             border-radius: 5px;
         }
     </style>
@@ -103,7 +104,7 @@
                         <form action="#" class="search-wrap">
                             <div class="form-group">
                                 <input type="search" class="form-control search" placeholder="Search">
-                                <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+                                <button class="btn btn-primary submit-search text-center" type="submit"><i class="fas fa-search"></i></button>
                             </div>
                         </form>
                     </div>
@@ -115,9 +116,10 @@
                             <li><a href="/shop">Shop</a></li>   
                             <li><a href="about.ejs">About</a></li>
                             <li><a href="contact.ejs">Contact</a></li>
-                            <li style="float: right;"><a href="/profile"><i class="fas fa-user-circle fa-2x"></i></a></li>
-                            <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
-                            <li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
+                            <li style="float: right;" class="active"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
+                            <li style="float: right;" ><a href="/wishlist"><i class="fa-solid fa-heart fa-2x"></i></a></li>
+                            <li class="cart"><a href="/cart"><i class="fas fa-shopping-cart fa-lg"></i> Cart [<%= count  %>]</a></li>
+                            <li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -131,16 +133,16 @@
                 <div class="sidebar">
                     <h4>Account Settings</h4>
                     <ul>
-                        <li class="active"><a href="/profile">Profile</a></li>
-                        <li><a href="/addressManage">Address Management</a></li>
-                        <li><a href="/orderProfile">Orders</a></li>
+                        <li class="active"><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="/addressManage"><i class="fas fa-address-book"></i> Address Management</a></li>
+                        <li><a href="/orderProfile"><i class="fas fa-list"></i> Orders</a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-md-9">
                 <div class="profile-info">
-
                     <h3>User Profile Details</h3>
+                    <img src="/static/images/—Pngtree—user vector avatar_4830521.png" alt="User Avatar" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 30px">
                     <p><i class="fas fa-user"></i> Name: <%= users.name %></p>
                     <p><i class="fas fa-phone"></i> Phone: <%= users.mobile %></p>
                     <!-- Add more user details as needed -->
@@ -149,7 +151,10 @@
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        
+    <script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/j   s/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/popper.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>

@@ -3,7 +3,6 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 const addressController = require('../controllers/addressController');
-const cartController = require('../controllers/cartController');
 const orderController = require('../controllers/orderController');
 const user = require('../middleware/userHandle');
 
@@ -31,7 +30,7 @@ router.get('/editUserProfile',user,  userController.editUserProfile); // Edit us
 router.post("/editUserProfile", user,  userController.postEditProfile); // Post Edit user profile page
 
 // Address Management Routes
-router.get('/addressManage', user, addressController.addressManagement); // Address management page
+router.get('/addressManage', user, userController.addressManagement); // Address management page
 router.get('/addAddress', user, addressController.addAddressPage); // Add Address page
 router.post('/addAddress', user,addressController.postAddAddressPage); // Add Address page
 router.get('/editAddress/:id', user, addressController.editAddressPage); // Add Address page
@@ -41,6 +40,7 @@ router.get('/deleteAddress/:id', user,addressController.deleteAddressPage); // A
 // Shop Routes
 router.get("/shop",  userController.shopPage); // Shop page
 router.get("/shop/:category", userController.shopPage); // Shop page with category filtering
+router.get('/priceFilter/:category?', userController.shopPage);
 router.get("/product-details/:id",  userController.productDetails); // Product details page
 
 // Pagination Route
@@ -48,20 +48,26 @@ router.get('/shop/:page',  userController.getShopPagination); // Shop pagination
 router.get('/shop/:category/:page', userController.getShopPagination); // Shop pagination with category filtering
 
 //Cart Route
-router.get('/cart', user, cartController.cart);
-router.get('/addTocart/:id',  user,cartController.cartPage);
-router.post('/updateQuantity',user, cartController.updateCart);
-router.get('/removeCart/:id', user, cartController.deleteCart);
+router.get('/cart', user, userController.cart);
+router.get('/addTocart/:id',  user,userController.cartPage);
+router.post('/updateQuantity',user, userController.updateCart);
+router.get('/removeCart/:id', user, userController.deleteCart);
 
 //Checkout Route
-router.get('/checkout',user, cartController.checkoutPage);
+router.get('/checkout',user, userController.checkoutPage);
 
 //Order Route
-router.get('/orderProfile', user, orderController.ordersProfilePage); // Orders page
-router.get('/trackOrder/:id',user, orderController.trackOrderPage); // Orders page
-router.get("/orderPage",user, orderController.orderPage)
-router.post('/order', user,cartController.placeOrder);
+router.get('/orderProfile', user, userController.ordersProfilePage); // Orders page
+router.get('/trackOrder/:id',user, userController.trackOrderPage); // Orders page
+router.get("/orderPage",user, userController.orderPage)
+router.post('/order', user,userController.placeOrder);
 router.get('/cancelOrder/:orderId', user, orderController.cancelOrder); // Add Address page
+
+
+//Wishlist Route
+router.get("/wishlist", user, userController.wishlist)
+router.get("/addTowishlist/:id", user, userController.wishlistPage)
+router.get('/removeWishlist/:id', user, userController.deleteWishlist);
 
 
 module.exports = router;
