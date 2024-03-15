@@ -47,8 +47,6 @@ const adminTrackOrderPage = async (req, res) => {
 
 const updateOrderStatus = async (req,res) => {
     try {
-
-        console.log("sdfsdfsdfsdf");
         const orderId = req.body.orderId;
         const newStatus = req.body.newStatus;
 

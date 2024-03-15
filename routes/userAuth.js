@@ -4,6 +4,7 @@ const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 const addressController = require('../controllers/addressController');
 const orderController = require('../controllers/orderController');
+const walletController = require('../controllers/walletController');
 const user = require('../middleware/userHandle');
 
 
@@ -75,6 +76,14 @@ router.get('/cancelOrder/:orderId', user, orderController.cancelOrder); // Add A
 router.get("/wishlist", user, userController.wishlist)
 router.get("/addTowishlist/:id", user, userController.wishlistPage)
 router.get('/removeWishlist/:id', user, userController.deleteWishlist);
+
+
+//Wallet Route
+router.get('/wallet',user, userController.userWallet);
+router.post('/addFunds',user, walletController.addFunds);
+router.post('/withdrawFunds',user, walletController.withdrawFunds);
+router.get('/check-Wallet-Balance',user, walletController.checkWalletBalance);
+router.post('/clearHistory',user, walletController.clearHistory);
 
 
 

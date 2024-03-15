@@ -224,7 +224,6 @@
 									<th>Product Name</th>
 									<th>Price</th>
 									<th>Stock</th>
-									<th>Total</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -242,7 +241,6 @@
 										<td>
 											<%= item.product.stock %> items in stock
 										</td>
-										<td class="cart__price" data-id="<%= item.product._id %>">₹<%= item.product.price * item.quantity %>
 										</td>
 										<td>
 											<% if (item.product.stock > 0) { %>
@@ -257,7 +255,7 @@
 							
 						</table>
 						<% }else{ %>
-							<p>no Products in your cart</p>
+							<p>no Products in your wishlist</p>
 						<% } %>
 					</div>
 				</div>

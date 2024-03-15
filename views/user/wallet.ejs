@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Wallet - Animex</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <style>
+        body {
+            font-family: "Montserrat", sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .profile-info {
+            background: #fff;
+            border-radius: 10px;
+            padding: 50px;
+            margin: 65px auto;
+            max-width: 800px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .profile-info h3 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #88c8bc;
+            padding-bottom: 10px;
+        }
+        .profile-info p {
+            color: #000000;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        .edit-button {
+            background-color: #88c8bc;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .edit-button:hover {
+            background-color: #488f82;
+        }
+        .sidebar {
+            background: #f8f9fa;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            margin-top: 185px;
+        }
+        .sidebar h4 {
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #88c8bc;
+            padding-bottom: 10px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar li a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+        }
+        .sidebar li a:hover {
+            background-color: #88c8bc;
+            color: #fff;
+        }
+        .active{
+            color: #88c8bc;
+            border-radius: 5px;
+        }.actives{
+            background-color: #88c8bc;
+            border-radius: 5px;
+        }
+
+        /* Updated CSS styles for the wallet section */
+        .wallet-container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .wallet-header h1 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #88c8bc;
+            padding-bottom: 10px;
+        }
+
+        .balance {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .transaction-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .transaction-option {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .transaction-option input {
+            width: calc(80% - 100px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .transaction-option button {
+            background-color: #88c8bc;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .transaction-option button:hover {
+            background-color: #488f82;
+        }
+
+        .transaction-history {
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+
+        .transaction-history h2 {
+            margin-bottom: 10px;
+            color: #333;
+            border-bottom: 2px solid #88c8bc;
+            padding-bottom: 10px;
+        }
+
+        .transaction-history ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .transaction-history ul li {
+            margin-bottom: 5px;
+        }
+
+        .clear-history-button {
+            background-color: #ff6666;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .clear-history-button:hover {
+            background-color: #cc0000;
+        }
+        li{
+            color: black;
+    font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+    <nav class="colorlib-nav" role="navigation">
+        <div class="top-menu">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-7 col-md-9">
+                        <div id="colorlib-logo"><a href="/">Animex</a></div>
+                    </div>
+                    <div class="col-sm-5 col-md-3">
+                        <form action="#" class="search-wrap">
+                            <div class="form-group">
+                                <input type="search" class="form-control search" placeholder="Search">
+                                <button class="btn btn-primary submit-search text-center" type="submit"><i class="fas fa-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 text-left menu-1">
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/shop">Shop</a></li>   
+                            <li><a href="about.ejs">About</a></li>
+                            <li><a href="contact.ejs">Contact</a></li>
+                            <li style="float: right;" class="active"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
+                            <li style="float: right;" ><a href="/wishlist"><i class="fa-solid fa-heart fa-2x"></i></a></li>
+                            <li class="cart"><a href="/cart"><i class="fas fa-shopping-cart fa-lg"></i> Cart [<%= count  %>]</a></li>
+                            <li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1">
+                <div class="sidebar">
+                    <h4>Account Settings</h4>
+                    <ul>
+                        <li class="active"><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="/addressManage"><i class="fas fa-address-book"></i> Address Management</a></li>
+                        <li><a href="/orderProfile"><i class="fas fa-list"></i> Orders</a></li>
+                        <li class="actives"><a href="/wallet"><i class="fa-solid fa-wallet"></i> Wallet</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-11">
+                <div class="wallet-container">
+                    <div class="wallet-header">
+                        <h1>My Wallet</h1>
+                        <div class="balance" id="balance">Balance: ₹<%= wallet.balance %></div>
+                    </div>
+                    <div class="transaction-options">
+                        <div class="transaction-option">
+                            <input type="number" id="add-amount" placeholder="Enter amount">
+                            <button onclick="addFunds()">Add Funds</button>
+                        </div>
+                    </div>
+                    <div class="transaction-history">
+                        <h2>Transaction History</h2>
+                        <ul id="transaction-list">
+                            <% wallet.transactionHistory.forEach(transaction => { %>
+                                <li><%= transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1) %>: ₹<%= transaction.amount %></li>
+                            <% }); %>
+                        </ul>
+                        <button class="clear-history-button" onclick="clearHistory()">Clear History</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const balanceDisplay = document.getElementById('balance');
+        const transactionList = document.getElementById('transaction-list');
+
+        async function addFunds() {
+            console.log("sdfsdfsdfsd")
+    const amount = parseFloat(document.getElementById('add-amount').value);
+    if (!isNaN(amount)) {
+        const options = {
+            key: 'rzp_test_Oks5Gpac00wL72', // Replace with your Razorpay key
+            amount: amount * 100, // Amount in paise
+            currency: 'INR',
+            name: 'Wallet Recharge',
+            description: 'Adding funds to wallet',
+            image: 'https://example.com/logo.png', // URL of your company logo
+            handler: function (response) {
+                // On successful payment, update balance and add transaction
+                const razorpay_payment_id = response.razorpay_payment_id;
+                updateBalanceAndTransaction(amount, razorpay_payment_id);
+                document.getElementById('add-amount').value = '';
+            },
+            prefill: {
+                name: users.name,
+		        email: users.email,
+		        contact: users.phone,
+            },
+            theme: {
+                color: '#88c8bc' // Customize the color
+            }
+        };
+        const rzp = new Razorpay(options);
+        rzp.open();
+    } else {
+        alert("Invalid amount!");
+    }
+}
+
+async function updateBalanceAndTransaction(amount, payment_id) {
+    const response = await fetch('/verifyPayment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ amount, payment_id })
+    });
+    const data = await response.json();
+    if (data.success) {
+        balanceDisplay.textContent = `Balance: ₹${data.balance}`;
+        addTransaction(amount, 'deposit');
+    } else {
+        alert(data.message);
+    }
+}
+
+
+
+        async function withdrawFunds() {
+            const amount = parseFloat(document.getElementById('withdraw-amount').value);
+            if (!isNaN(amount)) {
+                const response = await fetch('/withdrawFunds', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ amount })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    balanceDisplay.textContent = `Balance: ₹${data.balance}`;
+                    addTransaction(amount, 'withdraw');
+                    document.getElementById('withdraw-amount').value = '';
+                } else {
+                    alert(data.message);
+                }
+            } else {
+                alert("Invalid amount!");
+            }
+        }
+
+        function addTransaction(amount, type) {
+            const transaction = document.createElement('li');
+            transaction.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)}: ₹${amount}`;
+            transactionList.appendChild(transaction);
+        }
+
+        async function clearHistory() {
+            const response = await fetch('/clearHistory', {
+                method: 'POST'
+            });
+            const data = await response.json();
+            if (data.success) {
+                transactionList.innerHTML = '';
+            } else {
+                alert(data.message);
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+        
+    <script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/j   s/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@
   const Product = require('../models/products');
   const Wishlist = require('../models/wishlist');
   const Order = require('../models/order');
+  const Wallet = require('../models/wallet');
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -807,33 +808,71 @@ const deleteCart = async (req, res) => {
 };
 
 const checkoutPage = async (req, res) => {
-    try {
-        const userId = req.session.userID;
+  try {
+    const userId = req.session.userID;
+    const orderId = req.query.orderId;
 
-        const userdata = await User.findById(userId);
+    let userCart;
+    let totalPrice;
+    let addresses;
+    let defaultAddress;
 
-        const userAddress = await Address.findOne({ userId });
-
-        const userCart = await Cart.findOne({ userId }).populate("items.product");
-
-        // Find the cart document for the user
-   const cart = await Cart.findOne({ userId: req.session.userID });
-   let cartItemCount = 0;
-   if (cart) {
-       cartItemCount = cart.items.length; // Get the count of items in the cart
+    if (orderId) {
+      const order = await Order.findById(orderId).populate('items.product').exec();
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+      addresses = await Address.findOne({  userId });
+      console.log(addresses);
+      
+      userCart = order.items;
+      totalPrice = order.totalPrice;
+    } else {
+      addresses = await Address.findOne({ userId });
+      console.log(addresses);
+      
+      const cart = await Cart.findOne({ userId }).populate('items.product').exec();
+      if (!cart) {
+        return res.status(404).json({ message: 'Cart not found' });
+      }
+      userCart = cart.items;
+      totalPrice = cart.totalPrice;
    }
 
-        res.render("user/checkout", { count :cartItemCount, checkout: userAddress, user: userdata, totalPrice: userCart ? userCart.totalPrice : 0, product: userCart });
-    } catch (err) {
-        console.error("Error in checkoutPage:", err);
-        res.status(500).send("Internal Server Error");
-    }
+   // Find the cart document for the user
+      const cart = await Cart.findOne({ userId: req.session.userID });
+      let cartItemCount = 0;
+      if (cart) {
+          cartItemCount = cart.items.length; // Get the count of items in the cart
+      }
+
+    res.render('user/checkout', {
+      title: 'Checkout',
+      checkout: addresses,
+      user: req.session.user,
+      userAddress: defaultAddress,
+      product: userCart,
+      totalPrice: totalPrice,
+      orderId: orderId,
+      count: cartItemCount
+    });
+
+  } catch (err) {
+      console.error("Error in checkoutPage:", err);
+      res.status(500).send("Internal Server Error");
+  }
 };
+
 
 const placeOrder = async (req, res) => {
     try {
         const userId = req.session.userID;
-        const { addressId, totalPrice } = req.body;
+        const addressId = req.body.addressId;
+        const payment = req.body.paymentMethod
+
+        const totalPriceArray = req.body.totalPrice;
+        const totalPrice = totalPriceArray.reduce((acc, curr) => acc + parseFloat(curr), 0);
+
 
         // Check if an address is selected
         if (!addressId) {
@@ -883,6 +922,10 @@ const placeOrder = async (req, res) => {
                 items: orderItems
             });
 
+            if(payment == "Razorpay"){
+              order.orderStatus = "Paid";
+            }
+
             await order.save();
 
             await Cart.findOneAndUpdate(
@@ -904,6 +947,8 @@ const placeOrder = async (req, res) => {
                     }
                 )
             }
+
+            
 
         } else {
             return res.status(400).json({ error: 'Please select a valid address' });
@@ -959,8 +1004,6 @@ const ordersProfilePage = async (req, res) => {
       }
 
       let pending, shipped, delivered, cancelled
-
-      console.log("order status: ",order.orderStatus)
 
       if(order.orderStatus === "Pending"){
         pending = "#F78200"
@@ -1089,6 +1132,32 @@ const deleteWishlist = async (req, res) => {
   }
 };
 
+//wallet 
+const userWallet = async (req, res) => {
+  try {
+      const userId = req.session.userID;
+      let wallet = await Wallet.findOne({ userId });
+
+      // If wallet is not found, create a new one with balance 0
+      if (!wallet) {
+          wallet = new Wallet({ userId, balance: 0 });
+          await wallet.save();
+      }
+
+      // Find the cart document for the user
+      const cart = await Cart.findOne({ userId: req.session.userID });
+      let cartItemCount = 0;
+      if (cart) {
+        cartItemCount = cart.items.length; // Get the count of items in the cart
+      }
+
+      res.render('user/wallet', { wallet, count: cartItemCount, users: req.session.user });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+  }
+}
+
 
   module.exports = {
     //page 404
@@ -1137,5 +1206,7 @@ const deleteWishlist = async (req, res) => {
 
     wishlist,
     wishlistPage,
-    deleteWishlist
+    deleteWishlist,
+
+    userWallet
   };
