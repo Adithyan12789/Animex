@@ -405,11 +405,11 @@
 													</div>
 												</div>
 												<div class="form-group">
-														<div class="col-md-12">
-															<p style="color: black; font-weight: 400; font-size: 16px; float: right;">Total - <%= totalPrice %></p>
-															<input type="hidden" name="totalPrice" id="subtotal" value="<%= totalPrice %>">
-														</div>
-												</div>
+													<div class="col-md-12">
+														<p style="color: black; font-weight: 400; font-size: 16px; float: right;">Total - ₹<%= totalPrice %></p>
+														<input type="hidden" name="totalPrice" id="subtotal" value="<%= totalPrice %>">
+													</div>
+												</div>												
 												<br>
 												<hr>
 												<h3>Payment Method</h3>
@@ -710,9 +710,20 @@
 	const paymentStatusInput = document.getElementById("paymentStatus");
 	const checkedCount = [paymentCODCheckbox, paymentRazorpayCheckbox, paymentWalletCheckbox].filter(checkbox => checkbox.checked).length;
   
-	const totalPriceInput = document.getElementById("subtotal");
-		  const totalPrice = parseFloat(totalPriceInput.innerText);
-	console.log(totalPrice);
+	// Retrieve the subtotal element by ID
+const totalPriceInput = document.getElementById("subtotal");
+
+// Parse the inner text of the subtotal element as a floating-point number
+const totalPrice = parseFloat(totalPriceInput.value);
+
+// Check if the parsed value is a valid number
+if (!isNaN(totalPrice)) {
+    // Log the parsed total price
+    console.log("Parsed total price:", totalPrice);
+} else {
+    console.error("Unable to parse total price as a number.");
+}
+
   
 	if (checkedCount !== 1) {
 	  checkError.style.display = "block";
@@ -761,12 +772,13 @@
 		});
 		return false;
 	  }else  if (paymentWalletCheckbox.checked){
-                console.log("hai");
                 fetch('/check-wallet-balance')
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
                             const walletBalance = data.balance;
+							console.log(walletBalance)
+							console.log(totalPrice)
                             if (totalPrice <= walletBalance) {
                                 document.getElementById('paymentStatus').value = 'Paid';
                                 Swal.fire({
@@ -868,8 +880,8 @@
 
 	async function withdrawFunds() {
             const totalPrice = document.getElementById("subtotal");document.getElementById("subtotal")
-             const amount = parseFloat(totalPrice.innerText);
-            console.log(amount);
+             const amount = parseFloat(totalPrice.value);
+             console.log(amount);
             if (!isNaN(amount)) {
                 const response = await fetch('/withdrawFunds', {
                     method: 'POST',

@@ -5,6 +5,7 @@ const productController = require("../controllers/productController");
 const customerController = require("../controllers/customerController");
 const categoryController = require("../controllers/categoryController");
 const orderController = require("../controllers/orderController");
+const couponController = require("../controllers/couponController");
 const admin = require('../middleware/adminHandle');
 const uploadImage = require("../middleware/multer");
 
@@ -52,5 +53,10 @@ router.get('/orderList', admin, orderController.adminOrdersProfilePage); // Orde
 router.get('/orderDetails/:id',admin, orderController.adminTrackOrderPage); // Orders page
 router.post('/update_order_status', admin,orderController.updateOrderStatus);
 router.get('/deleteOrder/:orderId', admin, orderController.deleteOrder); // Add Address page
+
+
+
+//Coupon Page
+router.get('/coupon', admin, couponController.couponPage);
 
 module.exports = router;

@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet" />
     <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         body {
             font-family: "Montserrat", sans-serif;
@@ -113,6 +113,7 @@
         .balance {
             font-size: 24px;
             margin-bottom: 20px;
+            font-weight: 500;
         }
 
         .transaction-options {
@@ -246,7 +247,7 @@
                     <div class="transaction-options">
                         <div class="transaction-option">
                             <input type="number" id="add-amount" placeholder="Enter amount">
-                            <button onclick="addFunds()">Add Funds</button>
+                            <button onclick="initiateRazorpayPayment()">Add Funds</button>
                         </div>
                     </div>
                     <div class="transaction-history">
@@ -267,63 +268,67 @@
     <script>
         const balanceDisplay = document.getElementById('balance');
         const transactionList = document.getElementById('transaction-list');
+    
+        function initiateRazorpayPayment() {
 
-        async function addFunds() {
-            console.log("sdfsdfsdfsd")
-    const amount = parseFloat(document.getElementById('add-amount').value);
-    if (!isNaN(amount)) {
-        const options = {
-            key: 'rzp_test_Oks5Gpac00wL72', // Replace with your Razorpay key
-            amount: amount * 100, // Amount in paise
-            currency: 'INR',
-            name: 'Wallet Recharge',
-            description: 'Adding funds to wallet',
-            image: 'https://example.com/logo.png', // URL of your company logo
-            handler: function (response) {
-                // On successful payment, update balance and add transaction
-                const razorpay_payment_id = response.razorpay_payment_id;
-                updateBalanceAndTransaction(amount, razorpay_payment_id);
-                document.getElementById('add-amount').value = '';
-            },
-            prefill: {
-                name: users.name,
-		        email: users.email,
-		        contact: users.phone,
-            },
-            theme: {
-                color: '#88c8bc' // Customize the color
-            }
-        };
-        const rzp = new Razorpay(options);
-        rzp.open();
-    } else {
-        alert("Invalid amount!");
-    }
+const data = {
+  name: "<%= user.name %>",
+  email: "<%= user.email %>",
+  phone: "<%= user.phone %>",
+};
+
+const totalPriceInput = document.getElementById("add-amount");
+    console.log("ssssss",totalPriceInput);
+    const totalPrice = parseFloat(totalPriceInput.value);
+
+console.log(totalPrice);
+
+var options = {
+  key: "rzp_test_Oks5Gpac00wL72",
+  amount: totalPrice * 100,
+  currency: "INR",
+  name: "Time Z",
+  description: "Purchase Description",
+  image: "https://example.com/logo.png",
+  
+  handler: function (response) {
+    console.log(response);
+ 
+      console.log("Payment successful");
+    //   document.getElementById('paymentStatus').value = 'Paid';
+    addFunds();
+  },
+
+  prefill: {
+    name: data.name,
+    email: data.email,
+    contact: data.phone,
+  },
+  theme: {
+    color: "#3399cc",
+  },
+};
+
+var rzp = new Razorpay(options);
+
+// rzp.on('payment.failed', function (response) {
+//   console.log("Payment failed:", response);
+//   document.getElementById('paymentStatus').value = 'Failed';
+//   submitForm();
+// });
+
+rzp.open();
+
+
 }
 
-async function updateBalanceAndTransaction(amount, payment_id) {
-    const response = await fetch('/verifyPayment', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ amount, payment_id })
-    });
-    const data = await response.json();
-    if (data.success) {
-        balanceDisplay.textContent = `Balance: ₹${data.balance}`;
-        addTransaction(amount, 'deposit');
-    } else {
-        alert(data.message);
-    }
-}
 
 
 
-        async function withdrawFunds() {
-            const amount = parseFloat(document.getElementById('withdraw-amount').value);
+async function addFunds() {
+            const amount = parseFloat(document.getElementById('add-amount').value);
             if (!isNaN(amount)) {
-                const response = await fetch('/withdrawFunds', {
+                const response = await fetch('/addFunds', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -333,8 +338,8 @@ async function updateBalanceAndTransaction(amount, payment_id) {
                 const data = await response.json();
                 if (data.success) {
                     balanceDisplay.textContent = `Balance: ₹${data.balance}`;
-                    addTransaction(amount, 'withdraw');
-                    document.getElementById('withdraw-amount').value = '';
+                    addTransaction(amount, 'deposit');
+                    document.getElementById('add-amount').value = '';
                 } else {
                     alert(data.message);
                 }
@@ -342,13 +347,13 @@ async function updateBalanceAndTransaction(amount, payment_id) {
                 alert("Invalid amount!");
             }
         }
-
+    
         function addTransaction(amount, type) {
             const transaction = document.createElement('li');
             transaction.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)}: ₹${amount}`;
             transactionList.appendChild(transaction);
         }
-
+    
         async function clearHistory() {
             const response = await fetch('/clearHistory', {
                 method: 'POST'
@@ -361,18 +366,13 @@ async function updateBalanceAndTransaction(amount, payment_id) {
             }
         }
 
-        function goBack() {
-            window.history.back();
-        }
     </script>
+    
 
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
-        
-    <script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/j   s/all.min.js" integrity="sha512-DaGUvSUoc0W5jbC2B0O6qbRfufJtehO7eI/bM0K38Es0K4PXT/ZguSN5NCTnvdAxg0eUjLTYaBs1k/1qIG4KWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/popper.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>

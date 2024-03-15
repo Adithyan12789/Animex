@@ -870,9 +870,6 @@ const placeOrder = async (req, res) => {
         const addressId = req.body.addressId;
         const payment = req.body.paymentMethod
 
-        const totalPriceArray = req.body.totalPrice;
-        const totalPrice = totalPriceArray.reduce((acc, curr) => acc + parseFloat(curr), 0);
-
 
         // Check if an address is selected
         if (!addressId) {
@@ -881,15 +878,19 @@ const placeOrder = async (req, res) => {
 
         let userOrder = await Order.findOne({ userId });
 
+        const userCart = await Cart.findOne({ userId }).populate('items.product');
+        let totalPrice = 0;
+for (const item of userCart.items) {
+    totalPrice += item.product.price * item.quantity;
+}
+
         if (!userOrder) {
             userOrder = new Order({ userId, addressId, totalPrice });
         }
 
-        userOrder.totalPrice = totalPrice;
 
-        const userCart = await Cart.findOne({ userId }).populate('items.product');
-
-        console.log("Cart:", userCart);
+console.log("adisdfgsdfsdf",totalPrice)
+userOrder.totalPrice = totalPrice;
 
         const user = await User.findById(userId);
         const address = await Address.findOne({ userId });
@@ -923,7 +924,9 @@ const placeOrder = async (req, res) => {
             });
 
             if(payment == "Razorpay"){
-              order.orderStatus = "Paid";
+              order.paymentStatus = "Paid";
+            }else if(payment == "Wallet"){
+              order.paymentStatus = "Paid";
             }
 
             await order.save();
@@ -966,7 +969,7 @@ const ordersProfilePage = async (req, res) => {
   const userId = req.session.userID;
 
   try {
-      const orders = await Order.find({ userId });
+      const orders = await Order.find({ userId })
 
       // Find the cart document for the user
    const cart = await Cart.findOne({ userId: req.session.userID });
@@ -1003,27 +1006,12 @@ const ordersProfilePage = async (req, res) => {
         cartItemCount = cart.items.length; // Get the count of items in the cart
       }
 
-      let pending, shipped, delivered, cancelled
-
-      if(order.orderStatus === "Pending"){
-        pending = "#F78200"
-      }else if(order.orderStatus === "Shipped"){
-        shipped = "#FFAD00"
-      }else if(order.orderStatus === "Delivered"){
-        delivered = "#00FF2D"
-      }else if(order.orderStatus === "Cancelled"){
-        cancelled = "#FF0000"
-      }
 
       // Render the "user/trackOrder" view with the user and order data
       res.render("user/trackOrder", {
         user,
         order,
         count: cartItemCount,
-        pending,
-        shipped,
-        delivered,
-        cancelled
       });
     } catch (error) {
       console.error("Error:", error);
@@ -1145,13 +1133,17 @@ const userWallet = async (req, res) => {
       }
 
       // Find the cart document for the user
-      const cart = await Cart.findOne({ userId: req.session.userID });
+      const cart = await Cart.findOne({ userId });
       let cartItemCount = 0;
       if (cart) {
         cartItemCount = cart.items.length; // Get the count of items in the cart
       }
 
-      res.render('user/wallet', { wallet, count: cartItemCount, users: req.session.user });
+      const userData = await User.findById(userId);
+
+      console.log("sdvsvsvsdvvdfv",userData)
+
+      res.render('user/wallet', { wallet, count: cartItemCount, user: userData });
   } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');

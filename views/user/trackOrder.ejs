@@ -10,6 +10,26 @@
     <link rel="stylesheet" href="/static/css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-JDOvPXhfZgE/bs+FMqRf1rVHzAIn2tD5z5Q3zYqlv7qIYk5Nb57Ala9b2Di1D3FJf58po05MRV31/KBtCJnH7A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+
+.pending {
+    background-color: #da8700; 
+}
+
+.shipped {
+    background-color: #e9ed01; 
+}
+
+.delivered {
+    background-color: #08fb04; 
+}
+
+.return {
+    background-color: #133eff; 
+}
+
+.cancelled {
+    background-color: #e80000; 
+}
         /* Add any additional styling specific to the track order page here */
         .order-container {
             background: #fff;
@@ -155,14 +175,24 @@
             <div class="row mt-5">
                 <div class="col-md-8 offset-md-2">
                     <div class="progress" style="height: 2rem;">
-                        <% if (cancelled) { %>
-                            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 100%; background-color: <%= cancelled %>;" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">cancelled</div>
-                        <% }else{ %>
-                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 33%; background-color: <%= pending %>;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Processing Order</div>
-                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 33%; background-color: <%= shipped %>;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Shipped</div>
-                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 34%; background-color: <%= delivered %>;" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">Delivered</div>
+                        <% if (order.orderStatus === "Cancelled") { %>
+                            <div id="cancelledBar" class="progress-bar cancelled" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Cancelled</div>
+                        <% }else if (order.orderStatus === "Return") { %>
+                            <div id="returnBar" class="progress-bar return" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Return</div>
+                        <% } else if (order.orderStatus === "Pending") { %>
+                            <div id="processingBar" class="progress-bar pending" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Processing Order</div>
+                            <div id="shippedBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div id="deliveredBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <% } else if (order.orderStatus === "Shipped") { %>
+                            <div id="processingBar" class="progress-bar pending" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Processing Order</div>
+                            <div id="shippedBar" class="progress-bar shipped" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Shipped</div>
+                            <div id="deliveredBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <% } else if (order.orderStatus === "Delivered") { %>
+                            <div id="processingBar" class="progress-bar pending" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Processing Order</div>
+                            <div id="shippedBar" class="progress-bar shipped" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Shipped</div>
+                            <div id="deliveredBar" class="progress-bar delivered" role="progressbar" style="width: 34%;" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">Delivered</div>
                         <% } %>
-                    </div>                      
+                    </div>
                 </div>                
             </div>
             
@@ -208,6 +238,7 @@
                             <li ><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
                             <li ><a href="/addressManage"><i class="fas fa-address-book"></i> Address Management</a></li>
                             <li class="actives"><a href="/orderProfile"><i class="fas fa-list"></i> Orders</a></li>
+                            <li><a href="/wallet"><i class="fa-solid fa-wallet"></i> Wallet</a></li>
                         </ul>
                     </div>
                 </div>
@@ -264,6 +295,44 @@
             var formattedDate = orderDate.toLocaleDateString("en-US", options);
             document.getElementById("orderDate").textContent = formattedDate;
         });
+
+
+
     </script>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+   var orderStatus = "<%= order.orderStatus %>";
+   var processingBar = document.getElementById("processingBar");
+   var shippedBar = document.getElementById("shippedBar");
+   var deliveredBar = document.getElementById("deliveredBar");
+   var cancelledBar = document.getElementById("cancelledBar");
+   var returnBar = document.getElementById("returnBar");
+
+   switch (orderStatus) {
+       case "Processing":
+           processingBar.classList.add("pending");
+           break;
+       case "Shipped":
+           shippedBar.classList.add("shipped");
+           break;
+       case "Delivered":
+           deliveredBar.classList.add("delivered");
+           break;
+       case "Cancelled":
+           cancelledBar.classList.add("cancelled");
+           break;
+        case "Return":
+           returnBar.classList.add("return");
+           break;
+       default:
+           break;
+   }
+});
+
+
+   </script>
 </body>
 </html>

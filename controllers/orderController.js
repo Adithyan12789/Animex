@@ -1,6 +1,8 @@
 const Order = require("../models/order");
 const User = require("../models/userModel");
 const Address = require("../models/address");
+const Wallet = require("../models/wallet");
+const Product = require("../models/products");
 
 //Admin - Side  Code
 
@@ -67,9 +69,7 @@ const updateOrderStatus = async (req,res) => {
     }
 }
 
-
-// Assuming you have a route like /cancelOrder/:orderId
-const cancelOrder = async (req, res) => {
+const returnOrder = async (req, res) => {
     try {
         const orderId = req.params.orderId;
         
@@ -81,7 +81,7 @@ const cancelOrder = async (req, res) => {
         }
         
         // Update the order status to "canceled"
-        order.paymentStatus = 'canceled';
+        order.orderStatus = 'Return';
         await order.save();
 
         res.redirect("/orderProfile")
@@ -90,6 +90,78 @@ const cancelOrder = async (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+
+
+
+
+const cancelOrder = async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        const order = await Order.findById(orderId);
+
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        if (order.orderStatus === 'Cancelled') {
+            return res.status(400).json({ error: 'Order already canceled' });
+        }
+
+        // Calculate total quantity of all items in the order
+        let totalQuantity = 0;
+        for (const item of order.items) {
+            totalQuantity += item.quantity;
+        }
+
+        // Increment stock count by the total quantity
+        await Product.updateMany({}, {
+            $inc: { stock: totalQuantity }
+        });
+
+        // Update order status to "Cancelled"
+        order.orderStatus = 'Cancelled';
+        await order.save();
+
+        // Optionally, return money to wallet if payment was made
+
+        return res.status(200).json({ success: true, message: "Order canceled successfully" });
+    } catch (error) {
+        console.error('Error canceling order:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+const returnMoneyToWallet = async (userId, amount) => {
+    try {
+        console.log('Finding wallet for user:', userId);
+        let wallet = await Wallet.findOne({ userId });
+
+        if (!wallet) {
+            console.log('Wallet not found for user:', userId);
+            wallet = new Wallet({ userId, balance: amount });
+        } else {
+            console.log('Wallet found for user:', userId);
+            console.log('Previous balance:', wallet.balance);
+            console.log('Previous amount:', amount);
+            // Instead of directly adding the amount, set the balance to the amount
+            wallet.balance += amount; 
+        }
+
+        console.log('Saving wallet:', wallet);
+        await wallet.save();
+        console.log('Money returned to wallet successfully');
+        return true;
+    } catch (error) {
+        console.error('Error returning money to wallet:', error);
+        return false;
+    }
+}
+
+
+
+
 
 const deleteOrder = async (req, res) => {
     try {
@@ -103,7 +175,7 @@ const deleteOrder = async (req, res) => {
         }
         
         // Update the order status to "canceled"
-        order.paymentStatus = 'canceled';
+        order.orderStatus = 'canceled';
         await order.save();
 
         res.redirect("/orderList")
@@ -126,6 +198,8 @@ module.exports = {
 
     //User-side
     updateOrderStatus,
+    returnOrder,
     cancelOrder,
+    returnMoneyToWallet,
     deleteOrder
 };

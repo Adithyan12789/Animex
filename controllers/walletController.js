@@ -69,4 +69,4 @@ const Wallet = require("../models/wallet");
     }
 
 
-    module.exports = { addFunds, withdrawFunds, clearHistory, checkWalletBalance}
+    module.exports = { addFunds,withdrawFunds, clearHistory, checkWalletBalance}
