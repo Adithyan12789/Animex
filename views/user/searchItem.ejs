@@ -60,9 +60,6 @@
         .active{
             color: aquamarine;
         }
-        .actives{
-            background-color: aquamarine;
-        }
         .out-of-stock-message {
     font-weight: bold;
     color: #ff0000; /* Red color */
@@ -94,7 +91,7 @@
                     <div class="col-sm-5 col-md-3">
                         <form action="/search" class="search-wrap" method="get">
                             <div class="form-group">
-                                <input type="search" class="form-control search" name="q" placeholder="Search">
+                                <input type="search" name="q" class="form-control search" placeholder="Search">
                                 <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
                             </div>
                         </form>
@@ -161,6 +158,9 @@
                     <div class="breadcrumbs-img" style="background-image: url(/static/images/ROMAN-SHIRT-1.webp);">
                         <h2>Men's</h2>
                     </div>
+                    <div class="menu text-center">
+                        <p><a href="#">New Arrivals</a> <a href="#">Best Sellers</a> <a href="#">Popularity</a> <a href="#">Featured</a></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -170,7 +170,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-xl-12">
-                    <div class="row row-pb-md" style="justify-content: end;">
+                    <div class="row row-pb-md">
                         <div class="col-lg-3 col-xl-3">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -195,9 +195,9 @@
                                         <ul>
                                             <li><a href="/priceFilter/<%= categories._id %>?sort=lowToHigh" class="<%= sort === 'lowToHigh' ? 'actives' : '' %>">Price: low to high</a></li>
                                             <li><a href="/priceFilter/<%= categories._id %>?sort=highToLow" class="<%= sort === 'highToLow' ? 'actives' : '' %>">Price: high to low</a></li>
-                                            <li><a href="/bestSeller/<%= categories._id %>?sort=bestSell" class="<%= sort === 'bestSell' ? 'actives' : '' %>">Best Sellers</a></li>
-                                            <li><a href="/aToZFilter/<%= categories._id %>?sort=aToZ" class="<%= sort === 'aToZ' ? 'actives' : '' %>">aA - zZ</a></li>
-                                            <li><a href="/aToZFilter/<%= categories._id %>?sort=zToA" class="<%= sort === 'zToA' ? 'actives' : '' %>">zZ - aA</a></li>
+                                            <li><a href="#">Average ratings</a></li>
+                                            <li><a href="#">aA - zZ</a></li>
+                                            <li><a href="#">zZ - aA</a></li>
                                         </ul>                                                                                                                     
                                     </div>
                                 </div>
@@ -243,19 +243,7 @@
                         </div>
                         <% }) %>
                         <!-- Pagination -->
-                        <div class="col-md-12 text-center">
-                            <div class="block-27">
-                                <ul>
-                                    <li><a href="/shop?page=<%= currentPage - 1 %>"><i class="ion-ios-arrow-back"></i></a></li>
-                                    <% for(i = 1 ; i <= totalPages ; i++){ %>
-                                    <li class="<%= currentPage == i ? "active": "" %> ">
-                                        <a href="/shop?page=<%= i %>"><span><%= i %></span></a>
-                                    </li>
-                                    <% } %>
-                                    <li><a href="/shop?page=<%= currentPage + 1 %>"><i class="ion-ios-arrow-forward"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

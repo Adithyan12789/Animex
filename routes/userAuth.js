@@ -24,6 +24,11 @@ router.post('/verifyOtp', authController.verifyOTP); // OTP verification action
 router.get('/resend-otp', userController.resendOTP); // Resend OTP
 router.get('/userlogout', user, userController.logoutuser); // User logout
 
+//Search Route
+router.get('/search', user, userController.searchProduct); // User logout
+
+
+
 // User Profile Routes
 router.get('/profile', user, userController.userProfile); // User profile page
 router.get('/editUserProfile',user,  userController.editUserProfile); // Edit user profile page
@@ -41,6 +46,8 @@ router.get('/deleteAddress/:id', user,addressController.deleteAddressPage); // A
 router.get("/shop",  userController.shopPage); // Shop page
 router.get("/shop/:category", userController.shopPage); // Shop page with category filtering
 router.get('/priceFilter/:category?', userController.shopPage);
+router.get('/aToZFilter/:category?', userController.shopPage);
+router.get('/bestSeller/:category?', userController.shopPage);
 router.get("/product-details/:id",  userController.productDetails); // Product details page
 
 // Pagination Route

@@ -214,6 +214,89 @@
     }
   };
 
+  //Search 
+
+  const searchProduct = async (req,res) =>{
+    const perPage = 6; 
+    const page = req.query.page || 1;
+    const category = req.query.category;
+    const sort = req.query.sort; // Retrieve sort parameter from query
+
+    try {
+      const searchTerm = req.query.q; // Assuming the search query parameter is named 'q'
+  
+      // Perform the search query against the MongoDB database
+      const searchResults = await Product.find({
+        $or: [
+          { name: { $regex: searchTerm, $options: 'i' } } // Case-insensitive search on product name
+          // Add more fields to search here as needed
+        ],
+      }).exec();
+
+      // Find the cart document for the user
+      const cart = await Cart.findOne({ userId: req.session.userID });
+      let cartItemCount = 0;
+      if (cart) {
+          cartItemCount = cart.items.length; // Get the count of items in the cart
+      }
+
+
+        let totalProducts;
+        let products;
+        let selectedCategory = null;
+
+        // Count total number of products
+        if (category) {
+            totalProducts = await Product.countDocuments({ category: category });
+            // Query the database to find products matching the specified category
+            products = await Product.find({ category: category })
+                .populate("category")
+                .skip(perPage * page - perPage)
+                .limit(perPage)
+                .exec();
+            selectedCategory = category;
+        } else {
+            totalProducts = await Product.countDocuments();
+            // Query the database to find all products
+            products = await Product.find()
+                .populate("category")
+                .skip(perPage * page - perPage)
+                .limit(perPage)
+                .exec();
+        }
+
+        // Apply sorting if specified
+        if (sort === 'lowToHigh') {
+          products.sort((a, b) => a.price - b.price);
+      } else if (sort === 'highToLow') {
+          products.sort((a, b) => b.price - a.price);
+      }
+
+    const totalPages = Math.ceil(totalProducts / perPage);
+
+        const categories = await Category.find();
+
+        res.render("user/searchItem", {
+            title: "Product Page",
+            categories: categories,
+            user: req.session.user,
+            count :cartItemCount,
+            selectedCategory: selectedCategory,
+            sort: sort, // Pass the sort variable,
+            products: searchResults,
+            totalPages: totalPages,
+            currentPage: page,
+        });
+    } catch (error) {
+      console.error('Error searching products:', error);
+      res.status(500).json({ error: 'Internal server error' });
+      }
+  }
+
+
+
+  //Profile Controll
+
   const viewprofile = async function (req, res) {
     try {
       if (req.session.user) {
@@ -293,9 +376,8 @@
 
 
 
-  //Shop Page
   const shopPage = async (req, res) => {
-    const perPage = 6; 
+    const perPage = 6;
     const page = req.query.page || 1;
     const category = req.query.category;
     const sort = req.query.sort; // Retrieve sort parameter from query
@@ -328,9 +410,17 @@
 
         // Apply sorting if specified
         if (sort === 'lowToHigh') {
-            products.sort((a, b) => a.price - b.price);
+          products.sort((a, b) => a.price - b.price);
         } else if (sort === 'highToLow') {
-            products.sort((a, b) => b.price - a.price);
+          products.sort((a, b) => b.price - a.price);
+        } else if (sort === 'aToZ') {
+          products.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sort === 'zToA') {
+          products.sort((a, b) => b.name.localeCompare(a.name));
+        } else if (sort === 'bestSell') {
+          orderCount = await Order.find
+          // Sort by order count in descending order to get the best sellers first
+          products.sort((a, b) => b.orderCount - a.orderCount);
         }
 
         // Filter out products that are not listed
@@ -363,9 +453,10 @@
         });
     } catch (error) {
         console.error("Error fetching products:", error);
-        res.status(500).send("Error fetching products");
+        res.status(500).send("Error fetching products: " + error.message); // Provide more specific error message
     }
 }
+
 
 
 
@@ -1010,6 +1101,9 @@ const deleteWishlist = async (req, res) => {
     loguser,
     loaduserHome,
     logoutuser,
+    searchProduct,
+
+
     viewprofile,
     editprofileload,
     editprofile,
