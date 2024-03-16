@@ -123,41 +123,42 @@ const cancelOrder = async (req, res) => {
         order.orderStatus = 'Cancelled';
         await order.save();
 
-        // Optionally, return money to wallet if payment was made
+        // Pass userId and amount to returnMoneyToWallet
+        // await returnMoneyToWallet(order.userId, order.totalPrice);
 
         return res.status(200).json({ success: true, message: "Order canceled successfully" });
     } catch (error) {
         console.error('Error canceling order:', error);
         return res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
 
+// const returnMoneyToWallet = async (userId, amount) => {
+//     try {
+//         console.log('Finding wallet for user:', userId);
+//         let wallet = await Wallet.findOne({ userId });
 
-const returnMoneyToWallet = async (userId, amount) => {
-    try {
-        console.log('Finding wallet for user:', userId);
-        let wallet = await Wallet.findOne({ userId });
+//         if (!wallet) {
+//             console.log('Wallet not found for user:', userId);
+//             wallet = new Wallet({ userId, balance: 0 });
+//         }
 
-        if (!wallet) {
-            console.log('Wallet not found for user:', userId);
-            wallet = new Wallet({ userId, balance: amount });
-        } else {
-            console.log('Wallet found for user:', userId);
-            console.log('Previous balance:', wallet.balance);
-            console.log('Previous amount:', amount);
-            // Instead of directly adding the amount, set the balance to the amount
-            wallet.balance += amount; 
-        }
+//         console.log('Previous balance:', wallet.balance);
+//         console.log('Previous amount:', amount);
+//         // add the amount from the balance
+//         wallet.balance += amount; 
 
-        console.log('Saving wallet:', wallet);
-        await wallet.save();
-        console.log('Money returned to wallet successfully');
-        return true;
-    } catch (error) {
-        console.error('Error returning money to wallet:', error);
-        return false;
-    }
-}
+//         console.log('Saving wallet:', wallet);
+//         await wallet.save();
+
+//         console.log('Money returned to wallet successfully');
+//         return true;
+//     } catch (error) {
+//         console.error('Error returning money to wallet:', error);
+//         return false;
+//     }
+// }
+
 
 
 
@@ -200,6 +201,6 @@ module.exports = {
     updateOrderStatus,
     returnOrder,
     cancelOrder,
-    returnMoneyToWallet,
+    // returnMoneyToWallet,
     deleteOrder
 };

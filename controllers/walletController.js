@@ -12,6 +12,8 @@ const Wallet = require("../models/wallet");
                 $inc: { balance: amount },
                 $push: { transactionHistory: { amount, type: 'deposit' } }
             }, { new: true });
+
+            console.log("yhtjtyjtyj",wallet)
     
             res.json({ success: true, balance: wallet.balance });
         } catch (error) {
@@ -29,6 +31,8 @@ const Wallet = require("../models/wallet");
                 $inc: { balance: -amount },
                 $push: { transactionHistory: { amount, type: 'withdraw' } }
             }, { new: true });
+
+            console.log("erfgerewfw", wallet)
     
             res.json({ success: true, balance: wallet.balance });
         } catch (error) {
