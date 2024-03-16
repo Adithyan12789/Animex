@@ -16,6 +16,8 @@ router.get("/adminlogout",admin, adminController.logoutadmin);
 
 // Admin Home
 router.get("/adminhome", admin,adminController.AdminHomePage);
+router.get('/product_search', admin, adminController.searchProduct);
+
 
 // Admin Customer Management
 router.get("/adminCustomer", admin, customerController.getUsers);
@@ -50,6 +52,7 @@ router.get("/publishProduct/:id",admin, productController.publishProducts);
 //Order page
 
 router.get('/orderList', admin, orderController.adminOrdersProfilePage); // Orders page
+router.get("/orderList/:page",admin, orderController.getPagination);
 router.get('/orderDetails/:id',admin, orderController.adminTrackOrderPage); // Orders page
 router.post('/update_order_status', admin,orderController.updateOrderStatus);
 router.get('/deleteOrder/:orderId', admin, orderController.deleteOrder); // Add Address page
@@ -57,6 +60,12 @@ router.get('/deleteOrder/:orderId', admin, orderController.deleteOrder); // Add 
 
 
 //Coupon Page
-router.get('/coupon', admin, couponController.couponPage);
+router.get('/coupon',admin,couponController.couponPage)
+router.get('/addCoupon',admin,couponController.addCoupon)
+router.post('/submitNewCoupon',admin,couponController.submitNewCoupon)
+router.get('/listCoupon/:id',admin,couponController.couponList)
+router.get('/unlistCoupon/:id',admin,couponController.couponUnlist)
+router.get('/editCoupon/:id',admin,couponController.editCoupon)
+router.post('/updateCoupon/:id',admin,couponController.updateCoupon)
 
 module.exports = router;

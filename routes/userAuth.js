@@ -26,7 +26,7 @@ router.get('/resend-otp', userController.resendOTP); // Resend OTP
 router.get('/userlogout', user, userController.logoutuser); // User logout
 
 //Search Route
-router.get('/search', user, userController.searchProduct); // User logout
+router.get('/search', user, userController.searchProduct);
 
 
 

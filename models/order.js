@@ -47,6 +47,10 @@ const orderSchema = new mongoose.Schema({
         phone: String,
         email: String
     },
+    paymentMethod: {
+        type: String,
+        default: 'Cash On Delivery'
+    },
     paymentStatus: {
         type: String,
         default: 'Pending'

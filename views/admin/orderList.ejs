@@ -69,7 +69,13 @@
                             <i class="icon material-icons md-shopping_cart"></i>
                             <span class="text">Orders</span>
                         </a>
-                    </li>                    
+                    </li>    
+                    <li class="menu-item">
+                        <a class="menu-link" href="/coupon">
+                            <i class="icon fa-solid fa-receipt"></i> <!-- Use the same icon name -->
+                            <span class="text">Coupon</span>
+                        </a>
+                    </li>                
                     <li class="menu-item">
                         <a class="menu-link" href="/adminlogout">
                             <i class="icon material-icons md-exit_to_app"></i> <!-- Changed to md-exit_to_app -->
@@ -116,8 +122,10 @@
                                     <th scope="col">Name</th>
                                     <th scope="col">Total</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Order Status</th>
                                     <th scope="col">Date</th>
-                                    <th scope="col" > Action </th>
+                                    <th scope="col">Details</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -133,15 +141,22 @@
 
                                     <td>₹ <%= order.totalPrice %></td>
                                     <td><span class="badge rounded-pill alert-warning">
+                                        <% if (order.paymentStatus) { %>
+                                            <%= order.paymentStatus %>
+                                        <% }else{ %>
+                                            <p>there is no payment Status</p>
+                                        <% } %>
+                                        </span></td>
+                                    <td><span class="badge rounded-pill alert-warning">
                                     <% if (order.orderStatus) { %>
                                         <%= order.orderStatus %>
                                     <% }else{ %>
-                                        <p>there is no paymentStatus</p>
+                                        <p>there is no Order Status</p>
                                     <% } %>
                                     </span></td>
                                     <td><%= new Date(order.orderDate).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                                    <td><a href="/orderDetails/<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a></td>
                                     <td>
-                                        <a href="/orderDetails/<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>
                                         <button class="btn btn-sm btn-primary" onclick="deleteOrder('<%= order._id %>')">Cancel Order</button>
                                     </td>
                                 </tr>
@@ -151,6 +166,32 @@
                     </div> <!-- table-responsive //end -->
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->  
+
+            <div class="container text-center"> <!-- Centered container div -->
+                <div class="paginationCenter mt-30 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <!-- Left arrow icon -->
+                            <li class="page-item">
+                                <a class="page-link" href="/orderList?page=<%= currentPage - 1 %>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <% for(i = 1 ; i <= totalPages ; i++){ %>
+                                <li class="page-item <%= currentPage == i ? "active": "" %>">
+                                    <a class="page-link" href="/orderList?page=<%= i %>"><%= i %></a>
+                                </li>
+                            <% } %>
+                            <!-- Right arrow icon -->
+                            <li class="page-item">
+                                <a class="page-link" href="/orderList?page=<%= currentPage + 1 %>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </section> <!-- content-main end// -->
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
@@ -194,6 +235,7 @@
     <script src="/static/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="/static/admin-assets/js/main.js" type="text/javascript"></script>
+    <script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
 </body>
 
 

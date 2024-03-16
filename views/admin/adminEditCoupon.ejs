@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:35 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Animex</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/static/assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/static/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="index.html" class="brand-wrap">
+                    <h2 style="color: #088178;">Animex</h2>
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                    </button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item">
+                        <a class="menu-link" href="/adminhome">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/adminCustomer">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text">Customer</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/adminProductPage">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/adminPageCategories">
+                            <i class="icon material-icons md-layers"></i> <!-- Changed to md-layers -->
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/orderList">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>                    
+                    <li class="menu-item">
+                        <a class="menu-link" href="/adminlogout">
+                            <i class="icon material-icons md-exit_to_app"></i> <!-- Changed to md-exit_to_app -->
+                            <span class="text">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <hr>
+                <ul class="menu-aside">
+                    <li class="menu-item">
+                        <a class="menu-link" href="/adminSettingsPage"> <i class="icon material-icons md-settings"></i>
+                            <span class="text">Settings</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="page-blank.html"> <i class="icon material-icons md-local_offer"></i>
+                            <span class="text"> Starter page </span>
+                        </a>
+                    </li>
+                </ul>
+                <br>
+                <br>
+            </nav>
+        </aside>
+    <main class="main-wrap">
+       
+        <!-- Form to add a new product -->
+        <div class="container custom-container"> <!-- Added custom-container class -->
+            <div class="row">
+                <div class="col-lg-12 mt-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-light">
+                            <h3>Edit Coupon</h3>
+                        </div>
+                        <div class="card-body">
+                            <form action="/updateCoupon/<%= coupon._id %>" method="POST" onsubmit="return validateForm()">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Coupon Code</label>
+                                            <input type="text" placeholder="Type here" name="coupon_code" value="<%= coupon.coupon_code %>" class="form-control" required>
+                                            <span id="coupon-code-error" class="error-message"></span>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label class="form-label">Description</label>
+                                            <textarea placeholder="Type here" class="form-control" name="description" rows="4" required><%= coupon.description %></textarea>
+                                            <span id="description-error" class="error-message"></span>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label class="form-label">Percentage</label>
+                                            <input type="text" placeholder="Type here" name="percentage" value="<%= coupon.percentage %>" class="form-control" required>
+                                            <span id="percentage-error" class="error-message"></span>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label class="form-label">Minimum Amount</label>
+                                            <input type="text" placeholder="Type here" name="minimumAmount" value="<%= coupon.minimumAmount %>" class="form-control" required>
+                                            <span id="minimum-amount-error" class="error-message"></span>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label class="form-label">Maximum Discount</label>
+                                            <input type="text" placeholder="Type here" name="maximumAmount" value="<%= coupon.maximumAmount %>" class="form-control" required>
+                                            <span id="maximum-amount-error" class="error-message"></span>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label class="form-label">Expiry Date</label>
+                                            <input type="date" placeholder="Type here" name="expiryDate" value="<%= coupon.expiryDate %>" class="form-control" required>
+                                            <span id="expiry-date-error" class="error-message"></span>
+                                        </div>
+
+                                        <div>
+                                            <button type="submit" class="btn btn-md rounded font-sm hover-up">Update</button>
+                                            <span id="submit-error" class="error-message"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script> ©, Evara - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">
+                            All rights reserved
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        function validateForm() {
+            var couponCode = document.getElementsByName("coupon_code")[0].value.trim();
+            var description = document.getElementsByName("description")[0].value.trim();
+            var percentage = document.getElementsByName("percentage")[0].value.trim();
+            var minimumAmount = document.getElementsByName("minimumAmount")[0].value.trim();
+            var maximumAmount = document.getElementsByName("maximumAmount")[0].value.trim();
+            var expiryDate = document.getElementsByName("expiryDate")[0].value.trim();
+            var couponCodeError = document.getElementById("coupon-code-error");
+            var descriptionError = document.getElementById("description-error");
+            var percentageError = document.getElementById("percentage-error");
+            var minimumAmountError = document.getElementById("minimum-amount-error");
+            var maximumAmountError = document.getElementById("maximum-amount-error");
+            var expiryDateError = document.getElementById("expiry-date-error");
+            var submitError = document.getElementById("submit-error");
+            var isValid = true;
+
+            // Reset error messages
+            couponCodeError.textContent = "";
+            descriptionError.textContent = "";
+            percentageError.textContent = "";
+            minimumAmountError.textContent = "";
+            maximumAmountError.textContent = "";
+            expiryDateError.textContent = "";
+            submitError.textContent = "";
+
+            // Validate coupon code
+            if (couponCode === "") {
+                couponCodeError.textContent = "Coupon code is required";
+                isValid = false;
+            } else if (!isValidCouponCode(couponCode)) {
+                couponCodeError.textContent = "Invalid coupon code format";
+                isValid = false;
+            }
+
+            // Validate description
+            if (description === "") {
+                descriptionError.textContent = "Description is required";
+                isValid = false;
+            }
+
+            // Validate percentage
+            if (percentage === "") {
+                percentageError.textContent = "Percentage is required";
+                isValid = false;
+            } else if (isNaN(percentage) || parseFloat(percentage) <= 0 || parseFloat(percentage) > 100) {
+                percentageError.textContent = "Invalid percentage value";
+                isValid = false;
+            }
+
+            // Validate minimum amount
+            if (minimumAmount === "") {
+                minimumAmountError.textContent = "Minimum amount is required";
+                isValid = false;
+            } else if (isNaN(minimumAmount) || parseFloat(minimumAmount) < 0) {
+                minimumAmountError.textContent = "Invalid minimum amount value";
+                isValid = false;
+            }
+
+            // Validate maximum amount
+            if (maximumAmount === "") {
+                maximumAmountError.textContent = "Maximum amount is required";
+                isValid = false;
+            } else if (isNaN(maximumAmount) || parseFloat(maximumAmount) < 0) {
+                maximumAmountError.textContent = "Invalid maximum amount value";
+                isValid = false;
+            }
+
+            // Validate expiry date
+            if (expiryDate === "") {
+                expiryDateError.textContent = "Expiry date is required";
+                isValid = false;
+            } else if (!isValidExpiryDate(expiryDate)) {
+                expiryDateError.textContent = "Expiry date should be in the future";
+                isValid = false;
+            }
+
+            if (!isValid) {
+                submitError.textContent = "Please fix the errors before submitting";
+            }
+
+            return isValid;
+        }
+
+        function isValidCouponCode(code) {
+            // Add your validation logic for coupon code here
+            return /^[A-Za-z0-9]+$/.test(code);
+        }
+
+        function isValidExpiryDate(date) {
+            // Add your validation logic for expiry date here
+            var currentDate = new Date();
+            var selectedDate = new Date(date);
+            return selectedDate > currentDate;
+        }
+    </script>
+
+    <!-- JavaScript imports -->
+    <script src="/static/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/static/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/static/admin-assets/js/vendors/select2.min.js"></script>
+    <script src="/static/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/static/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/static/admin-assets/js/main.js" type="text/javascript"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+
+</html>

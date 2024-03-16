@@ -63,13 +63,13 @@
                             <i class="icon material-icons md-shopping_cart"></i>
                             <span class="text">Orders</span>
                         </a>
-                    </li>  
-                    <li class="menu-item">
-                      <a class="menu-link" href="/coupon">
-                          <i class="icon fa-solid fa-receipt"></i> <!-- Use the same icon name -->
-                          <span class="text">Coupon</span>
-                      </a>
-                  </li>                  
+                    </li>        
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/coupon">
+                            <i class="icon fa-solid fa-receipt"></i> <!-- Use the same icon name -->
+                            <span class="text">Coupon</span>
+                        </a>
+                    </li>             
                     <li class="menu-item">
                         <a class="menu-link" href="/adminlogout">
                             <i class="icon material-icons md-exit_to_app"></i> <!-- Changed to md-exit_to_app -->
@@ -99,8 +99,8 @@
     <section class="content-main">
       <div class="content-header">
         <div>
-          <h2 class="content-title card-title">Add Categories </h2>
-          <p>Add, edit or delete a category</p>
+          <h2 class="content-title card-title">Add Coupon </h2>
+          <p>Add, edit or delete a Coupon</p>
         </div>
       </div>
 
@@ -110,92 +110,121 @@
 
         <div class="card-body">
           <div class="row">
-            <form action="/addCategory" method="post">
-              <div class="mb-4">
-                <label class="form-label">Category</label>
-                <input type="text" placeholder="Type here" name="name" class="form-control" id="product_name" required onkeyup="validateName()">
-                 <span id="name-error" style="font-size: 14px;"></span> <!-- Corrected ID -->
-            </div>
-            <div class="mb-4">
-                <label class="form-label">Description</label>
-                <textarea placeholder="Type here" class="form-control" name="description" rows="4" id="product_description" required onkeyup="validateDescription()"></textarea>
-                <span id="descriptionError" style="font-size: 14px;"></span>
-            </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Add category</button>
-              </div>
+            <form action="/submitNewCoupon" method="POST" onsubmit="return validateForm()">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="mb-4">
+                            <label class="form-label">Coupon Code</label>
+                            <input type="text" placeholder="Type here" name="coupon_code" class="form-control" id="coupon_code" required>
+                            <span id="name-error" style="font-size: 14px;"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea placeholder="Type here" class="form-control" name="description" rows="4" id="product_description" required></textarea>
+                            <span id="descriptionError" style="font-size: 14px;"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Percentage</label>
+                            <input type="text" placeholder="Type here" name="percentage" class="form-control" id="coupon_percentage" required>
+                            <span id="percentageError" style="font-size: 14px;"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Minimum Amount</label>
+                            <input type="text" placeholder="Type here" name="minimumAmount" class="form-control" id="minimumAmount" required>
+                            <span id="minAmountError" style="font-size: 14px;"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Maximum Discount</label>
+                            <input type="text" placeholder="Type here" name="maximumAmount" class="form-control" id="maximumAmount" required>
+                            <span id="maxAmountError" style="font-size: 14px;"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Expiration Date</label>
+                            <input type="date" placeholder="Type here" name="expiryDate" class="form-control" id="coupon_exp_date" required>
+                            <span id="expDateError" style="font-size: 14px;"></span>
+                        </div>
+                        <div>
+                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
+                            <span id="submit-error" style="font-size: 14px;"></span>
+                        </div>
+                    </div> <!-- col.// -->
+                </div> <!-- row.// -->
             </form>
-          </div>
         </div>
-      </div>
-    </section> <!-- content-main end// -->
-    <footer class="main-footer font-xs">
-      <div class="row pb-30 pt-15">
-        <div class="col-sm-6">
-          <script>
+    </div>
+</div>
+</section> <!-- content-main end// -->
+<footer class="main-footer font-xs">
+<div class="row pb-30 pt-15">
+    <div class="col-sm-6">
+        <script>
             document.write(new Date().getFullYear())
-          </script> ©, Evara - HTML Ecommerce Template .
-        </div>
-        <div class="col-sm-6">
-          <div class="text-sm-end">
+        </script> ©, Evara - HTML Ecommerce Template .
+    </div>
+    <div class="col-sm-6">
+        <div class="text-sm-end">
             All rights reserved
-          </div>
         </div>
-      </div>
-    </footer>
-  </main>
+    </div>
+</div>
+</footer>
+</main>
 
+<script>
+function validateForm() {
+var valid = true;
+var couponCode = document.getElementById("coupon_code").value.trim();
+var description = document.getElementById("product_description").value.trim();
+var percentage = document.getElementById("coupon_percentage").value.trim();
+var minAmount = document.getElementById("minimumAmount").value.trim();
+var maxAmount = document.getElementById("maximumAmount").value.trim();
+var expDate = document.getElementById("coupon_exp_date").value.trim();
 
-
-  <script>
-    setTimeout(() => {
-      document.getElementById("error").style.display = "none";
-    }, 3000);
-    var nameError = document.getElementById("name-error");
-    var descriptionError = document.getElementById("description-error");
-    var submitError = document.getElementById("submit-error");
-
-    function validateName() {
-var name = document.getElementById("product_name").value.trim();
-var nameError = document.getElementById("name-error"); // Corrected ID
-
-if (name.length === 0) {
-    nameError.innerHTML = "Product name is required";
-    nameError.style.color = "red";
-    return false;
+if (couponCode === "") {
+    document.getElementById("name-error").innerHTML = "Coupon code is required";
+    valid = false;
+} else {
+    document.getElementById("name-error").innerHTML = "";
 }
 
-nameError.innerHTML = "Valid";
-nameError.style.color = "green";
-return true;
+if (description === "") {
+    document.getElementById("descriptionError").innerHTML = "Description is required";
+    valid = false;
+} else {
+    document.getElementById("descriptionError").innerHTML = "";
 }
 
-function validateDescription() {
-var desc = document.getElementById("product_description").value.trim();
-var descriptionError = document.getElementById("descriptionError");
-
-if (desc.length === 0) {
-    descriptionError.innerHTML = "Description is required";
-    descriptionError.style.color = "red";
-    return false;
-}
-descriptionError.innerHTML = "Valid";
-    descriptionError.style.color = "green";
-    return true;
+if (percentage === "") {
+    document.getElementById("percentageError").innerHTML = "Percentage is required";
+    valid = false;
+} else {
+    document.getElementById("percentageError").innerHTML = "";
 }
 
-        function validateForm() {
-          if (!validateName() || !validateDescription()) {
-            submitError.style.display = "block";
-            submitError.innerHTML = "Please enter all the fields to submit ";
-            submitError.style.color = "red";
-            setTimeout(function () {
-              submitError.style.display = "none";
-            }, 3000);
-            return false;
-          }
-        }
-      </script>
+if (minAmount === "") {
+    document.getElementById("minAmountError").innerHTML = "Minimum amount is required";
+    valid = false;
+} else {
+    document.getElementById("minAmountError").innerHTML = "";
+}
+
+if (maxAmount === "") {
+    document.getElementById("maxAmountError").innerHTML = "Maximum discount amount is required";
+    valid = false;
+} else {
+    document.getElementById("maxAmountError").innerHTML = "";
+}
+
+if (expDate === "") {
+    document.getElementById("expDateError").innerHTML = "Expiration date is required";
+    valid = false;
+} else {
+    document.getElementById("expDateError").innerHTML = "";
+}
+
+return valid;
+}
+</script>
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

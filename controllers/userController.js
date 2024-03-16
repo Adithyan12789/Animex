@@ -925,8 +925,12 @@ userOrder.totalPrice = totalPrice;
 
             if(payment == "Razorpay"){
               order.paymentStatus = "Paid";
+
+              order.paymentMethod = "Online Payment"
             }else if(payment == "Wallet"){
               order.paymentStatus = "Paid";
+
+              order.paymentMethod = "Wallet Payment"
             }
 
             await order.save();
