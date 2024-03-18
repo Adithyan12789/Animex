@@ -3,6 +3,7 @@ const Coupon = require("../models/coupon");
 const couponPage = async (req, res) => {
     try {
         const coupons = await Coupon.find();
+        console.log("Coupons: ",coupons)
         res.render('admin/couponList', { coupons: coupons });
     } catch (error) {
         console.error("Error fetching coupons:", error);

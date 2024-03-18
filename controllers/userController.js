@@ -10,6 +10,7 @@
   const Wishlist = require('../models/wishlist');
   const Order = require('../models/order');
   const Wallet = require('../models/wallet');
+  const Coupon = require('../models/coupon');
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -676,13 +677,15 @@ const cart = async (req, res) => {
         });
         console.log("wefwfw",userCart)
 
+        const product = await Product.find();
+
          // Find the cart document for the user
    const cart = await Cart.findOne({ userId: req.session.userID });
    let cartItemCount = 0;
    if (cart) {
        cartItemCount = cart.items.length; // Get the count of items in the cart
    }
-        res.status(200).render("user/cart", { cart: userCart, user: req.session.user, count :cartItemCount });
+        res.status(200).render("user/cart", { cart: userCart, user: req.session.user, count :cartItemCount,products: product });
     } catch (error) {
         console.error("Error fetching user's cart:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -811,6 +814,7 @@ const checkoutPage = async (req, res) => {
   try {
     const userId = req.session.userID;
     const orderId = req.query.orderId;
+    const today = new Date()
 
     let userCart;
     let totalPrice;
@@ -846,6 +850,14 @@ const checkoutPage = async (req, res) => {
           cartItemCount = cart.items.length; // Get the count of items in the cart
       }
 
+      const validCoupons = await Coupon.find({
+        expiryDate: { $gt: new Date() }, 
+         minimumAmount: { $lt: totalPrice }, 
+        userId: { $ne: userId },
+        isListed: true 
+    });
+
+
     res.render('user/checkout', {
       title: 'Checkout',
       checkout: addresses,
@@ -854,7 +866,8 @@ const checkoutPage = async (req, res) => {
       product: userCart,
       totalPrice: totalPrice,
       orderId: orderId,
-      count: cartItemCount
+      count: cartItemCount,
+      coupons: validCoupons
     });
 
   } catch (err) {
@@ -862,6 +875,62 @@ const checkoutPage = async (req, res) => {
       res.status(500).send("Internal Server Error");
   }
 };
+
+const applyCoupon = async (req, res) => {
+  try {
+      const { couponCode } = req.body;
+
+      
+      const coupon = await Coupon.findOne({ coupon_code: couponCode });
+      if (!coupon) {
+          return res.status(404).json({ message: 'Coupon not found' });
+      }
+
+      
+      const userId = req.session.userID; // Assuming you have user session
+      const userCart = await Cart.findOne({ userId });
+      if (!userCart) {
+          return res.status(404).json({ message: 'Cart not found' });
+      }
+
+      
+      // const discount = coupon.percentage * userCart.totalPrice / 100;
+      const discount = coupon.maximumAmount
+
+      const newTotalPrice = userCart.totalPrice - discount;
+
+      // Update the cart total price
+      // userCart.totalPrice = newTotalPrice;
+  
+
+     
+      return res.status(200).json({ message: 'Coupon applied successfully', newTotalPrice });
+  } catch (error) {
+      console.error('Error applying coupon:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+const cancelCoupon = async (req, res) => {
+  try {
+      
+      const userId = req.session.userID;
+      const userCart = await Cart.findOne({ userId });
+
+      if (!userCart) {
+          return res.status(404).json({ message: 'Cart not found' });
+      }
+
+     
+      const originalTotalPrice = userCart.totalPrice; 
+
+      
+      return res.status(200).json({ originalTotalPrice });
+  } catch (error) {
+      console.error('Error canceling coupon:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
 
 const placeOrder = async (req, res) => {
@@ -1193,6 +1262,8 @@ const userWallet = async (req, res) => {
     updateCart,
     deleteCart,
     checkoutPage,
+    applyCoupon,
+    cancelCoupon,
     placeOrder,
     ordersProfilePage,
     trackOrderPage,

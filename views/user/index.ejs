@@ -38,76 +38,53 @@
 
 	<style>
 		
-		.prod-img {
-			position: relative;
-			display: inline-block;
-			overflow: hidden;
-		}
-
-		.prod-img i {
-			position: absolute;
-			top: 310px;
-			right: 25px;
-			font-size: 24px;
-			color: #fff;
-			z-index: 2;
-			transition: transform 0.3s ease;
-			/* Added transition property */
-		}
-
-		.prod-img i:hover {
-			transform: scale(1.1);
-		}
-
-
-		.prod-img:hover img {
-			transform: scale(1.1);
-			transition: transform 0.3s ease;
-		}
-
-		/* View Details Button */
-.view-details {
-    background-color: #007bff; /* Blue color, you can adjust as needed */
-    color: #fff; /* Text color */
-    padding: 10px 20px; /* Add some padding for better spacing */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition */
+		.product-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.view-details:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+.product-item:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Add to Cart Icon Button */
-.btn-update {
-    background-color: #28a745; /* Green color for add to cart button */
-    color: #fff; /* Text color */
-    padding: 10px 20px; /* Adjust padding */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Show pointer on hover */
-    transition: background-color 0.3s ease; /* Smooth transition */
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 15px;
 }
 
-.btn-update:hover {
-    background-color: #218838; /* Darker shade of green on hover */
+.category {
+    font-size: 14px;
+    color: #5b5b5b;
+    margin-bottom: 10px;
+	font-weight: 400;
 }
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
 .out-of-stock-message {
     font-weight: bold;
-    color: #ff0000; /* Red color */
+    color: #ff0000;
     font-size: 18px;
-    animation: pulse 1s infinite alternate; /* Add a pulsating animation */
+    margin-top: 10px;
 }
 
-@keyframes pulse {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.1);
-    }
+.btn {
+    margin-top: 10px;
 }
+
+
 
 	</style>
 
@@ -192,7 +169,7 @@
 											<h2 class="head-2">T-shirts</h2>
 											<h2 class="head-3">Collection</h2>
 											<p class="category"><span>New trending Hoodies</span></p>
-											<p><a href="#" class="btn btn-primary">Shop Collection</a></p>
+											<p><a href/shop" class="btn btn-primary">Shop Collection</a></p>
 										</div>
 									</div>
 								</div>
@@ -210,7 +187,7 @@
 											<h2 class="head-2">Sale</h2>
 											<h2 class="head-3"><strong class="font-weight-bold">50%</strong> Off</h2>
 											<p class="category"><span>Big sale sandals</span></p>
-											<p><a href="#" class="btn btn-primary">Shop Collection</a></p>
+											<p><a href="/shop" class="btn btn-primary">Shop Collection</a></p>
 										</div>
 									</div>
 								</div>
@@ -229,7 +206,7 @@
 											<h2 class="head-3">up to <strong class="font-weight-bold">30%</strong> off
 											</h2>
 											<p class="category"><span>New Fullsleeves Tshirt for men</span></p>
-											<p><a href="#" class="btn btn-primary">Shop Collection</a></p>
+											<p><a href/shop" class="btn btn-primary">Shop Collection</a></p>
 										</div>
 									</div>
 								</div>
@@ -285,33 +262,21 @@
 				<div class="row">
 					<% product.forEach((item, index)=> { %>
 						<a href="/shop">
+							<!-- Inside the loop where individual product items are generated -->
 							<div class="col-lg-4 mb-4 text-center">
 								<div class="product-entry border">
-									<div class="prod-img">
-										<img src="/static/uploads/<%= item.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
-									</div>
-									<div class="desc">
-										<h2><a href="#">
-												<%= item.name %>
-											</a></h2>
-										<% if (item.category) { %>
-											<h2><a href="#">
-													<%= item.category.name %>
-												</a></h2>
-											<% } else { %>
-												<p>No category</p>
-												<% } %>
-											<span class="price">₹<%= item.price %></span>
-												<!-- Inside the loop where the "View Details" button is generated -->
-												<% if (item.stock <= 0) { %>
-													<p class="out-of-stock-message">Out of Stock</p>
-												<% } else { %>
-													<div class="buttons">
-														<button class="btn btn-primary view-details" onclick="cart('<%= item._id %>')">Add to Cart <i class="fas fa-cart-plus"></i></button>
-														<button class="btn btn-primary view-details" onclick="wishlist('<%= item._id %>')"><i class="fa-solid fa-heart" style="color: crimson;"></i> Wishlist</button>
-													</div>
-												<% } %>	
-									</div>
+									<div class="product-item">
+										<img src="/static/uploads/<%= item.image[0] %>" class="product-image" alt="Product Image">
+										<h5><a href="#"> <%= item.name %> </a></h5>
+										<p class="category"><%= item.category ? item.category.name : 'No category' %></p>
+										<p class="price">₹<%= item.price %></p>
+										<% if (item.stock <= 0) { %>
+											<p class="out-of-stock-message">Out of Stock</p>
+										<% } else { %>
+											<button class="btn btn-primary add-to-cart" onclick="cart('<%= item._id %>')">Add to Cart <i class="fas fa-cart-plus"></i></button>
+											<button class="btn btn-primary add-to-wishlist" onclick="wishlist('<%= item._id %>')"><i class="fa-solid fa-heart" style="color: crimson;"></i> Wishlist</button>
+										<% } %>
+									</div>									
 								</div>
 							</div>
 						</a>

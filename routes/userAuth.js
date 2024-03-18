@@ -64,6 +64,10 @@ router.get('/removeCart/:id', user, userController.deleteCart);
 //Checkout Route
 router.get('/checkout',user, userController.checkoutPage);
 
+//coupon Route
+router.post('/apply-coupon', userController.applyCoupon);
+router.post('/cancel-coupon', userController.cancelCoupon);
+
 //Order Route
 router.get('/orderProfile', user, userController.ordersProfilePage); // Orders page
 router.get('/trackOrder/:id',user, userController.trackOrderPage); // Orders page

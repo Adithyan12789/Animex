@@ -45,6 +45,75 @@
 			<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 			<style>
+				.buttons {
+    background-color: #007bff; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 5px 15px; /* Padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make it into a block */
+    font-size: 16px; /* Font size */
+    margin: 4px 2px; /* Margin */
+    cursor: pointer; /* Cursor pointer */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.buttons:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+				.toggle_info {
+    margin-bottom: 20px;
+}
+
+.toggle-link {
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.panel-body {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.font-sm {
+    font-size: 14px;
+}
+
+.coupon-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    opacity: 0.8;
+}
+
+
 				.radio-box {
 					display: flex;
 				}
@@ -252,6 +321,68 @@
 				label{
 					font-weight: 500;
 				}
+				/* Modal Styles */
+				.modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal Content Styles */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 30%;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Close Button Styles */
+    .close {
+        color: #aaa;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+    }
+
+    /* Coupon Styles */
+    .coupon {
+        border: 2px dashed #f0f0f0;
+        background-color: #f9f9f9;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+    }
+
+    .coupon h3 {
+        color: #333;
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .coupon p {
+        color: #666;
+        font-size: 16px;
+        margin: 0;
+    }
 			</style>
 
 		</head>
@@ -404,12 +535,56 @@
 														<% } %>
 													</div>
 												</div>
-												<div class="form-group">
-													<div class="col-md-12">
-														<p style="color: black; font-weight: 400; font-size: 16px; float: right;">Total - ₹<%= totalPrice %></p>
-														<input type="hidden" name="totalPrice" id="subtotal" value="<%= totalPrice %>">
+													<div class="form-group">
+														<div class="col-md-12 ">
+															<p style="color: black; font-weight: 400; font-size: 16px; float: right;">Total - ₹<span id="total"><%= totalPrice %></span></p>
+															<input type="hidden" name="totalPrice" id="subtotal" value="<%= totalPrice %>">
+														</div>
 													</div>
-												</div>												
+												<br>	
+												<hr>											
+												<br>
+												<button class="buttons" id="openModal">Show Coupons</button><br>
+												<div id="couponModal" class="modal">
+													<div class="modal-content">
+														<span class="close" style="font-size: 35px;">&times;</span>
+														<h2>Available Coupons</h2>
+														<% if (coupons) { %>
+															<% coupons.forEach(coupon => { %>
+																<div class="coupon">
+																	<h3><%= coupon.description %></h3>
+																	<p>Coupon Code: <strong><%= coupon.coupon_code %></strong></p>
+																</div>
+															<% }); %>
+														<% }else{ %>
+															<p>There is no coupons</p>
+														<% } %>
+													</div>
+												</div>
+												
+												<div class="col-lg-12 mt-4">
+													<div class="toggle_info">
+														<span>
+															<i class="fi-rs-label mr-10"></i>
+															<span class="text-muted">Coupon Actions</span> 
+															<a href="#" id="toggleCoupon" class="collapsed toggle-link">Click here to manage your coupon</a>
+														</span>
+													</div>
+													<div class="panel-collapse collapse coupon_form" id="couponActions">
+														<div class="panel-body">
+															<p class="mb-30 font-sm">Manage your coupon below.</p>
+															<div class="form-group">
+																<input type="text" id="couponCode" placeholder="Enter Coupon Code..." class="form-control coupon-input">
+															</div>
+															<div class="form-group">
+																<button class="btn btn-md btn-primary" id="applyCouponBtn">Apply Coupon</button>
+																<button class="btn btn-md btn-secondary" id="cancelCouponBtn">Cancel</button>
+															</div>
+														</div>
+													</div>
+												</div>
+
+																											
 												<br>
 												<hr>
 												<h3>Payment Method</h3>
@@ -424,7 +599,6 @@
 														name="paymentMethod"
 														value="Cash on Delivery"
 													  />
-													  <span class="checkmark"></span>
 													</label>
 												  </div>
 												  <div class="checkout__input__checkbox">
@@ -436,7 +610,6 @@
 														name="paymentMethod"
 														value="Razorpay"
 													  />
-													  <span class="checkmark"></span>
 													  
 													</label>
 												  </div>
@@ -450,7 +623,6 @@
 															  name="paymentMethod"
 															  value="Wallet"
 														  />
-														  <span class="checkmark"></span>
 														  <span
 														id="check-error"
 														style="font-size: 14px; margin-top: -5px"
@@ -674,6 +846,95 @@
 		}
 	</script>
 
+<script>
+	document.getElementById("openModal").addEventListener("click", function() {
+	  document.getElementById("couponModal").style.display = "block";
+	});
+	
+	document.getElementsByClassName("close")[0].addEventListener("click", function() {
+	  document.getElementById("couponModal").style.display = "none";
+	});
+	</script>
+
+<script>
+   document.addEventListener("DOMContentLoaded", function() {
+    const toggleCoupon = document.getElementById("toggleCoupon");
+    const couponSection = document.getElementById("couponActions");
+
+    toggleCoupon.addEventListener("click", function(event) {
+        event.preventDefault();
+        couponSection.classList.toggle("show");
+    });
+
+    const applyCouponBtn = document.getElementById("applyCouponBtn");
+
+    applyCouponBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        const couponCode = document.getElementById("couponCode").value;
+        applyCoupon(couponCode);
+    });
+
+    function applyCoupon(couponCode) {
+        fetch('/apply-coupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ couponCode })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to apply coupon');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Coupon applied successfully');
+				const newTotalPrice = data.newTotalPrice.toFixed(2);
+				console.log(newTotalPrice)
+				document.getElementById('total').innerText = newTotalPrice;
+				document.getElementById('subtotal').value = newTotalPrice;
+        }) 
+        .catch(error => {
+            console.error('Error applying coupon:', error);
+        });
+    }
+});
+	</script>
+	
+	<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const cancelCouponBtn = document.getElementById('cancelCouponBtn');
+		if (cancelCouponBtn) {
+			cancelCouponBtn.addEventListener('click', cancelCoupon);
+		}
+	});
+	
+	function cancelCoupon() {
+		fetch('/cancel-coupon', {
+			method: 'POST'
+		})
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Failed to cancel coupon');
+			}
+			return response.json();
+		})
+		.then(data => {
+			console.log('Coupon canceled successfully');
+			const originalTotalPrice = data.originalTotalPrice.toFixed(2);
+			console.log(originalTotalPrice)
+			document.getElementById('total').innerText = newTotalPrice;
+            document.getElementById('subtotal').value = newTotalPrice;
+
+		})
+		.catch(error => {
+			console.error('Error canceling coupon:', error);
+		});
+	}
+	</script>
+
+	
 
 <script>
 	var checkError = document.getElementById("check-error");

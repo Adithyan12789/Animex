@@ -114,6 +114,26 @@
 		span {
 			margin: 10px;
 		}
+		/* CSS for product images */
+.product-entry .product-item .product-image {
+    max-width: 100%; /* Set maximum width to prevent image overflow */
+    height: auto; /* Allow the height to adjust automatically */
+    display: block; /* Ensure the image is displayed as a block element */
+    margin: 0 auto; /* Center the image horizontally */
+}
+
+/* Adjust the height of product images if needed */
+.product-entry .product-item .product-image {
+    max-height: 200px; /* Set maximum height */
+}
+
+/* Responsive image size */
+@media (max-width: 768px) {
+    .product-entry .product-item .product-image {
+        max-width: 80%; /* Adjust the image width for smaller screens */
+    }
+}
+
 	</style>
 
 </head>
@@ -267,8 +287,6 @@
 			<br>
 			<br>
 			<br>
-		</div>
-	</div>
 
 	<footer id="colorlib-footer" role="contentinfo">
 		<div class="container">
