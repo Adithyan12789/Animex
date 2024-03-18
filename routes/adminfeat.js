@@ -16,7 +16,12 @@ router.get("/adminlogout",admin, adminController.logoutadmin);
 
 // Admin Home
 router.get("/adminhome", admin,adminController.AdminHomePage);
-router.get('/product_search', admin, adminController.searchProduct);
+router.post("/generate-report", admin,adminController.generateReport);
+
+
+
+
+
 
 
 // Admin Customer Management
@@ -36,6 +41,7 @@ router.get("/unlistCategory/:list",admin, categoryController.unlistCategories);
 
 // Admin Product Management
 router.get("/adminProductPage",admin, productController.getProducts);
+router.get('/product_search', admin, adminController.searchProduct);
 router.get("/adminProductPage/:page",admin, productController.getPagination);
 router.get("/adminAddProduct",admin, productController.createProduct);
 router.post("/adminAddProduct",admin, uploadImage, productController.addProducts);

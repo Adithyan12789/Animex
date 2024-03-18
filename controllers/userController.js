@@ -949,17 +949,17 @@ const placeOrder = async (req, res) => {
 
         const userCart = await Cart.findOne({ userId }).populate('items.product');
         let totalPrice = 0;
-for (const item of userCart.items) {
-    totalPrice += item.product.price * item.quantity;
-}
+        for (const item of userCart.items) {
+            totalPrice += item.product.price * item.quantity;
+        }
 
         if (!userOrder) {
             userOrder = new Order({ userId, addressId, totalPrice });
         }
 
 
-console.log("adisdfgsdfsdf",totalPrice)
-userOrder.totalPrice = totalPrice;
+        console.log("adisdfgsdfsdf",totalPrice)
+        userOrder.totalPrice = totalPrice;
 
         const user = await User.findById(userId);
         const address = await Address.findOne({ userId });

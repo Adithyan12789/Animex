@@ -8,6 +8,7 @@
 
 			<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
 			<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
+			<link rel="icon" href="/static/images/unnamed.jpg">
 
 			<!-- Animate.css -->
 			<link rel="stylesheet" href="/static/css/animate.css">
@@ -544,6 +545,7 @@
 												<br>	
 												<hr>											
 												<br>
+
 												<button class="buttons" id="openModal">Show Coupons</button><br>
 												<div id="couponModal" class="modal">
 													<div class="modal-content">
@@ -884,6 +886,12 @@
         })
         .then(response => {
             if (!response.ok) {
+				Swal.fire({
+					title: 'Error!',
+					text: 'Failed to apply coupon',
+					icon: 'error',
+					confirmButtonText: 'OK'
+               });
                 throw new Error('Failed to apply coupon');
             }
             return response.json();
@@ -894,9 +902,21 @@
 				console.log(newTotalPrice)
 				document.getElementById('total').innerText = newTotalPrice;
 				document.getElementById('subtotal').value = newTotalPrice;
+				Swal.fire({
+					title: 'Success!',
+					text: data.message,
+					icon: 'success',
+					confirmButtonText: 'OK'
+                });
         }) 
         .catch(error => {
             console.error('Error applying coupon:', error);
+			Swal.fire({
+					title: 'Error!',
+					text: 'Error applying coupon',
+					icon: 'error',
+					confirmButtonText: 'OK'
+            });
         });
     }
 });
@@ -917,6 +937,12 @@
 		.then(response => {
 			if (!response.ok) {
 				throw new Error('Failed to cancel coupon');
+				Swal.fire({
+					title: 'Error!',
+					text: 'Failed to cancel coupon',
+					icon: 'error',
+					confirmButtonText: 'OK'
+                });
 			}
 			return response.json();
 		})
@@ -924,12 +950,23 @@
 			console.log('Coupon canceled successfully');
 			const originalTotalPrice = data.originalTotalPrice.toFixed(2);
 			console.log(originalTotalPrice)
-			document.getElementById('total').innerText = newTotalPrice;
-            document.getElementById('subtotal').value = newTotalPrice;
-
+			document.getElementById('total').innerText = originalTotalPrice;
+            document.getElementById('subtotal').value = originalTotalPrice;
+			Swal.fire({
+				title: 'Successfully Cancelled!',
+				text: data.message,
+				icon: 'success',
+				confirmButtonText: 'OK'
+            });
 		})
 		.catch(error => {
 			console.error('Error canceling coupon:', error);
+			Swal.fire({
+					title: 'Error!',
+					text: 'Error canceling coupon',
+					icon: 'error',
+					confirmButtonText: 'OK'
+            });
 		});
 	}
 	</script>
@@ -995,7 +1032,7 @@ if (!isNaN(totalPrice)) {
 	  }, 3000);
 	  return false;
 	}
-	else if (totalPrice > 1000 && paymentCODCheckbox.checked) {
+	else if (totalPrice > 2000 && paymentCODCheckbox.checked) {
 	  paymentStatusInput.value = "Pending";
 	  checkError.style.display = "block";
 	  checkError.innerHTML = "COD is not available for orders above Rs 1000.";
@@ -1105,9 +1142,9 @@ if (!isNaN(totalPrice)) {
 		key: "rzp_test_Oks5Gpac00wL72",
 		amount: totalPrice * 100,
 		currency: "INR",
-		name: "Your Company Name",
+		name: "Animex",
 		description: "Purchase Description",
-		image: "https://example.com/logo.png",
+		image: "/static/images/Anime-Logo-PNG-Images.png",
 		
 		handler: function (response) {
 		  console.log(response);
