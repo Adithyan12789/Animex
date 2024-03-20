@@ -6,6 +6,7 @@ const addressController = require('../controllers/addressController');
 const orderController = require('../controllers/orderController');
 const walletController = require('../controllers/walletController');
 const user = require('../middleware/userHandle');
+const isLogged = require('../middleware/userLogged');
 
 
 //404 page
@@ -15,7 +16,7 @@ router.get('page404', userController.page404)
 
 // User Authentication Routes
 router.get('/', userController.loaduserHome); // User login page
-router.get('/userlogin', userController.loadlogin); // User login page
+router.get('/userlogin', isLogged, userController.loadlogin); // User login page
 router.post('/userlogin',  userController.loguser); // User login action
 // router.get('/index', userController.loaduserHome)
 router.get('/register', userController.loadregister); // User registration page
@@ -51,9 +52,9 @@ router.get('/aToZFilter/:category?', userController.shopPage);
 router.get('/bestSeller/:category?', userController.shopPage);
 router.get("/product-details/:id",  userController.productDetails); // Product details page
 
-// Pagination Route
-router.get('/shop/:page',  userController.getShopPagination); // Shop pagination
-router.get('/shop/:category/:page', userController.getShopPagination); // Shop pagination with category filtering
+// // Pagination Route
+// router.get('/shop/:page',  userController.getShopPagination); // Shop pagination
+// router.get('/shop/:category/:page', userController.getShopPagination); // Shop pagination with category filtering
 
 //Cart Route
 router.get('/cart', user, userController.cart);

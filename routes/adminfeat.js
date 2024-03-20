@@ -8,9 +8,10 @@ const orderController = require("../controllers/orderController");
 const couponController = require("../controllers/couponController");
 const admin = require('../middleware/adminHandle');
 const uploadImage = require("../middleware/multer");
+const isLoggedAdmin = require('../middleware/adminLogged');
 
 // Admin Login
-router.get("/adminlogin", adminController.adminloginload);
+router.get("/adminlogin",isLoggedAdmin, adminController.adminloginload);
 router.post("/adminlogin", adminController.loadadminHome);
 router.get("/adminlogout",admin, adminController.logoutadmin);
 

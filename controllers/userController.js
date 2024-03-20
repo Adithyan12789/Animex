@@ -85,6 +85,7 @@
 
         if (passwordMatch) {
           req.session.user = loggeduser;
+          req.session.isLogged = true;
           req.session.userID = loggeduser._id;
           return res.redirect("/");
         } else {
@@ -202,17 +203,14 @@
 
 
   const logoutuser = (req, res) => {
-    if(req.session.user || req.session.admin)
-    {
-    req.session.destroy((err) => {
-      if (err) {
-        console.log("error in logging out");
-      } else {
-        res.redirect("/");
-      }
-    });}
-    else{
-      res.redirect("/")
+    try{
+      req.session.user =null;
+      req.session.isLogged = false;
+
+      res.render("user/login",{logout: "logout successfully"});
+    }catch(err){
+      console.log(err.message);
+      res.render("user/login",{logout: "logout failed"});
     }
   };
 
@@ -278,7 +276,7 @@
 
         const categories = await Category.find();
 
-        res.render("user/searchItem", {
+        res.render("user/shop", {
             title: "Product Page",
             categories: categories,
             user: req.session.user,
@@ -379,8 +377,6 @@
 
 
   const shopPage = async (req, res) => {
-    const perPage = 6;
-    const page = req.query.page || 1;
     const category = req.query.category;
     const sort = req.query.sort; // Retrieve sort parameter from query
 
@@ -396,8 +392,6 @@
             // Query the database to find products matching the specified category
             products = await Product.find({ category: category })
                 .populate("category")
-                .skip(perPage * page - perPage)
-                .limit(perPage)
                 .exec();
             selectedCategory = category;
         } else {
@@ -405,32 +399,28 @@
             // Query the database to find all products
             products = await Product.find()
                 .populate("category")
-                .skip(perPage * page - perPage)
-                .limit(perPage)
                 .exec();
         }
 
         // Apply sorting if specified
         if (sort === 'lowToHigh') {
-          products.sort((a, b) => a.price - b.price);
+            products.sort((a, b) => a.price - b.price);
         } else if (sort === 'highToLow') {
-          products.sort((a, b) => b.price - a.price);
+            products.sort((a, b) => b.price - a.price);
         } else if (sort === 'aToZ') {
-          products.sort((a, b) => a.name.localeCompare(b.name));
+            products.sort((a, b) => a.name.localeCompare(b.name));
         } else if (sort === 'zToA') {
-          products.sort((a, b) => b.name.localeCompare(a.name));
+            products.sort((a, b) => b.name.localeCompare(a.name));
         } else if (sort === 'bestSell') {
-          orderCount = await Order.find
-          // Sort by order count in descending order to get the best sellers first
-          products.sort((a, b) => b.orderCount - a.orderCount);
+            orderCount = await Order.find()
+            // Sort by order count in descending order to get the best sellers first
+            products.sort((a, b) => b.orderCount - a.orderCount);
         }
 
         // Filter out products that are not listed
         listedProducts = products.filter(product => {
             return product.category && product.category.isListed;
         });
-
-        const totalPages = Math.ceil(totalProducts / perPage);
 
         const categories = await Category.find();
 
@@ -446,9 +436,6 @@
             products: listedProducts,
             selectedCategory: selectedCategory,
             categories: categories,
-            totalPages: totalPages,
-            currentPage: page,
-            perPage: perPage,
             user: req.session.user,
             count: cartItemCount,
             sort: sort // Pass the sort variable
@@ -458,58 +445,6 @@
         res.status(500).send("Error fetching products: " + error.message); // Provide more specific error message
     }
 }
-
-
-
-
-
-  
-  const getShopPagination = async (req, res) => {
-    const perPage = 6;
-    const page = req.query.page || 1;
-    try {
-        let totalProducts;
-        let products;
-        let selectedCategory = null;
-
-        // Extract category query parameter from the request
-        const category = req.query.category;
-
-        // Count total number of products
-        if (category) {
-            totalProducts = await Product.countDocuments({ category: category });
-            // Query the database to find products matching the specified category
-            products = await Product.find({ category: category })
-                .skip(perPage * page - perPage)
-                .limit(perPage)
-                .exec();
-            selectedCategory = category;
-        } else {
-            totalProducts = await Product.countDocuments();
-            // Query the database to find all products
-            products = await Product.find()
-                .skip(perPage * page - perPage)
-                .limit(perPage)
-                .exec();
-        }
-
-        const totalPages = Math.ceil(totalProducts / perPage);
-
-        res.render("user/shop", {
-            title: "Product Page",
-            products: products,
-            selectedCategory: selectedCategory,
-            totalPages: totalPages,
-            currentPage: page,
-            perPages: perPage,
-            user:req.session.user
-        });
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        res.status(500).render("error", { message: "Error fetching products" });
-    }
-}
-
 
 
 
@@ -668,29 +603,46 @@ const addressManagement = async (req, res) => {
 
 
 
-const cart = async (req, res) => {
-    try {
-        const userId = req.session.userID;
-        const userCart = await Cart.findOne({ userId }).populate({
-            path: "items.product",
-            message: "Product",
-        });
-        console.log("wefwfw",userCart)
-
-        const product = await Product.find();
-
-         // Find the cart document for the user
-   const cart = await Cart.findOne({ userId: req.session.userID });
-   let cartItemCount = 0;
-   if (cart) {
-       cartItemCount = cart.items.length; // Get the count of items in the cart
-   }
-        res.status(200).render("user/cart", { cart: userCart, user: req.session.user, count :cartItemCount,products: product });
-    } catch (error) {
-        console.error("Error fetching user's cart:", error);
-        res.status(500).json({ message: "Internal server error" });
-    }
-};
+    const cart = async (req, res) => {
+      try {
+          const userId = req.session.userID;
+  
+          // Fetch user's cart with populated product information
+          const userCart = await Cart.findOne({ userId }).populate({
+              path: "items.product",
+              message: "Product",
+          });
+  
+          // Fetch all products (assuming 'Product' model exists)
+          const products = await Product.find();
+  
+          let totalPrice = 0;
+  
+          // Calculate total price
+          if (userCart && userCart.items.length > 0) {
+              totalPrice = userCart.items.reduce((acc, item) => {
+                  const product = products.find(product => product._id.equals(item.product._id));
+                  if (product) {
+                      acc += product.price * item.quantity;
+                  }
+                  return acc;
+              }, 0);
+          }
+  
+          // Find the cart document for the user
+          const cart = await Cart.findOne({ userId: req.session.userID });
+          let cartItemCount = 0;
+          if (cart) {
+              cartItemCount = cart.items.length; // Get the count of items in the cart
+          }
+  
+          res.status(200).render("user/cart", { cart: userCart, user: req.session.user, count: cartItemCount, products: products, totalPrice: totalPrice });
+      } catch (error) {
+          console.error("Error fetching user's cart:", error);
+          res.status(500).json({ message: "Internal server error" });
+      }
+  };
+  
 
 const cartPage = async (req, res) => {
     try {
@@ -1042,14 +994,15 @@ const ordersProfilePage = async (req, res) => {
   const userId = req.session.userID;
 
   try {
-      const orders = await Order.find({ userId })
+      // Fetch orders associated with the user
+      const orders = await Order.find({ userId }).sort({ orderDate: -1 });
 
       // Find the cart document for the user
-   const cart = await Cart.findOne({ userId: req.session.userID });
-   let cartItemCount = 0;
-   if (cart) {
-       cartItemCount = cart.items.length; // Get the count of items in the cart
-   }
+      const cart = await Cart.findOne({ userId: req.session.userID });
+      let cartItemCount = 0;
+      if (cart) {
+          cartItemCount = cart.items.length; // Get the count of items in the cart
+      }
 
       res.render("user/orders", { orders, count: cartItemCount });
   } catch (error) {
@@ -1057,6 +1010,8 @@ const ordersProfilePage = async (req, res) => {
       res.status(500).send("Error fetching orders");
   }
 };
+
+
 
   const trackOrderPage = async (req, res) => {
     const id = req.params.id;
@@ -1246,7 +1201,6 @@ const userWallet = async (req, res) => {
     //shop Page
     shopPage,
     productDetails,
-    getShopPagination,
 
     //user profile
     userProfile,

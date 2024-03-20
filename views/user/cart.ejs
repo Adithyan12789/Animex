@@ -38,6 +38,34 @@
 	<link rel="stylesheet" href="/static/css/style.css">
 
 	<style>
+		/* Add this CSS code to your existing styles */
+		.total{
+			padding: 1em;
+    background: whitesmoke;
+    width: 100%;
+		}
+
+		.total .grand-total {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center; /* Center the text */
+}
+
+.total .grand-total p {
+    margin: 0;
+    font-size: 18px;
+}
+
+.total .grand-total p span:first-child {
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+.total .grand-total p span:last-child {
+    font-weight: bold;
+}
+
+
 		/* New table design for product listing */
 		/* New table design for product listing */
 		table {
@@ -275,6 +303,22 @@
 									<% }); %>
 							
 						</table>
+
+						<div class="row mt-5">
+							<div class="col-lg-8"></div>
+							<div class="col-lg-4 text-center">
+								<div class="total">
+									<div class="sub">
+										<p class="cart__total" >Subtotal:<span id="totalPrice"> ₹<%= cart.totalPrice %></span></p>
+										<p><span>Delivery:</span> <span>Free</span></p>
+									</div>
+									<hr>
+									<div class="grand-total cart__total text-center">
+										<p><strong>Total Price:</strong><span id="totalPrice"> ₹<%= cart.totalPrice %></span></p>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="text-center mt-5">
 							<a href="/checkout"><button class="btn btn-primary btn-checkout">Proceed to
 									Checkout</button></a>
@@ -282,7 +326,7 @@
 						<% }else{ %>
 							<p>no Products in your cart</p>
 						<% } %>
-					</div>
+					</div>	
 				</div>
 			</div>
 			<br>
@@ -399,42 +443,44 @@
 
 <script>
     $(document).ready(function () {
-        $(".qty-dec, .qty-inc").on("click", function (e) {
-            e.preventDefault();
-            var productId = $(this).data("id");
-            var action = $(this).hasClass("qty-dec") ? "decrement" : "increment";
+    $(".qty-dec, .qty-inc").on("click", function (e) {
+        e.preventDefault();
+        var productId = $(this).data("id");
+        var action = $(this).hasClass("qty-dec") ? "decrement" : "increment";
 
-            $.ajax({
-                url: "/updateQuantity",
-                type: "POST",
-                data: { productId: productId, action: action }, 
-                success: function (data) {
-                    console.log("Server response:", data);
-                    if (data.success) {
-                        var item = data.item;
-                
-                        var $quantityInput = $("input[data-id='" + productId + "']");
-                        var $cartPrice = $(".cart__price[data-id='" + productId + "']");
-                        var $totalPrice = $(".cart__total span");
+        $.ajax({
+            url: "/updateQuantity",
+            type: "POST",
+            data: { productId: productId, action: action }, 
+            success: function (data) {
+                console.log("Server response:", data);
+                if (data.success) {
+                    var item = data.item;
+            
+                    var $quantityInput = $("input[data-id='" + productId + "']");
+                    var $cartPrice = $(".cart__price[data-id='" + productId + "']");
+                    var $totalPrice = $(".total__price[data-id='" + productId + "']");
+                    var $totalPrice = $(".cart__total span");
 
-                        $quantityInput.val(item.quantity);
-                        $cartPrice.text("Rs " + (item.price * item.quantity));
-                        $totalPrice.text("Rs " + data.totalPrice);
-                    } else {
-                        if (data.message === "Maximum quantity reached for this product") {
-                            Swal.fire({
-                                title: "Maximum Quantity Reached",
-                                icon: "warning"
-                            });
-                        } 
-                    }
-                },
-                error: function () {
-                    alert("Error in AJAX request.");
-                },
-            });
+                    $quantityInput.val(item.quantity);
+                    $cartPrice.text("Rs " + (item.product.price * item.quantity));
+                    $totalPrice.text("Rs " + data.totalPrice); // Update total price here
+                } else {
+                    if (data.message === "Maximum quantity reached for this product") {
+                        Swal.fire({
+                            title: "Maximum Quantity Reached",
+                            icon: "warning"
+                        });
+                    } 
+                }
+            },
+            error: function () {
+                alert("Error in AJAX request.");
+            },
         });
     });
+});
+
 </script>
 
 

@@ -3,11 +3,11 @@ const Order = require("../models/order");
 const User = require("../models/userModel");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
-const { log } = require("console");
+require("dotenv").config();
 
 const credentials = {
-  email: "admin123@gmail.com",
-  password: "metasploit.123",
+  email: process.env.ADMIN_EMAIL,
+  password: process.env.ADMIN_PASSWORD,
 };
 
 const adminloginload = (req, res) => {
@@ -18,6 +18,7 @@ const loadadminHome = async (req, res) => {
   try {
     if (req.body.email === credentials.email && req.body.password === credentials.password) { 
       req.session.admin = req.body.email;
+      req.session.isLoggedAdmin = true;
       res.redirect("/adminhome");
     } else {
       res.render("admin/adminlogin", { title: "Admin Login", alert: "Invalid email or password" });
@@ -113,14 +114,15 @@ const searchProduct = async (req, res) => {
 };
 
 const logoutadmin = (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Error logging out:", err);
-      res.status(500).send("Internal Server Error");
-    } else {
-      res.redirect("/adminlogin");
-    }
-  });
+  try{
+    req.session.admin =null;
+    req.session.isLoggedAdmin = false;
+
+    res.render("admin/adminlogin",{logout: "logout successfully"});
+  }catch(err){
+    console.log(err.message);
+    res.render("admin/adminlogin",{logout: "logout failed"});
+  }
 };
 
 const AdminHomePage = async (req, res) => {

@@ -469,7 +469,7 @@
 						<div class="container">
 							<div class="row">
 								<!-- Billing Details -->
-								<div class="col-lg-7">
+								<div class="col-lg-5">
 									<div class="col-md-12">
 										<div class="profile-info">
 											<h3>Billing Details</h3>
@@ -490,7 +490,7 @@
 																<h3 onclick="toggleAddressDetails('<%= index + 1 %>', '<%= address._id %>')">Address <%= index + 1 %></h3>
 															</div>
 														</label>
-														<div class="address-details" style="display: none;">
+														<div class="address-details">
 															<p>Address: <%= address.address1 %></p>
 															<p>Street Name: <%= address.address2 %></p>
 															<p>City: <%= address.city %></p>
@@ -505,9 +505,9 @@
 											<% } %>
 										</div>
 									</div>
+									
 								</div>
-								<!-- Payment Method -->
-								<div class="col-lg-5">
+								<div class="col-lg-7">
 									<div class="row">
 										<div class="w-100"></div>
 										<div class="col-md-12">
@@ -522,11 +522,17 @@
 																	<div class="col-md-1">
 																		<p><%= index + 1 %>.</p>
 																	</div>
-																	<div class="col-md-3">
+																	<div class="col-md-2">
 																		<img style="width: 70px;" src="/static/uploads/<%= item.product.image[0] %>" alt="Product Image">
 																	</div>
-																	<div class="col-md-8">
-																		<p><%= item.product.name %> - ₹<%= item.product.price %></p>
+																	<div class="col-md-3">
+																		<p><%= item.product.name %></p>
+																	</div>
+																	<div class="col-md-3">
+																		<p>Price: ₹<%= item.product.price %></p>
+																	</div>
+																	<div class="col-md-3">
+																		<p>Quantity: <%= item.quantity %></p>
 																	</div>
 																</div>
 																<br>
@@ -535,7 +541,8 @@
 															<p>No items in the cart</p>
 														<% } %>
 													</div>
-												</div>
+												</div>	
+																							
 													<div class="form-group">
 														<div class="col-md-12 ">
 															<p style="color: black; font-weight: 400; font-size: 16px; float: right;">Total - ₹<span id="total"><%= totalPrice %></span></p>
@@ -546,7 +553,7 @@
 												<hr>											
 												<br>
 
-												<button class="buttons" id="openModal">Show Coupons</button><br>
+												<button class="buttons" id="openModal" type="button">Show Coupons</button><br>
 												<div id="couponModal" class="modal">
 													<div class="modal-content">
 														<span class="close" style="font-size: 35px;">&times;</span>
@@ -849,14 +856,15 @@
 	</script>
 
 <script>
-	document.getElementById("openModal").addEventListener("click", function() {
-	  document.getElementById("couponModal").style.display = "block";
-	});
-	
-	document.getElementsByClassName("close")[0].addEventListener("click", function() {
-	  document.getElementById("couponModal").style.display = "none";
-	});
-	</script>
+    document.getElementById("openModal").addEventListener("click", function() {
+      document.getElementById("couponModal").style.display = "block";
+    });
+    
+    document.getElementsByClassName("close")[0].addEventListener("click", function() {
+      document.getElementById("couponModal").style.display = "none";
+    });
+</script>
+
 
 <script>
    document.addEventListener("DOMContentLoaded", function() {
@@ -1035,7 +1043,7 @@ if (!isNaN(totalPrice)) {
 	else if (totalPrice > 2000 && paymentCODCheckbox.checked) {
 	  paymentStatusInput.value = "Pending";
 	  checkError.style.display = "block";
-	  checkError.innerHTML = "COD is not available for orders above Rs 1000.";
+	  checkError.innerHTML = "COD is not available for orders above Rs 2000.";
 	  checkError.style.color = "red";
 	  setTimeout(function () {
 		checkError.style.display = "none";

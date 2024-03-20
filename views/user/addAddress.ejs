@@ -74,43 +74,40 @@
           background-color: #488f82;
         }
         .sidebar {
-          background: #f8f9fa;
-          border-right: 1px solid #ddd;
-          padding: 20px;
-          height: 100%;
-          position: fixed;
-          left: 0;
-          top: 0;
-          overflow-y: auto;
-          margin-top: 100px;
+            background: #f8f9fa;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            margin-top: 185px;
         }
         .sidebar h4 {
-          margin-bottom: 40px;
-          color: #333;
-          border-bottom: 2px solid #88c8bc;
-          padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #88c8bc;
+            padding-bottom: 10px;
         }
         .sidebar ul {
-          list-style: none;
-          padding-left: 0;
+            list-style: none;
+            padding-left: 0;
         }
         .sidebar ul li {
-          margin-bottom: 10px;
+            margin-bottom: 10px;
         }
         .sidebar li a {
-          color: #333;
-          text-decoration: none;
-          display: block;
-          padding: 10px;
-          border-radius: 5px;
-          transition: background-color 0.3s ease;
-          font-family: "Montserrat", sans-serif; /* Change the font family */
-          font-weight: 500;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
-
         .sidebar li a:hover {
-          background-color: #88c8bc; /* Change background color on hover */
-          color: #fff; /* Change text color on hover */
+            background-color: #88c8bc;
+            color: #fff;
         }
 
         li {
@@ -127,17 +124,53 @@
     </head>
     <body>
       <div id="page">
+        <nav class="colorlib-nav" role="navigation">
+          <div class="top-menu">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-sm-7 col-md-9">
+                          <div id="colorlib-logo"><a href="/">Animex</a></div>
+                      </div>
+                      <div class="col-sm-5 col-md-3">
+                          <form action="#" class="search-wrap">
+                              <div class="form-group">
+                                  <input type="search" class="form-control search" placeholder="Search">
+                                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-12 text-left menu-1">
+                          <ul>
+                              <li><a href="/">Home</a></li>
+                              <li><a href="/shop">Shop</a></li>   
+                              <li><a href="about.ejs">About</a></li>
+                              <li><a href="contact.ejs">Contact</a></li>
+                              <li style="float: right;"><a href="/profile"><i class="fas fa-user-circle fa-2x"></i></a></li>
+                              <li style="float: right;"><a href="/wishlist"><i class="fa-solid fa-heart fa-2x"></i></a></li>
+                              <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart</a></li>
+                              <li class="logout"><a href="userlogout"><i class="logout-Page"></i> Logout</a></li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </nav>
+      <hr>
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-2">
               <div class="sidebar">
-                <li><a href="/index"><i class="fa-solid fa-house"></i>   Home</a></li>
-                <li><a href="/profile"><i class="fas fa-user"></i>  Profile</a></li>
-                <li class="active"><a href="/addressManage"><i class="fas fa-address-book"></i>  Address Management</a></li>
-                <li><a href="/orderProfile"><i class="fas fa-list"></i>  Orders</a></li>
-                <li><a href="/wallet"><i class="fa-solid fa-wallet"></i>  Wallet</a></li>
+                  <h4>Account Settings</h4>
+                  <ul>
+                      <li ><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
+                      <li ><a href="/addressManage"><i class="fas fa-address-book"></i> Address Management</a></li>
+                      <li class="actives"><a href="/orderProfile"><i class="fas fa-list"></i> Orders</a></li>
+                      <li><a href="/wallet"><i class="fa-solid fa-wallet"></i> Wallet</a></li>
+                  </ul>
               </div>
-            </div>
+          </div>
             <div class="col-md-10">
               <div class="add-address-form">
                 <h3>Add Address</h3>

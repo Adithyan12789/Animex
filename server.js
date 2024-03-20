@@ -5,10 +5,10 @@ const userauthRoute = require("./routes/userAuth");
 const adminfeatRoute = require("./routes/adminfeat");
 const session = require("express-session");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+require("dotenv").config();
 
 // Load environment variables from .env file
-dotenv.config();
+// dotenv.config();
 
 // MongoDB connection
 mongoose.connect(process.env.DB_URI);
@@ -21,7 +21,7 @@ db.on("error",(error) => console.log(error));
 db.once("open",() => console.log("Connected to the Database"))
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/static", express.static(path.join(__dirname, "/public")));
