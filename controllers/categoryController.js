@@ -1,19 +1,6 @@
 const Category = require("../models/category");
 
 
-//Category Page
-
-// const addCategoriesLoad = async (req, res) => {
-//   try {
-//       const categories = await Category.find();
-//       res.render('adminAddCategories', { categories });
-//   } catch (error) {
-//       console.error(error);
-//       res.status(500).send('Internal Server Error');
-//   }
-// };
-
-// // Add new category
 const CategoriesRoute = async function(req, res) {
     try {
         const categories = await Category.find();
@@ -42,7 +29,7 @@ const CategoriesRoute = async function(req, res) {
             const newCategoryName = req.body.name;
             const newCategoryDescription = req.body.description;
 
-            const existingCategory = await Category.findOne({ name: newCategoryName });
+            const existingCategory = await Category.findOne({ name: { $regex: new RegExp('^' + newCategoryName + '$', 'i') } });
             if (existingCategory) {
                 res.render('admin/adminAddCategory', {
                     categories: await Category.find(),
@@ -82,6 +69,10 @@ const CategoriesRoute = async function(req, res) {
             const id = req.body.id;
             const name = req.body.name;
             const description = req.body.description;
+
+            console.log("name: ",name)
+            console.log("id: ",id)
+            console.log("description: ",description)
 
 
             const existingCategory = await Category.findOne({ name: name, _id: { $ne: id } });

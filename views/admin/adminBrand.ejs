@@ -111,7 +111,7 @@
                         <span class="text">Categories</span>
                     </a>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item active">
                   <a class="menu-link" href="/adminPageBrand">
                       <i class="icon fa-solid fa-star"></i>
                       <span class="text">Brands</span>
@@ -123,12 +123,12 @@
                       <span class="text">Orders</span>
                   </a>
                 </li> 
-                <li class="menu-item active">
-                    <a class="menu-link" href="/coupon">
-                        <i class="icon fa-solid fa-receipt"></i> <!-- Use the same icon name -->
-                        <span class="text">Coupon</span>
-                    </a>
-                </li> 
+                <li class="menu-item">
+                  <a class="menu-link" href="/coupon">
+                      <i class="icon fa-solid fa-receipt"></i> <!-- Use the same icon name -->
+                      <span class="text">Coupon</span>
+                  </a>
+              </li>
                 <li class="menu-item">
                     <a class="menu-link" href="/adminlogout">
                         <i class="icon material-icons md-exit_to_app"></i> <!-- Changed to md-exit_to_app -->
@@ -159,13 +159,13 @@
     <section class="content-main">
         <div class="content-header">
             <div>
-              <h2 class="content-title card-title">Coupon List </h2>
-              <p>Add, edit or list/unlist a Coupon</p>
+              <h2 class="content-title card-title">Brands </h2>
+              <p>Add, edit or list/unlist a Brands</p>
             </div>
             <div>
-              <input type="text" placeholder="Search Coupon" class="form-control bg-white">
+              <input type="text" placeholder="Search Brands" class="form-control bg-white">
               <!-- Add Category Button -->
-              <button class="btn btn-primary" onclick="window.location.href='/addCoupon'">Add Coupon</button>
+              <button class="btn btn-primary" onclick="window.location.href='/addBrand'">Add Brands</button>
             </div>
           </div>
           <div class="card">
@@ -173,47 +173,48 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="table-responsive">
-                    <table class="table">
-                      <thead class="thead-light">
-                          <tr>
-                              <th>Index</th>
-                              <th>Coupon Code</th>
-                              <th>Description</th>
-                              <th>%</th>
-                              <th>Up to</th>
-                              <th>Max amount</th>
-                              <th>Exp date</th>
-                              <th>status</th>
-                              <th>List/Unlist</th>
-                              <th>Edit</th>
-                          </tr>
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>ID</th>
+                          <th>Name</th>
+                          <th>Description</th>
+                          <th>Status</th>
+                          <th>Action</th>
+                        </tr>
                       </thead>
-                      <tbody> <!-- Move this tag outside of the loop -->
-                          <% coupons.forEach((row,index) => { %>
-                          <!-- Table data goes here -->
-                          <tr>
-                              <td><%= index+1  %></td>
-                              <td><%= row.coupon_code  %></td>
-                              <td><%= row.description %></td>
-                              <td><%= row.percentage  %>%</td>
-                              <td>₹<%= row.minimumAmount  %></td>
-                              <td>₹<%= row.maximumAmount  %></td>
-                             <td><%=new Date(row.expiryDate).toLocaleDateString() %></b></td>
-                                <% if (row.isListed) { %>
-                                    <td><span class="badge rounded-pill alert-success">listed</span></td> 
-                                    <% }else{ %>
-                                        <td><span class="badge rounded-pill alert-danger">unlisted</span></td>
-                                      <% } %>
-                                    <% if(row.isListed) { %>
-                                        <td><button style="width: 90%;" class="btn btn-sm btn-danger" onclick="unlisted('<%= row._id %>')">UnList</button></td>
-                                    <% } else { %>
-                                        <td><button style="width: 90%;" class="btn btn-sm btn-success" onclick="listed('<%= row._id %>')">List</button></td>
-                                    <% } %>
-          
-                                <td><a href="/editCoupon/<%= row._id  %>" class="btn btn-primary btn-sm rounded">Edit</a></td>
-                            </tr>
-                            <% }) %>
-                        </tbody> <!-- Move this tag outside of the loop -->
+                      <tbody>
+                        <% if (locals.brand && locals.brand.length > 0) { %>
+                        <% for (let index = 0; index < locals.brand.length; index++) { %>
+                        <% const brand = locals.brand[index]; %>
+                        <tr>
+                          <td><%= index + 1 %></td>
+                          <td><b><%= brand.name %></b></td>
+                          <td><%= brand.description %></td>
+                          <td>
+                            <% if(brand.isListed == false) { %>
+                            <span class="badge bg-danger">Inactive</span>
+                            <% } else { %>
+                            <span class="badge bg-success">Active</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if(brand.isListed == true) { %>
+                            <button class="btn btn-sm btn-danger" onclick="unlisted('<%= brand._id %>')">UnList</button>
+                            <% } else { %>
+                            <button class="btn btn-sm btn-success" onclick="listed('<%= brand._id %>')">List</button>
+                            <% } %>
+
+                            <a href="/editBrand?brandid=<%= brand._id %>" class="btn btn-info edit-button">Edit</a>
+                        </td>
+                        </tr>
+                        <% } %>
+                        <% } else { %>
+                        <tr>
+                          <td colspan="5">No Brands found</td>
+                        </tr>
+                        <% } %>
+                      </tbody>
                     </table>
                   </div>
                 </div>
@@ -245,39 +246,38 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <!-- Your HTML content -->
-  
-  <script>
-  function unlisted(id) {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, unlist it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = "/unlistCoupon/" + id;
-      }
-    });
-  }
-  
-  function  listed(id) {
-    Swal.fire({
-      title: "Are you sure?",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, list it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = "/listCoupon/" + id;
-      }
-    });
-  }
-  </script>
+<!-- Your HTML content -->
+
+<script>
+function unlisted(list) {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, unlist it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "/unlistBrand/" + list;
+    }
+  });
+}
+
+function  listed(list) {
+  Swal.fire({
+    title: "Are you sure?",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, list it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "/listBrand/" + list;
+    }
+  });
+}
 </script>
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

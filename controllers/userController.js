@@ -847,16 +847,16 @@ const applyCoupon = async (req, res) => {
 
       
       // const discount = coupon.percentage * userCart.totalPrice / 100;
-      const discount = coupon.maximumAmount
+      const discount = coupon.maximumAmount;
 
       const newTotalPrice = userCart.totalPrice - discount;
 
       // Update the cart total price
-      // userCart.totalPrice = newTotalPrice;
-  
+      userCart.totalPrice = newTotalPrice;
 
+      userCart.save();
      
-      return res.status(200).json({ message: 'Coupon applied successfully', newTotalPrice });
+      return res.status(200).json({ message: 'Coupon applied successfully', newTotalPrice ,discount});
   } catch (error) {
       console.error('Error applying coupon:', error);
       return res.status(500).json({ error: 'Internal server error' });
@@ -890,6 +890,9 @@ const placeOrder = async (req, res) => {
         const userId = req.session.userID;
         const addressId = req.body.addressId;
         const payment = req.body.paymentMethod
+        const discount = req.body.discount;
+
+
 
 
         // Check if an address is selected
@@ -903,6 +906,10 @@ const placeOrder = async (req, res) => {
         let totalPrice = 0;
         for (const item of userCart.items) {
             totalPrice += item.product.price * item.quantity;
+        }
+
+        if(userCart){
+          totalPrice = userCart.totalPrice
         }
 
         if (!userOrder) {
@@ -953,6 +960,8 @@ const placeOrder = async (req, res) => {
 
               order.paymentMethod = "Wallet Payment"
             }
+
+            order.discount = discount
 
             await order.save();
 
@@ -1039,6 +1048,7 @@ const ordersProfilePage = async (req, res) => {
       res.render("user/trackOrder", {
         user,
         order,
+        cart,
         count: cartItemCount,
       });
     } catch (error) {
@@ -1152,7 +1162,7 @@ const deleteWishlist = async (req, res) => {
 const userWallet = async (req, res) => {
   try {
       const userId = req.session.userID;
-      let wallet = await Wallet.findOne({ userId });
+      let wallet = await Wallet.findOne({ userId }).sort({ "transactionHistory.date": -1 });
 
       // If wallet is not found, create a new one with balance 0
       if (!wallet) {
@@ -1169,7 +1179,9 @@ const userWallet = async (req, res) => {
 
       const userData = await User.findById(userId);
 
-      console.log("sdvsvsvsdvvdfv",userData)
+      // Reverse the transaction history before rendering the view
+      wallet.transactionHistory.reverse();
+      
 
       res.render('user/wallet', { wallet, count: cartItemCount, user: userData });
   } catch (error) {

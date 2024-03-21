@@ -18,6 +18,11 @@ const walletSchema = new mongoose.Schema({
             type: String,
             enum: ['deposit', 'withdraw'],
             required: true
+        },
+        date: {
+            type: Date,
+            default: Date.now,
+            required: true
         }
     }]
 });

@@ -12,48 +12,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-JDOvPXhfZgE/bs+FMqRf1rVHzAIn2tD5z5Q3zYqlv7qIYk5Nb57Ala9b2Di1D3FJf58po05MRV31/KBtCJnH7A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
 
-.pending {
-    background-color: #da8700; 
-}
-
-.shipped {
-    background-color: #e9ed01; 
-}
-
-.delivered {
-    background-color: #08fb04; 
-}
-
-.return {
-    background-color: #133eff; 
-}
-
-.cancelled {
-    background-color: #e80000; 
-}
-        /* Add any additional styling specific to the track order page here */
-        .order-container {
-            background: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 65px auto;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        .order-container h3 {
-            color: #333;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #88c8bc;
-            padding-bottom: 10px;
-        }
-        .order-table {
+/* Table Styles */
+.order-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            overflow: hidden;
         }
         .order-table th, .order-table td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 10px;
             text-align: left;
         }
         .order-table th {
@@ -73,15 +41,41 @@
         .order-table td.total {
             font-weight: bold;
         }
-         td{
-            color: black;
+
+        /* Total Price Box */
+        .total {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .total p {
+            margin-bottom: 10px;
             font-weight: 500;
+            color: #333;
+        }
+        .total hr {
+            border-color: #ddd;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .total .grand-total {
+            border-top: 2px solid #88c8bc;
+            padding-top: 15px;
         }
 
-        p{
-            color: black;
-            font-weight: 500;
+        /* Progress Bar Styles */
+        .progress-bar {
+            font-weight: bold;
+            text-align: center;
+            height: 2rem;
+            border-radius: 10px;
         }
+        .pending { background-color: #da8700; }
+        .shipped { background-color: #e9ed01; }
+        .delivered { background-color: #08fb04; }
+        .return { background-color: #133eff; }
+        .cancelled { background-color: #e80000; }
         .user-info, .shipping-address, .payment-info {
             margin-bottom: 30px;
         }
@@ -227,7 +221,7 @@
                 <div class="col-md-3">
                     <div class="payment-info">
                         <h4>Payment Information</h4>
-                        <p><strong>Cash On Delivery</strong></p>
+                        <p><strong> <%= order.paymentMethod %></strong></p>
                     </div>
                 </div>
             </div>
@@ -247,34 +241,55 @@
                 <div class="col-md-10">
                     <div class="order-container">
                         <h3>Order Details</h3>
-                        <table class="order-table">
-                            <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Product Name</th>
-                                    <th>Unit Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% if (order.items){ %>
-                                    <% order.items.forEach(product => { %>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <table class="order-table">
+                                    <thead>
                                         <tr>
-                                            <td><img src="/static/uploads/<%= product.product.image[0]%>" alt="<%= product.name %>"></td>
-                                            <td class="product-name"><%= product.product.name %></td>
-                                            <td>$<%= product.product.price %></td>
-                                            <td><%= product.quantity %></td>
-                                            <td>$<%= product.product.price * product.quantity %></td>
+                                            <th>Image</th>
+                                            <th>Product Name</th>
+                                            <th>Unit Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
                                         </tr>
-                                    <% }) %>
-                                <% } else { %>
-                                    <tr>
-                                        <td colspan="5"><p>No products</p></td>
-                                    </tr>
-                                <% } %>
-                            </tbody>                                
-                        </table>
+                                    </thead>
+                                    <tbody>
+                                        <% if (order.items){ %>
+                                            <% order.items.forEach(product => { %>
+                                                <tr>
+                                                    <td><img src="/static/uploads/<%= product.product.image[0]%>" alt="<%= product.name %>"></td>
+                                                    <td class="product-name"><%= product.product.name %></td>
+                                                    <td>$<%= product.product.price %></td>
+                                                    <td><%= product.quantity %></td>
+                                                    <td>$<%= product.product.price * product.quantity %></td>
+                                                </tr>
+                                            <% }) %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="5"><p>No products</p></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>                                
+                                </table>
+                            </div>
+                                    <div class="col-lg-4 text-center">
+                                        <div class="total">
+                                            <div class="sub">
+                                                <% if (order.items) { %>
+                                                    <% order.items.forEach(item => { %>
+                                                        <p>Subtotal:<span> ₹<%= item.product.price * item.quantity %></span></p>
+                                                    <% }) %>
+                                                <% } %>
+                                                <p><span>Discount:</span> <span>₹<%= order.discount %></span></p>
+                                            </div>
+                                            <hr>
+                                            <div class="grand-total cart__total text-center">
+                                                <p id="subtotal">Total Price: ₹<%= order.totalPrice %></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
+						</div>
                     </div>
                 </div>
             </div>

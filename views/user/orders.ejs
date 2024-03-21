@@ -183,7 +183,11 @@
                                                     <% if (order.orderStatus == "Delivered") { %>
                                                         <button class="btn btn-sm btn-primary" onclick="returnOrder('<%= order._id %>')">Return Order</button>
                                                     <% }else{ %>
-                                                        <button class="btn btn-sm btn-primary" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                                                        <% if (order.orderStatus !== "Cancelled") { %>
+                                                            <button class="btn btn-sm btn-primary" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                                                        <% }else{ %>
+                                                            <button class="btn btn-sm btn-secondary" disabled>Cancel Order</button>
+                                                        <% } %>
                                                     <% } %>
                                                 </td>
                                             </tr>

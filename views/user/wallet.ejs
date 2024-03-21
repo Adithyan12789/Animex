@@ -94,6 +94,9 @@
             background-color: #88c8bc;
             border-radius: 5px;
         }
+        td{
+            font-weight: 500;
+        }
 
         /* Updated CSS styles for the wallet section */
         .wallet-container {
@@ -253,13 +256,27 @@
                     </div>
                     <div class="transaction-history">
                         <h2>Transaction History</h2>
-                        <ul id="transaction-list">
-                            <% wallet.transactionHistory.forEach(transaction => { %>
-                                <li><%= transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1) %>: ₹<%= transaction.amount %></li>
-                            <% }); %>
-                        </ul>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transaction-list">
+                                <% wallet.transactionHistory.forEach(transaction => { %>
+                                    <tr>
+                                        <td><%= new Date(transaction.date).toLocaleDateString() %></td>
+                                        <td><%= transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1) %></td>
+                                        <td>₹<%= transaction.amount %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>                            
+                        </table>
                         <button class="clear-history-button" onclick="clearHistory()">Clear History</button>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -292,6 +309,8 @@
                     handler: function (response) {
                         console.log(response);
                         addFunds(totalPrice);
+                        window.location.reload();
+                        window.location.reload();
                     },
     
                     prefill: {
@@ -312,32 +331,38 @@
         }
     
         async function addFunds(amount) {
-            if (!isNaN(amount) && amount > 0) {
-                const response = await fetch('/addFunds', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ amount })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    balanceDisplay.textContent = `Balance: ₹${data.balance}`;
-                    addTransaction(amount, 'deposit');
-                    document.getElementById('add-amount').value = '';
-                } else {
-                    alert(data.message);
-                }
-            } else {
-                alert("Invalid amount!");
-            }
+    if (!isNaN(amount) && amount > 0) {
+        const response = await fetch('/addFunds', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ amount })
+        });
+        const data = await response.json();
+        if (data.success) {
+            balanceDisplay.textContent = `Balance: ₹${data.balance}`;
+            addTransaction({ date: new Date().toLocaleDateString(), type: 'deposit', amount }); // Add transaction to UI
+            document.getElementById('add-amount').value = '';
+        } else {
+            alert(data.message);
         }
+    } else {
+        alert("Invalid amount!");
+    }
+}
+
     
-        function addTransaction(amount, type) {
-            const transaction = document.createElement('li');
-            transaction.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)}: ₹${amount}`;
-            transactionList.appendChild(transaction);
-        }
+        function addTransaction(transaction) {
+    const transactionRow = document.createElement('tr');
+    transactionRow.innerHTML = `
+        <td>${transaction.date}</td>
+        <td>${transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}</td>
+        <td>₹${transaction.amount}</td>
+    `;
+    document.getElementById('transaction-list').appendChild(transactionRow);
+}
+
     
         async function clearHistory() {
             const response = await fetch('/clearHistory', {

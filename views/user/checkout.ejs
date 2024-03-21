@@ -542,13 +542,21 @@
 														<% } %>
 													</div>
 												</div>	
-																							
-													<div class="form-group">
-														<div class="col-md-12 ">
-															<p style="color: black; font-weight: 400; font-size: 16px; float: right;">Total - ₹<span id="total"><%= totalPrice %></span></p>
-															<input type="hidden" name="totalPrice" id="subtotal" value="<%= totalPrice %>">
+												<div class="row">
+													<div class="col-md-8"></div>
+													<div class="col-lg-4 text-center">
+														<div class="total">
+															<div class="sub">
+																<p class="discount-label">Discount - ₹<span id="discount" class="discount-value">0</span></p>
+																<input type="hidden" name="discount" id="discount-item">
+															</div>
+															<div class="grand-total cart__total text-center">
+																<p class="total-label">Total - ₹<span id="total" class="total-value"><%= totalPrice %></span></p>
+															</div>
 														</div>
 													</div>
+												</div>												
+												
 												<br>	
 												<hr>											
 												<br>
@@ -662,7 +670,7 @@
 										/>
 										<input
 										  type="hidden"
-										  id="totalPrice"
+										  id="subtotal"
 										  name="totalPrice"
 										  value="<%= totalPrice %>"
 										/>
@@ -907,9 +915,12 @@
         .then(data => {
             console.log('Coupon applied successfully');
 				const newTotalPrice = data.newTotalPrice.toFixed(2);
+				const discount = data.discount.toFixed(2);
 				console.log(newTotalPrice)
 				document.getElementById('total').innerText = newTotalPrice;
+				document.getElementById('discount').innerText = discount;
 				document.getElementById('subtotal').value = newTotalPrice;
+				document.getElementById('discount-item').value = discount;
 				Swal.fire({
 					title: 'Success!',
 					text: data.message,
@@ -959,6 +970,7 @@
 			const originalTotalPrice = data.originalTotalPrice.toFixed(2);
 			console.log(originalTotalPrice)
 			document.getElementById('total').innerText = originalTotalPrice;
+			document.getElementById('discount').innerText = 0;
             document.getElementById('subtotal').value = originalTotalPrice;
 			Swal.fire({
 				title: 'Successfully Cancelled!',
@@ -1185,32 +1197,38 @@ if (!isNaN(totalPrice)) {
 	}
 
 	async function withdrawFunds() {
-            const totalPrice = document.getElementById("subtotal");
-             const amount = parseFloat(totalPrice.value);
-             console.log(amount);
-            if (!isNaN(amount)) {
-                const response = await fetch('/withdrawFunds', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ amount })
-                });
-                document.getElementById("orderForm").submit();
-                const data = await response.json();
-                if (data.success) {
-                    balanceDisplay.textContent = 'Balance: ₹${data.balance}';
-                    addTransaction(amount, 'withdraw');
-                    document.getElementById('withdraw-amount').value = '';
-                   
-
-                } else {
-                    alert(data.message);
-                }
-            } else {
-                alert("Invalid amount!");
-            }
+    const totalPrice = document.getElementById("subtotal");
+    const amount = parseFloat(totalPrice.value);
+    console.log(amount);
+    if (!isNaN(amount)) {
+        const response = await fetch('/withdrawFunds', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ amount })
+        });
+        document.getElementById("orderForm").submit();
+        const data = await response.json();
+        if (data.success) {
+            balanceDisplay.textContent = `Balance: ₹${data.balance}`;
+            
+            // Format the date correctly
+            const currentDate = new Date();
+            const formattedDate = currentDate.toLocaleString(); // Adjust date formatting as needed
+            
+            addTransaction({ date: formattedDate, type: 'withdraw', amount });
+            document.getElementById('withdraw-amount').value = '';
+        } else {
+            alert(data.message);
         }
+    } else {
+        alert("Invalid amount!");
+    }
+}
+
+
+
   
   
   </script>

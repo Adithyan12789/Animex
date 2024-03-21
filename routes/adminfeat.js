@@ -6,6 +6,7 @@ const customerController = require("../controllers/customerController");
 const categoryController = require("../controllers/categoryController");
 const orderController = require("../controllers/orderController");
 const couponController = require("../controllers/couponController");
+const brandController = require("../controllers/brandController");
 const admin = require('../middleware/adminHandle');
 const uploadImage = require("../middleware/multer");
 const isLoggedAdmin = require('../middleware/adminLogged');
@@ -18,10 +19,6 @@ router.get("/adminlogout",admin, adminController.logoutadmin);
 // Admin Home
 router.get("/adminhome", admin,adminController.AdminHomePage);
 router.post("/generate-report", admin,adminController.generateReport);
-
-
-
-
 
 
 
@@ -39,6 +36,16 @@ router.get("/editCategory",admin, categoryController.getEditCategory);
 router.post("/editCategory",admin, categoryController.postEditCategory);
 router.get("/listCategory/:list",admin, categoryController.listCategories);
 router.get("/unlistCategory/:list",admin, categoryController.unlistCategories);
+
+
+// Admin Brand Management
+router.get("/adminPageBrand",admin, brandController.BrandRoute);
+router.get("/addBrand",admin, brandController.getBrand);
+router.post("/addBrand",admin, brandController.addBrand);
+router.get("/editBrand",admin, brandController.getEditBrand);
+router.post("/editBrand",admin, brandController.postEditBrand);
+router.get("/listBrand/:list",admin, brandController.listBrand);
+router.get("/unlistBrand/:list",admin, brandController.unlistBrand);
 
 // Admin Product Management
 router.get("/adminProductPage",admin, productController.getProducts);
