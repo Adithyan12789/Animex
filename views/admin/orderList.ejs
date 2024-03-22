@@ -140,11 +140,16 @@
                                     <td>ord_<%= order.trackingId %></td>
                                     
                                     <td>
-                                     <% order.items.forEach(order => { %>
-                                        <b><%= order.product.name %></b>, <br>
-                                     <% }) %>
+                                        <% console.log(order); %>
+                                        <% order.items.forEach(item => { %>
+                                            <% if (item.product && item.product.name) { %>
+                                                <b><%= item.product.name %></b>, <br>
+                                            <% } else { %>
+                                                <i>No product name available</i>, <br>
+                                            <% } %>
+                                        <% }) %>
                                     </td>
-
+                                    
                                     <td>₹ <%= order.totalPrice %></td>
                                     <td><span class="badge rounded-pill alert-warning">
                                         <% if (order.paymentStatus) { %>

@@ -13,10 +13,12 @@ const adminOrdersProfilePage = async (req, res) => {
         const totalOrders = await Order.countDocuments();
         const totalPages = Math.ceil(totalOrders / perPage);
 
-        const orders = await Order.find().populate("items.product")
+        const orders = await Order.find().populate("items.product").sort({ orderDate: -1 })
             .skip(perPage * page - perPage)
             .limit(perPage)
             .exec();
+
+            console.log("asdfasef", orders)
 
         if (!orders) {
             console.error("No orders found");
@@ -27,7 +29,7 @@ const adminOrdersProfilePage = async (req, res) => {
 
         res.render("admin/orderList", {
             title: "Order Page",
-            orders: orders,
+            orders,
             totalPages: totalPages,
             currentPage: page
         });
@@ -44,10 +46,12 @@ const getPagination = async (req, res) => {
         const totalOrders = await Order.countDocuments();
         const totalPages = Math.ceil(totalOrders / perPage);
 
-        const orders = await Order.find().populate("items.product")
+        const orders = await Order.find().populate("items.product").sort({ orderDate: -1 })
             .skip(perPage * page - perPage)
             .limit(perPage)
             .exec();
+
+            console.log("asdfasef", orders)
 
         if (!orders) {
             console.error("No orders found");

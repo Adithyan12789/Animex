@@ -18,6 +18,13 @@
     <link rel="shortcut icon" type="image/x-icon" href="/static/assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="/static/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+    <style>
+        .hr hr{
+
+            border: 1px solid black;
+    margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -219,12 +226,21 @@
                         <div class="col-lg-1"></div>
                         <div class="col-lg-4">
                             <div class="box shadow-sm bg-light">
-                                <h6 class="mb-15">Payment info</h6>
-                                <p>
-                                   <%= order.paymentMethod %>
-                                </p>
+                                <% order.items.forEach(product => { %>
+                                    <div class="item">
+                                        <p>Subtotal: ₹<span><%= product.product.price * product.quantity %></span></p>
+                                        <p>Delivery: ₹<span>69</span></p>
+                                    </div>
+                                <% }) %>
+                                <% if (order.discount > 0) { %>
+                                    <p>Discount: ₹<span><%= order.discount %></span></p>
+                                <% } else { %>
+                                    <p>Discount: ₹<span>0</span></p>
+                                <% } %>
+                                <div class="hr"><hr></div>
+                                <p>Total: ₹<span><%= order.totalPrice %></span></p>
                             </div>
-                        </div> <!-- col// -->
+                        </div>                        
                     </div>
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->

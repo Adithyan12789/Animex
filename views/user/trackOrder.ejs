@@ -13,6 +13,12 @@
     <style>
 
 /* Table Styles */
+td{
+    font-weight: 400;
+}
+p{
+    font-weight: 400;
+}
 .order-table {
             width: 100%;
             border-collapse: collapse;
@@ -280,7 +286,12 @@
                                                         <p>Subtotal:<span> ₹<%= item.product.price * item.quantity %></span></p>
                                                     <% }) %>
                                                 <% } %>
-                                                <p><span>Discount:</span> <span>₹<%= order.discount %></span></p>
+                                                <% if (order.discount > 0) { %>
+                                                    <p><span>Discount:</span> <span>₹<%= order.discount %></span></p>
+                                                <% }else{ %>
+                                                    <p><span>Discount:</span> <span>₹0</span></p>
+                                                <% } %>
+                                                <p><span>Delivery Fee:</span> <span>₹69</span></p>
                                             </div>
                                             <hr>
                                             <div class="grand-total cart__total text-center">

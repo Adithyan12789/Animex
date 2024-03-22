@@ -310,11 +310,11 @@
 								<div class="total">
 									<div class="sub">
 										<p class="cart__total" >Subtotal:<span id="totalPrice"> ₹<%= cart.totalPrice %></span></p>
-										<p><span>Delivery:</span> <span>Free</span></p>
+										<p><span>Delivery Fee:</span> <span id="deliveryFee">₹69</span></p>
 									</div>
 									<hr>
 									<div class="grand-total cart__total text-center">
-										<p><strong>Total Price:</strong><span id="totalPrice"> ₹<%= cart.totalPrice %></span></p>
+										<p><strong>Total Price:</strong><span id="totalPrice"> ₹<%= cart.totalPrice + 69 %></span></p>
 									</div>
 								</div>
 							</div>

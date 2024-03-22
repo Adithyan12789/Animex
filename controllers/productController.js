@@ -1,5 +1,6 @@
 const Product = require("../models/products");
 const Category = require("../models/category");
+const Brand = require("../models/brand");
 const fs = require("fs")
 
 
@@ -11,6 +12,7 @@ const addProducts = async (req, res) => {
             name: req.body.name,
             description: req.body.description,
             category: req.body.category,
+            brand: req.body.brand,
             price: req.body.price,
             stock: req.body.stock,
             image: images
@@ -131,8 +133,9 @@ const getPagination = async (req, res) => {
 
 const createProduct =async (req, res) => {
     const catergories = await Category.find()
+    const brand = await Brand.find()
 
-    res.render("admin/adminAddProduct", { title: "Add-Products",category: catergories });
+    res.render("admin/adminAddProduct", { title: "Add-Products",category: catergories ,brand});
 };
 
 const editProduct = async (req, res) => {
@@ -140,10 +143,11 @@ const editProduct = async (req, res) => {
       const id = req.params.id;
       const productDetails = await Product.findById(id)
       const catergories = await Category.find()
+      const brand = await Brand.find()
       if (!productDetails) {
         return res.status(404).render("error", { message: "Product not found" });
       }
-      res.render("admin/adminEditProducts", { product: productDetails, category: catergories });
+      res.render("admin/adminEditProducts", { product: productDetails, category: catergories ,brand});
     } catch (error) {
       console.error("Error editing product:", error);
       res.status(500).render("error", { message: "Error editing product" });
@@ -160,19 +164,25 @@ const editProduct = async (req, res) => {
 
         // Assuming req.body.category contains the name of the category
         const categoryName = req.body.category;
+        const brandName = req.body.brand;
 
         console.log("12334556",categoryName)
+        console.log("+++++",brandName)
         
         // Find the category document based on its name
         const category = await Category.findOne({ _id: categoryName });
 
+        const brand = await Brand.findOne({ _id: brandName });
+
         console.log("dfsdfsf",category)
+        console.log("++++",brand)
 
         // Prepare the product update object
         const productUpdate = {
             name: req.body.name,
             description: req.body.description,
             category: category ? category._id : null, // Assign category ID or null if not found
+            brand: brand ? brand._id : null, // Assign brand ID or null if not found
             price: req.body.price,
             stock: req.body.stock
         };

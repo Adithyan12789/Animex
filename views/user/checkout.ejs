@@ -547,8 +547,11 @@
 													<div class="col-lg-4 text-center">
 														<div class="total">
 															<div class="sub">
-																<p class="discount-label">Discount - ₹<span id="discount" class="discount-value">0</span></p>
+																<p class="discount-label">Discount - ₹<span id="discount" class="discount-value">₹0</span></p>
 																<input type="hidden" name="discount" id="discount-item">
+															</div>
+															<div class="sub">
+																<p class="discount-label">Delivery Fee - ₹<span class="discount-value">69</span></p>
 															</div>
 															<div class="grand-total cart__total text-center">
 																<p class="total-label">Total - ₹<span id="total" class="total-value"><%= totalPrice %></span></p>
@@ -675,7 +678,7 @@
 										  value="<%= totalPrice %>"
 										/>
 										
-										<input type="hidden" name="subtotal" id="subtotalInput" value="<%= totalPrice + 100 %>">
+										<input type="hidden" name="subtotal" id="subtotalInput" value="<%= totalPrice %>">
 										<input type="hidden" id="discountAmountInput" name="discountAmount" value="">
 										<input type="hidden" id="couponCodeInput" name="couponCode" value="">
 						  

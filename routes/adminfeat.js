@@ -7,6 +7,7 @@ const categoryController = require("../controllers/categoryController");
 const orderController = require("../controllers/orderController");
 const couponController = require("../controllers/couponController");
 const brandController = require("../controllers/brandController");
+const bestSellerController = require("../controllers/bestSellerController");
 const admin = require('../middleware/adminHandle');
 const uploadImage = require("../middleware/multer");
 const isLoggedAdmin = require('../middleware/adminLogged');
@@ -81,5 +82,17 @@ router.get('/listCoupon/:id',admin,couponController.couponList)
 router.get('/unlistCoupon/:id',admin,couponController.couponUnlist)
 router.get('/editCoupon/:id',admin,couponController.editCoupon)
 router.post('/updateCoupon/:id',admin,couponController.updateCoupon)
+
+
+//Best Seller Page
+
+// Product Route
+router.get('/bestProductRoute',admin,bestSellerController.bestProduct)
+// Category Route
+router.get('/bestCategoryRoute',admin,bestSellerController.bestCategory)
+// Brand Route
+router.get('/bestBrandRoute',admin,bestSellerController.bestBrand)
+
+
 
 module.exports = router;

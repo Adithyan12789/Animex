@@ -18,6 +18,21 @@
     <link rel="shortcut icon" type="image/x-icon" href="/static/assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="/static/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .preview-image {
+    max-width: 100px; /* Set the maximum width of each preview image */
+    margin-right: 10px; /* Add some margin between each preview image */
+}
+
+#imagePreviewContainer {
+    display: flex; /* Use flexbox to arrange images horizontally */
+    flex-wrap: nowrap; /* Prevent images from wrapping to the next line */
+    overflow-x: auto; /* Add horizontal scrolling if images exceed container width */
+    padding-bottom: 10px; /* Add some bottom padding for spacing */
+}
+
+    </style>
 </head>
 
 <body>
@@ -131,6 +146,14 @@
                                             <option value="<%= category._id %>"><%= category.name %></option>
                                         <% }) %>
                                     </select>
+                                </div> 
+                                <div class="mb-3">
+                                    <label for="brand" class="form-label">Brand</label>
+                                    <select id="brand" name="brand" class="form-select">
+                                        <% brand.forEach(brand => { %>
+                                            <option value="<%= brand._id %>"><%= brand.name %></option>
+                                        <% }) %>
+                                    </select>
                                 </div>                                
                                 <div class="mb-4">
                                     <label class="form-label">New Cost</label>
@@ -146,7 +169,9 @@
                                     <label for="image" class="form-label">Select Image</label>
                                     <input type="file" id="imageInput" name="image" class="form-control" required multiple>
                                 </div>
-                                <div id="imagePreviewContainer" style="width: 100px;"></div>
+                                <div class="row">
+                                    <div id="imagePreviewContainer" class="col-md-12">   
+                                </div>
                                 </div>
                                 <div class="mb-3">
                                     <button type="submit" class="btn btn-primary">Add Product</button>
@@ -174,29 +199,30 @@
 
     <script>
         // Function to preview selected images
-        function previewImages() {
-            var previewContainer = document.getElementById('imagePreviewContainer');
-            var files = document.getElementById('imageInput').files;
-        
-            previewContainer.innerHTML = '';
-        
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                var reader = new FileReader();
-        
-                reader.onload = function(e) {
-                    var image = document.createElement('img');
-                    image.className = 'preview-image';
-                    image.src = e.target.result;
-                    previewContainer.appendChild(image);
-                };
-        
-                reader.readAsDataURL(file);
-            }
-        }
-        
-        // Event listener for file input change
-        document.getElementById('imageInput').addEventListener('change', previewImages);
+function previewImages() {
+    var previewContainer = document.getElementById('imagePreviewContainer');
+    var files = document.getElementById('imageInput').files;
+
+    previewContainer.innerHTML = '';
+
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            var image = document.createElement('img');
+            image.className = 'preview-image col-md-1'; // Adjust the column width as needed
+            image.src = e.target.result;
+            previewContainer.appendChild(image);
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
+
+// Event listener for file input change
+document.getElementById('imageInput').addEventListener('change', previewImages);
+
         </script>
 
     <script>

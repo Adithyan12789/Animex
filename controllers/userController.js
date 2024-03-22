@@ -40,7 +40,7 @@
     const perPage = 6; 
     const page = req.query.page || 1;
 
-    const productdata = await Product.find({ isPublished: true }).populate("category").skip(perPage * page - perPage)
+    const productdata = await Product.find({ isPublished: true }).populate("category").populate("brand").skip(perPage * page - perPage)
     .limit(perPage)
     .exec();
 
@@ -48,7 +48,7 @@
     const totalPages = Math.ceil(totalProducts / perPage);
 
     const listedProducts = productdata.filter(product => {
-      return product.category && product.category.isListed;
+      return product.category && product.category.isListed && product.brand && product.brand.isListed;
     });
 
    // Find the cart document for the user
@@ -678,6 +678,7 @@ const cartPage = async (req, res) => {
                 userCart.items.push({ product: productId, price: product.price, quantity: quantity });
             }
             userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            
             await userCart.save();
         }
         res.redirect("/");
@@ -782,7 +783,7 @@ const checkoutPage = async (req, res) => {
       console.log(addresses);
       
       userCart = order.items;
-      totalPrice = order.totalPrice;
+      totalPrice = order.totalPrice + 69;
     } else {
       addresses = await Address.findOne({ userId });
       console.log(addresses);
@@ -792,7 +793,7 @@ const checkoutPage = async (req, res) => {
         return res.status(404).json({ message: 'Cart not found' });
       }
       userCart = cart.items;
-      totalPrice = cart.totalPrice;
+      totalPrice = cart.totalPrice + 69;
    }
 
    // Find the cart document for the user
@@ -936,7 +937,7 @@ const placeOrder = async (req, res) => {
 
             const order = new Order({
                 userId,
-                totalPrice,
+                totalPrice: totalPrice + 69,
                 billingDetails: {
                     name: user.name,
                     email: user.email,
