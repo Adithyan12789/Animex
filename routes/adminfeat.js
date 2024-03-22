@@ -19,7 +19,9 @@ router.get("/adminlogout",admin, adminController.logoutadmin);
 
 // Admin Home
 router.get("/adminhome", admin,adminController.AdminHomePage);
-router.post("/generate-report", admin,adminController.generateReport);
+
+// Report Admin
+router.post('/generate-report',adminController.generateReport)
 
 
 

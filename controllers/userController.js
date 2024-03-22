@@ -937,7 +937,7 @@ const placeOrder = async (req, res) => {
 
             const order = new Order({
                 userId,
-                totalPrice: totalPrice + 69,
+                totalPrice: payment == "Cash on Delivery" ? totalPrice + 69 : totalPrice,
                 billingDetails: {
                     name: user.name,
                     email: user.email,

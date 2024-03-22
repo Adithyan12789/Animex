@@ -29,55 +29,55 @@ const loadadminHome = async (req, res) => {
   }
 };
 
+// Generate Report
+
 const generateReport = async (req, res) => {
   try {
-    const { startDate, endDate } = req.body;
+      const { startDate, endDate } = req.body;
 
-    console.log("startDate",startDate)
-    console.log("endDate",endDate)
+      console.log("Start Date: " , startDate);
+      console.log("End Date: " , endDate);
 
-    const orders = await Order.find({
-      orderDate: { $gte: new Date(startDate), $lte: new Date(endDate) }
-    }).populate('items.product');
+      // Fetch orders from the database based on the provided date range
+      const orders = await Order.find({
+          orderDate: { $gte: new Date(startDate), $lte: new Date(endDate) }
+      }).populate('items.product');
 
-    console.log("orders",orders)
+      console.log("orders: " , orders);
 
-    const doc = new PDFDocument();
-    const writeStream = fs.createWriteStream('./temp/report.pdf');
-    doc.pipe(writeStream);
+      // Process fetched orders to extract necessary information for the report
+      const reportData = orders.map((order, index) => {
+          let totalPrice = 0;
+          order.items.forEach(product => {
+              totalPrice += product.product.price * product.quantity;
+          });
 
-    doc.fontSize(12).text('Order Details Report', { align: 'center' });
-    doc.moveDown();
-    doc.text(`Start Date: ${startDate}`);
-    doc.text(`End Date: ${endDate}`);
-    doc.moveDown();
+          return {
+              orderId: order._id,
+              date: order.orderDate,
+              totalPrice,
+              products: order.items.map(product => {
+                  return {
+                      productName: product.product.name,
+                      quantity: product.quantity,
+                      price: product.price
+                  };
+              }),
+              firstName: order.billingDetails.name,
+              address: order.billingDetails.address1,
+              paymentMethod: order.paymentMethod,
+              paymentStatus: order.paymentStatus
+          };
+      });
 
-    if (orders.length === 0) {
-      console.log("heelo")
-        doc.fontSize(24).fillColor('#666666').text('No records found', { align: 'center' });
-    } else {
-      console.log("hao")
-        orders.forEach(order => {
-            const orderDetails = `Order ID: ${order._id}, Order Date: ${order.orderDate.toDateString()}, Payment Status: ${order.paymentStatus}`;
-            doc.text(orderDetails);
-            console.log("orderDetails: ",orderDetails)
-            order.items.forEach(item => {
-                const itemDetails = `Product: ${item.product.name}, Quantity: ${item.quantity}, Price: ${item.price}`;
-                doc.text(itemDetails);
-            });
-
-            doc.moveDown();
-        });
-    }
-
-    doc.end();
-
-    res.json({ reportUrl: './temp/report.pdf' });
-} catch (err) {
-    console.error('Error generating report:', err);
-    res.status(500).json({ error: 'Failed to generate report' });
+      console.log("Report Data: " , reportData);
+      res.status(200).json({ reportData });
+  } catch (err) {
+      console.error('Error generating report:', err);
+      res.status(500).json({ error: 'Failed to generate report' });
+  }
 }
-}
+
 
 const searchProduct = async (req, res) => {
   const perPage = 4; 
