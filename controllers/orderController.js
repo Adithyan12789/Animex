@@ -202,6 +202,10 @@ const cancelOrder = async (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
+ 
+const retryOrder = (req,res) => {
+    res.redirect("/checkout");
+}
 
 // const returnMoneyToWallet = async (userId, amount) => {
 //     try {
@@ -272,6 +276,7 @@ module.exports = {
     updateOrderStatus,
     returnOrder,
     cancelOrder,
+    retryOrder,
     // returnMoneyToWallet,
     deleteOrder
 };

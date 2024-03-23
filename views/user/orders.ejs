@@ -167,26 +167,30 @@
                                     <% if (orders && orders.length > 0) { %>
                                         <% orders.forEach(order => { %>
                                             <tr>
-                                                <td>ord_<%=order.trackingId %></td>
+                                                <td>ord_<%= order.trackingId %></td>
                                                 <td><%= new Date(order.orderDate).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
                                                 <td id="subtotal">₹<%= order.totalPrice %></td>
                                                 <td><%= order.orderStatus %></td>
                                                 <td>
-                                                <% if (order.paymentStatus) { %>
-                                                    <%= order.paymentStatus %>
-                                                <% }else{ %>
-                                                    <p>there is no paymentStatus</p>
-                                                <% } %>
+                                                    <% if (order.paymentStatus) { %>
+                                                        <%= order.paymentStatus %>
+                                                    <% } else { %>
+                                                        <p>there is no paymentStatus</p>
+                                                    <% } %>
                                                 </td>
                                                 <td>
                                                     <a href="/trackOrder/<%= order._id %>"><button class="btn btn-sm btn-success">Order Details</button></a>
-                                                    <% if (order.orderStatus == "Delivered") { %>
-                                                        <button class="btn btn-sm btn-primary" onclick="returnOrder('<%= order._id %>')">Return Order</button>
-                                                    <% }else{ %>
-                                                        <% if (order.orderStatus !== "Cancelled") { %>
-                                                            <button class="btn btn-sm btn-primary" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
-                                                        <% }else{ %>
-                                                            <button class="btn btn-sm btn-secondary" disabled>Cancel Order</button>
+                                                    <% if (order.paymentStatus == "Failed") { %>
+                                                        <button class="btn btn-sm btn-primary" onclick="retryOrder('<%= order._id %>')">Retry Checkout</button>
+                                                    <% } else { %>
+                                                        <% if (order.orderStatus == "Delivered") { %>
+                                                            <button class="btn btn-sm btn-primary" onclick="returnOrder('<%= order._id %>')">Return Order</button>
+                                                        <% } else { %>
+                                                            <% if (order.orderStatus !== "Cancelled") { %>
+                                                                <button class="btn btn-sm btn-primary" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                                                            <% } else { %>
+                                                                <button class="btn btn-sm btn-secondary" disabled>Cancel Order</button>
+                                                            <% } %>
                                                         <% } %>
                                                     <% } %>
                                                 </td>
@@ -197,6 +201,7 @@
                                             <td colspan="6">Order not found</td>
                                         </tr>
                                     <% } %>
+                                    
                                 </tbody>                                
                             </table>
                         </div>
@@ -280,6 +285,20 @@
         }
     });
 }
+
+function retryOrder(orderId) {
+        Swal.fire({
+            title: "Are you sure?",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Retry!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/retryOrder/" + orderId;
+            }
+        });
+    }
 
 
 

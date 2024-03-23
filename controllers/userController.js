@@ -776,67 +776,60 @@ const checkoutPage = async (req, res) => {
   try {
     const userId = req.session.userID;
     const orderId = req.query.orderId;
-    const today = new Date()
 
+    // Find addresses for the user
+    const addresses = await Address.findOne({ userId });
+
+    // Initialize variables for cart items and total price
     let userCart;
     let totalPrice;
-    let addresses;
-    let defaultAddress;
 
+    // Check if orderId is provided
     if (orderId) {
       const order = await Order.findById(orderId).populate('items.product').exec();
       if (!order) {
         return res.status(404).json({ message: 'Order not found' });
       }
-      addresses = await Address.findOne({  userId });
-      console.log(addresses);
-      
       userCart = order.items;
-      totalPrice = order.totalPrice + 69;
+      totalPrice = order.totalPrice + 69; // Assuming additional shipping cost
     } else {
-      addresses = await Address.findOne({ userId });
-      console.log(addresses);
-      
       const cart = await Cart.findOne({ userId }).populate('items.product').exec();
       if (!cart) {
         return res.status(404).json({ message: 'Cart not found' });
       }
       userCart = cart.items;
-      totalPrice = cart.totalPrice + 69;
-   }
+      totalPrice = cart.totalPrice + 69; // Assuming additional shipping cost
+    }
 
-   // Find the cart document for the user
-      const cart = await Cart.findOne({ userId: req.session.userID });
-      let cartItemCount = 0;
-      if (cart) {
-          cartItemCount = cart.items.length; // Get the count of items in the cart
-      }
+    // Get the count of items in the cart
+    const cartItemCount = (await Cart.findOne({ userId: req.session.userID }))?.items.length || 0;
 
-      const validCoupons = await Coupon.find({
-        expiryDate: { $gt: new Date() }, 
-         minimumAmount: { $lt: totalPrice }, 
-        userId: { $ne: userId },
-        isListed: true 
+    // Find valid coupons for the user
+    const validCoupons = await Coupon.find({
+      expiryDate: { $gt: new Date() },
+      minimumAmount: { $lt: totalPrice },
+      userId: { $ne: userId },
+      isListed: true
     });
 
-
+    // Render the checkout page with necessary data
     res.render('user/checkout', {
       title: 'Checkout',
       checkout: addresses,
       user: req.session.user,
-      userAddress: defaultAddress,
       product: userCart,
-      totalPrice: totalPrice,
-      orderId: orderId,
+      totalPrice,
+      orderId,
       count: cartItemCount,
       coupons: validCoupons
     });
 
   } catch (err) {
-      console.error("Error in checkoutPage:", err);
-      res.status(500).send("Internal Server Error");
+    console.error("Error in checkoutPage:", err);
+    res.status(500).send("Internal Server Error");
   }
 };
+
 
 const applyCoupon = async (req, res) => {
   try {
@@ -900,8 +893,10 @@ const placeOrder = async (req, res) => {
         const userId = req.session.userID;
         const addressId = req.body.addressId;
         const payment = req.body.paymentMethod
+        const status = req.body.paymentStatus
         const discount = req.body.discount;
 
+        console.log("+++", status)
 
 
 
@@ -946,7 +941,7 @@ const placeOrder = async (req, res) => {
 
             const order = new Order({
                 userId,
-                totalPrice: payment == "Cash on Delivery" ? totalPrice + 69 : totalPrice,
+                totalPrice: totalPrice + 69 ,
                 billingDetails: {
                     name: user.name,
                     email: user.email,
@@ -961,24 +956,23 @@ const placeOrder = async (req, res) => {
                 items: orderItems
             });
 
-            if(payment == "Razorpay"){
-              order.paymentStatus = "Paid";
+          
+              order.paymentStatus = status
+              
 
-              order.paymentMethod = "Online Payment"
-            }else if(payment == "Wallet"){
-              order.paymentStatus = "Paid";
-
-              order.paymentMethod = "Wallet Payment"
-            }
+              order.paymentMethod = payment
+          
 
             order.discount = discount
 
             await order.save();
 
-            await Cart.findOneAndUpdate(
+            if(status !== "Failed"){
+              await Cart.findOneAndUpdate(
                 { userId: user._id },
                 { $set: { items: [], totalPrice: 0 } }
             );
+            }
 
 
             for(const item of order.items){
@@ -1000,8 +994,13 @@ const placeOrder = async (req, res) => {
         } else {
             return res.status(400).json({ error: 'Please select a valid address' });
         }
+        if(status !== "Failed"){
+          res.redirect("/orderPage");
+        }else{
+          res.redirect("/orderProfile")
+        }
 
-        res.redirect("/orderPage");
+        
     } catch (error) {
         console.error("Error placing order:", error);
         res.status(500).json({ error: 'Internal server error' });

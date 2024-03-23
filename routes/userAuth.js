@@ -78,6 +78,7 @@ router.post('/order', user,userController.placeOrder);
 router.get('/downloadinvoice/:orderId',user,userController.downloadInvoice)
 router.get('/returnOrder/:orderId', user, orderController.returnOrder); // Add Address page
 router.get('/cancelOrder/:orderId', user, orderController.cancelOrder); // Add Address page
+router.get('/retryOrder/:orderId', user, orderController.retryOrder); // Add Address page
 
 
 //Wishlist Route

@@ -1088,6 +1088,7 @@ if (!isNaN(totalPrice)) {
 		}).then((result) => {
 		  if (result.isConfirmed) {
 			console.log("Order placed");
+			document.getElementById('paymentStatus').value = 'Pending';
 			document.getElementById("orderForm").submit();
 		  }
 		});
@@ -1171,9 +1172,13 @@ if (!isNaN(totalPrice)) {
 		
 		handler: function (response) {
 		  console.log(response);
-
-			console.log("Payment successful");
-		
+		  if (response.razorpay_payment_id) {
+          console.log("Payment successful");
+          document.getElementById('paymentStatus').value = 'Paid';
+        } else {
+          console.log("Payment failed or canceled");
+          document.getElementById('paymentStatus').value = 'Failed';
+        }
 		  submitForm();
 		},
   
@@ -1189,7 +1194,11 @@ if (!isNaN(totalPrice)) {
   
 	  var rzp = new Razorpay(options);
   
-
+	  rzp.on('payment.failed', function (response) {
+      console.log("Payment failed:", response);
+      document.getElementById('paymentStatus').value = 'Failed';
+      submitForm();
+      });
   
 	  rzp.open();
 	}
