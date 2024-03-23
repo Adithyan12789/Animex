@@ -8,6 +8,7 @@ const orderController = require("../controllers/orderController");
 const couponController = require("../controllers/couponController");
 const brandController = require("../controllers/brandController");
 const bestSellerController = require("../controllers/bestSellerController");
+const dashController = require("../controllers/dashController");
 const admin = require('../middleware/adminHandle');
 const uploadImage = require("../middleware/multer");
 const isLoggedAdmin = require('../middleware/adminLogged');
@@ -18,7 +19,8 @@ router.post("/adminlogin", adminController.loadadminHome);
 router.get("/adminlogout",admin, adminController.logoutadmin);
 
 // Admin Home
-router.get("/adminhome", admin,adminController.AdminHomePage);
+router.get("/adminHome",admin, dashController.getDashboard);
+router.get("/fetchdashboard",admin, dashController.fetchDashboard);
 
 // Report Admin
 router.post('/generate-report',adminController.generateReport)

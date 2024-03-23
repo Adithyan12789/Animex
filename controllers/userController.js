@@ -1,4 +1,7 @@
   const nodemailer = require('nodemailer');
+  const easyinvoice = require('easyinvoice');
+  const path = require('path');
+  const fs = require('fs');
   const User = require('../models/userModel');
   const Category = require('../models/category');
   const randomstring = require('randomstring');
@@ -377,32 +380,37 @@
 
 
   const shopPage = async (req, res) => {
-    const category = req.query.category;
-    const sort = req.query.sort; // Retrieve sort parameter from query
-
     try {
-        let totalProducts;
+        const category = req.query.category;
+        const sort = req.query.sort;
         let products;
-        let listedProducts;
-        let selectedCategory = null;
 
-        // Count total number of products
         if (category) {
-            totalProducts = await Product.countDocuments({ category: category });
-            // Query the database to find products matching the specified category
-            products = await Product.find({ category: category })
-                .populate("category")
-                .exec();
-            selectedCategory = category;
+            products = await Product.find({ category: category }).populate("category").exec();
+        } else if (sort === 'bestSell') {
+            // Fetch best selling products based on order history
+            const bestSellingProducts = await Order.find()
+                .sort('-items.quantity')
+                .limit(10)
+                .populate({
+                    path: 'items.product',
+                    select: '_id name stock category',
+                    populate: {
+                        path: 'category',
+                        select: 'isListed'
+                    }
+                })
+                .lean();
+
+            // Extract product IDs from bestSellingProducts
+            const productIds = bestSellingProducts.map(order => order.items[0].product._id);
+
+            // Fetch products based on the extracted IDs
+            products = await Product.find({ _id: { $in: productIds } }).populate("category").exec();
         } else {
-            totalProducts = await Product.countDocuments();
-            // Query the database to find all products
-            products = await Product.find()
-                .populate("category")
-                .exec();
+            products = await Product.find().populate("category").exec();
         }
 
-        // Apply sorting if specified
         if (sort === 'lowToHigh') {
             products.sort((a, b) => a.price - b.price);
         } else if (sort === 'highToLow') {
@@ -411,18 +419,42 @@
             products.sort((a, b) => a.name.localeCompare(b.name));
         } else if (sort === 'zToA') {
             products.sort((a, b) => b.name.localeCompare(a.name));
-        } else if (sort === 'bestSell') {
-            orderCount = await Order.find()
-            // Sort by order count in descending order to get the best sellers first
-            products.sort((a, b) => b.orderCount - a.orderCount);
+        }else if (sort === 'newArrival') {
+          products.sort((a, b) => b.created - a.created);
         }
 
-        // Filter out products that are not listed
-        listedProducts = products.filter(product => {
-            return product.category && product.category.isListed;
-        });
-
+        const listedProducts = products.filter(product => product.category && product.category.isListed);
         const categories = await Category.find();
+        const cart = await Cart.findOne({ userId: req.session.userID });
+        const cartItemCount = cart ? cart.items.length : 0;
+
+        res.render("user/shop", {
+            title: "Product Page",
+            products: listedProducts,
+            selectedCategory: category,
+            categories: categories,
+            user: req.session.user,
+            count: cartItemCount,
+            sort: sort
+        });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).send("Error fetching products: " + error.message);
+    }
+}
+
+
+
+  //Product Details
+
+  const productDetails = async (req, res) => {
+    try {
+        const proid = req.params.id; 
+        const product = await Product.findById(proid).populate("category");
+        if (!product) {
+            console.log("Product not found");
+            return res.redirect("/");
+        }
 
         // Find the cart document for the user
         const cart = await Cart.findOne({ userId: req.session.userID });
@@ -431,48 +463,25 @@
             cartItemCount = cart.items.length; // Get the count of items in the cart
         }
 
-        res.render("user/shop", {
-            title: "Product Page",
-            products: listedProducts,
-            selectedCategory: selectedCategory,
-            categories: categories,
-            user: req.session.user,
+        // Fetch new arrivals (products created close to the current product's creation date)
+        const newArrivals = await Product.find({
+            _id: { $ne: proid }, // Exclude the current product
+            created: { $gte: product.created - 24 * 60 * 60 * 1000 }, // Products created within 24 hours of the current product
+            // Adjust the time interval as needed
+        }).limit(6); // Limit the number of new arrivals
+
+        res.render("user/product-detail", { 
+            product: product,
             count: cartItemCount,
-            sort: sort // Pass the sort variable
+            user: req.session.userID,
+            newArrivals: newArrivals
         });
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        res.status(500).send("Error fetching products: " + error.message); // Provide more specific error message
-    }
-}
-
-
-
-
-  //Product Details
-
-  const productDetails = async (req, res) => {
-    try {
-      const proid = req.params.id; 
-      const product = await Product.findById(proid).populate("category");
-      if (!product) {
-        console.log("Product not found");
-        return res.redirect("/");
-      }
-
-      // Find the cart document for the user
-   const cart = await Cart.findOne({ userId: req.session.userID });
-   let cartItemCount = 0;
-   if (cart) {
-       cartItemCount = cart.items.length; // Get the count of items in the cart
-   }
-
-      res.render("user/product-detail", { product: product,count :cartItemCount, user :req.session.userID });
     } catch (err) {
-      console.log(err.message);
-      res.status(500).send("Internal Server Error");
+        console.log(err.message);
+        res.status(500).send("Internal Server Error");
     }
-  };
+};
+
 
 
   //User Profile
@@ -1058,6 +1067,75 @@ const ordersProfilePage = async (req, res) => {
     }
   };
 
+  const downloadInvoice = async (req, res) => {
+    try {
+      const orderId = req.params.orderId;
+      const order = await Order.findById(orderId);
+      
+      if (!order) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+      
+      const productsData = await Promise.all(order.items.map(async item => {
+        const product = await Product.findById(item.product);
+        if (!product) {
+          throw new Error(`Product not found for ID: ${item.product}`);
+        }
+        return {
+          "quantity": item.quantity,
+          "description": product.name,
+          "tax": 0,
+          "price": product.price 
+        };
+      }));
+      
+      const data = {
+        "currency": "INR",
+        "taxNotation": "vat",
+        "marginTop": 25,
+        "marginRight": 25,
+        "marginLeft": 25,
+        "marginBottom": 25,
+        "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png",
+        "sender": {
+          "company": "Football Arena",
+          "address": "Maradu Kochi",
+          "zip": "680013",
+          "city": "Kerala",
+          "country": "India"
+        },
+        "client": {
+          "company": order.billingDetails.name,
+          "address": `${order.billingDetails.address1}, ${order.billingDetails.address2}`,
+          "zip": order.billingDetails.postalCode,
+          "city": order.billingDetails.city,
+          "country": order.billingDetails.country
+        },
+        "invoiceNumber": order.trackingId,
+        "invoiceDate": order.orderDate.toISOString(),
+        "products": productsData,
+        "total": order.totalPrice+100, 
+        "bottomNotice": `Total: ${order.totalPrice} INR`,
+      };
+      
+      const result = await easyinvoice.createInvoice(data);
+      
+      const invoicesDir = path.join(__dirname, '..', 'invoices');
+      if (!fs.existsSync(invoicesDir)) {
+        fs.mkdirSync(invoicesDir);
+      }
+      
+      const filePath = path.join(invoicesDir, `invoice_${orderId}.pdf`);
+      fs.writeFileSync(filePath, result.pdf, 'base64');
+      
+      // Send the file as a response
+      res.download(filePath, `invoice_${orderId}.pdf`);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to generate invoice' });
+    }
+  }
+
 
 
 const orderPage = async (req, res) => {
@@ -1232,6 +1310,7 @@ const userWallet = async (req, res) => {
     applyCoupon,
     cancelCoupon,
     placeOrder,
+    downloadInvoice,
     ordersProfilePage,
     trackOrderPage,
     orderPage,

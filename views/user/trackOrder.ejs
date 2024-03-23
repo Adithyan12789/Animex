@@ -178,7 +178,7 @@ p{
                     <div class="progress" style="height: 2rem;">
                         <% if (order.orderStatus === "Cancelled") { %>
                             <div id="cancelledBar" class="progress-bar cancelled" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Cancelled</div>
-                        <% }else if (order.orderStatus === "Return") { %>
+                        <% } else if (order.orderStatus === "Return") { %>
                             <div id="returnBar" class="progress-bar return" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Return</div>
                         <% } else if (order.orderStatus === "Pending") { %>
                             <div id="processingBar" class="progress-bar pending" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Processing Order</div>
@@ -194,8 +194,9 @@ p{
                             <div id="deliveredBar" class="progress-bar delivered" role="progressbar" style="width: 34%;" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">Delivered</div>
                         <% } %>
                     </div>
-                </div>                
+                </div>             
             </div>
+        </div>        
             
             <br>
             <br>
@@ -297,7 +298,13 @@ p{
                                             <div class="grand-total cart__total text-center">
                                                 <p id="subtotal">Total Price: ₹<%= order.totalPrice %></p>
                                             </div>
+                                            
                                         </div>
+                                    </div>
+                                    <div class="col-md-10" style="text-align: center; margin: 0px 10px 60px;">
+                                        <% if (order.paymentStatus == "Paid") { %>
+                                            <a href="/downloadinvoice/<%= order.id %>" class="btn btn-md btn-primary">Download Invoice</a>
+                                        <% } %>   
                                     </div>
                         </div>
 						</div>

@@ -79,6 +79,9 @@ const generateReport = async (req, res) => {
 }
 
 
+
+
+
 const searchProduct = async (req, res) => {
   const perPage = 4; 
   const page = req.query.page || 1;
@@ -125,32 +128,7 @@ const logoutadmin = (req, res) => {
   }
 };
 
-const AdminHomePage = async (req, res) => {
-  try {
-    const ordersCount = await Order.countDocuments({});
-    const customers = await User.countDocuments({});
-    const productsCount = await Product.countDocuments({})
 
-    
-    const Revenue = await Order.aggregate([
-        {
-            $group: {
-                _id: null,
-                totalAmount: { $sum: "$totalPrice" }
-            }
-        }
-    ]);
-
-    // Extracting total revenue from the aggregation result
-    const totalRevenue = Revenue.length > 0 ? Revenue[0].totalAmount : 0;
-
-    res.render('admin/adminHome', { ordersCount, totalRevenue,customers,productsCount });
-} catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
-    }
-;
-};
 
 const adminCategoriesRoute = (req, res) => {
   res.render('adminCategories');
@@ -161,7 +139,6 @@ module.exports = {
   loadadminHome,
   generateReport,
   logoutadmin,
-  AdminHomePage,
   adminCategoriesRoute,
   searchProduct
 };

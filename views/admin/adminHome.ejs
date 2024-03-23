@@ -128,7 +128,7 @@
                             <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                             <div class="text">
                                 <h6 class="mb-1 card-title">Revenue</h6>
-                                <span>₹<%= totalRevenue %></span>
+                                <span>₹<%= revenue %></span>
                                 <span class="text-sm">
                                     Shipping fees are not included
                                 </span>
@@ -141,7 +141,7 @@
                         <article class="icontext">
                             <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
                             <div class="text">
-                                <h6 class="mb-1 card-title">Orders</h6> <span><%= ordersCount %></span>
+                                <h6 class="mb-1 card-title">Orders</h6> <span><%= orders.length %></span>
                                 <span class="text-sm">
                                     Excluding orders in transit
                                 </span>
@@ -154,7 +154,7 @@
                         <article class="icontext">
                             <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
                             <div class="text">
-                                <h6 class="mb-1 card-title">Products</h6> <span><%= productsCount %></span>
+                                <h6 class="mb-1 card-title">Products</h6> <span><%= products.length %></span>
                                 <span class="text-sm">
                                     In 19 Categories
                                 </span>
@@ -167,7 +167,7 @@
                         <article class="icontext">
                             <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
                             <div class="text">
-                                <h6 class="mb-1 card-title">Users</h6> <span><%= customers %></span>
+                                <h6 class="mb-1 card-title">Users</h6> <span><%= users.length %></span>
                                 <span class="text-sm">
                                     Based in your local time.
                                 </span>
@@ -176,6 +176,39 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                  <div class="card mb-4">
+                    <article class="card-body">
+                      <h5 class="card-title">Sale statistics</h5>
+                      <div>
+                        <a href="#" class="mx-2" id="monthGraphBtn">
+                          <i class="text-muted material-icons md-show_chart"></i>Month Graph
+                        </a>
+                        <a href="#" class="" id="yearGraphBtn">
+                          <i class="text-muted material-icons md-show_chart"></i>Year Graph
+                        </a>
+                      </div>
+                      <canvas id="lineChart" height="120px"></canvas>
+                    </article>
+                  </div>
+                  
+                </div>
+              
+              
+              <div class="col-lg-4">
+                <div class="container">
+                    <div class="card mb-4">
+                        <article class="card-body">
+                            <h5 class="card-title">Order Statistics</h5>
+                            <canvas id="orderChart" height="120px"></canvas>
+        
+                        </article>
+                    </div>
+                </div>
+              </div>
+          </div>
 
             
                 
@@ -335,7 +368,230 @@ function downloadExcel() {
   XLSX.writeFile(wb, 'report.xlsx');
 }
 
+
     </script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const initialData = {
+        pending: 0,
+        shipped: 0,
+        delivered: 0,
+        cancelled: 0,
+      };
+
+      
+      const orderCtx = document.getElementById('orderChart').getContext('2d');
+      const orderChart = new Chart(orderCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Pending', 'Shipped',  'Delivered', 'Cancelled'],
+          datasets: [{
+            data: Object.values(initialData),
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.7)',
+              'rgba(255, 205, 86, 0.7)',
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(75, 192, 192, 0.7)',
+              'rgba(255, 64, 64, 0.7)',
+            ],
+          }],
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Order Statistics by Status',
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: 'orange',
+              },
+            },
+          },
+        },
+      });
+
+      function updateChartData(data) {
+        orderChart.data.datasets[0].data = Object.values(data);
+        orderChart.update();
+      }
+
+      function fetchDataAndUpdateChart() {
+        fetch('/fetchdashboard')
+          .then(response => response.json())
+          .then(data => {
+            updateChartData(data.ordersPie);
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+      }
+
+      fetchDataAndUpdateChart();
+
+      function updateGraphWithMonthlyData() {
+        const existingChart = Chart.getChart('lineChart');
+  if (existingChart) {
+      existingChart.destroy();
+  }
+    const months = '<%- JSON.stringify(ordersGraph.labels) %>';
+    const counts = '<%- JSON.stringify(ordersGraph.count) %>';
+
+
+    const parsedMonths = JSON.parse(months);
+    const parsedCounts = JSON.parse(counts);
+
+
+    const countsWithNull = new Array(parsedMonths.length).fill(null);
+
+
+    parsedMonths.forEach((month, index) => {
+      const monthIndex = parsedMonths.indexOf(month);
+      if (monthIndex !== -1) {
+        countsWithNull[monthIndex] = parsedCounts[index];
+      }
+    });
+
+    const lineCtx = document.getElementById('lineChart').getContext('2d');
+    const lineChart = new Chart(lineCtx, {
+      type: 'line',
+      data: {
+        labels: parsedMonths,
+        datasets: [{
+          label: 'Orders by Month',
+          data: countsWithNull,
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          fill: true,
+        }],
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Orders by Month',
+        },
+        scales: {
+          x: {
+            type: 'category', 
+            position: 'bottom',
+          },
+          y: {
+            type: 'linear', 
+            ticks: {
+              stepSize: 1, 
+              beginAtZero: true, 
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: 'orange', 
+            },
+          },
+        },
+      },
+    });
+  }
+    function updateYearGraph() {
+      const existingChart = Chart.getChart('lineChart');
+  if (existingChart) {
+      existingChart.destroy();
+  }
+      const years = '<%- JSON.stringify(ordersYearGraph.labels) %>';
+    const counts = '<%- JSON.stringify(ordersYearGraph.count) %>';
+
+
+    const parsedYears = JSON.parse(years);
+    const parsedCounts = JSON.parse(counts);
+    const minYear = Math.min(...parsedYears);
+    const maxYear = Math.max(...parsedYears);
+
+  const yearsToShow = [];
+  for (let i = minYear-3; i <= maxYear+3; i++) {
+  yearsToShow.push(i);
+}
+console.log('yearsToShow:', yearsToShow);
+    const countsWithNull = new Array(yearsToShow.length).fill(null);
+
+    
+    parsedYears.forEach((year, index) => {
+  const yearIndex = yearsToShow.indexOf(parseInt(year));
+  if (yearIndex !== -1) {
+      countsWithNull[yearIndex] = parsedCounts[index];
+  }
+});
+console.log('countsWithNull:', countsWithNull);
+
+    const lineCtx = document.getElementById('lineChart').getContext('2d');
+    const lineChart = new Chart(lineCtx, {
+      type: 'line',
+      data: {
+        labels: yearsToShow,
+        datasets: [{
+          label: 'Orders by Years',
+          data: countsWithNull,
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          fill: true,
+        }],
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Orders by Years',
+        },
+        scales: {
+          x: {
+            type: 'category', 
+            position: 'bottom',
+          },
+          y: {
+                  type: 'linear',
+                  beginAtZero: true, 
+                  ticks: {
+                      stepSize: 1,
+                  },
+              },
+          },
+        plugins: {
+          legend: {
+            labels: {
+              color: 'orange', 
+            },
+          },
+        },
+      },
+    });
+  }
+
+  const monthGraphBtn = document.getElementById('monthGraphBtn');
+  const yearGraphBtn = document.getElementById('yearGraphBtn');
+
+  monthGraphBtn.addEventListener('click', function () {
+    
+    updateGraphWithMonthlyData();
+    
+    monthGraphBtn.classList.add('active');
+    yearGraphBtn.classList.remove('active');
+  });
+
+  yearGraphBtn.addEventListener('click', function () {
+    
+    updateYearGraph();
+
+    
+    yearGraphBtn.classList.add('active');
+    monthGraphBtn.classList.remove('active');
+  });
+
+  updateGraphWithMonthlyData();
+})   
+  </script>
+
+    
 
 <!-- Bootstrap JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

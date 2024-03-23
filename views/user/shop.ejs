@@ -130,7 +130,7 @@
                             <% if(user) { %>
 								<li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
 							<% } else { %>
-								<li class="login"><a href="userlogin"><i class="login-Page"></i> Login</a></li>
+								<li class="login"><a href="/userlogin"><i class="login-Page"></i> Login</a></li>
 							<% } %>
                             <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
                         </ul>
@@ -212,6 +212,7 @@
                                     <li><a href="/priceFilter/<%= categories._id %>?sort=lowToHigh" class="<%= sort === 'lowToHigh' ? 'actives' : '' %>">Price: low to high</a></li>
                                     <li><a href="/priceFilter/<%= categories._id %>?sort=highToLow" class="<%= sort === 'highToLow' ? 'actives' : '' %>">Price: high to low</a></li>
                                     <li><a href="/bestSeller/<%= categories._id %>?sort=bestSell" class="<%= sort === 'bestSell' ? 'actives' : '' %>">Best Sellers</a></li>
+                                    <li><a href="/newArrival/<%= categories._id %>?sort=newArrival" class="<%= sort === 'newArrival' ? 'actives' : '' %>">New Arrival</a></li>
                                     <li><a href="/aToZFilter/<%= categories._id %>?sort=aToZ" class="<%= sort === 'aToZ' ? 'actives' : '' %>">aA - zZ</a></li>
                                     <li><a href="/aToZFilter/<%= categories._id %>?sort=zToA" class="<%= sort === 'zToA' ? 'actives' : '' %>">zZ - aA</a></li>
                                 </ul>                                                                                                                     
@@ -227,7 +228,7 @@
                                     <div class="product-item">
                                         <a href="/product-details/<%= item._id %>">
                                             <div class="prod-img">
-                                                <img src="/static/uploads/<%= item.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+                                                <img src="/static/uploads/<%= item.image[0] %>" class="img-fluid" style="height: 205px;" alt="Free html5 bootstrap 4 template">
                                             </div>
                                         </a>
                                         <h6><a href="#"> <%= item.name %> </a></h6>

@@ -50,6 +50,7 @@ router.get("/shop/:category", userController.shopPage); // Shop page with catego
 router.get('/priceFilter/:category?', userController.shopPage);
 router.get('/aToZFilter/:category?', userController.shopPage);
 router.get('/bestSeller/:category?', userController.shopPage);
+router.get('/newArrival/:category?', userController.shopPage);
 router.get("/product-details/:id",  userController.productDetails); // Product details page
 
 // // Pagination Route
@@ -74,6 +75,7 @@ router.get('/orderProfile', user, userController.ordersProfilePage); // Orders p
 router.get('/trackOrder/:id',user, userController.trackOrderPage); // Orders page
 router.get("/orderPage",user, userController.orderPage)
 router.post('/order', user,userController.placeOrder);
+router.get('/downloadinvoice/:orderId',user,userController.downloadInvoice)
 router.get('/returnOrder/:orderId', user, orderController.returnOrder); // Add Address page
 router.get('/cancelOrder/:orderId', user, orderController.cancelOrder); // Add Address page
 
