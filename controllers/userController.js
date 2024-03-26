@@ -14,6 +14,8 @@
   const Order = require('../models/order');
   const Wallet = require('../models/wallet');
   const Coupon = require('../models/coupon');
+const ejs = require("ejs");
+const pdf = require("html-pdf");
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -791,7 +793,7 @@ const checkoutPage = async (req, res) => {
         return res.status(404).json({ message: 'Order not found' });
       }
       userCart = order.items;
-      totalPrice = order.totalPrice + 69; // Assuming additional shipping cost
+      totalPrice = order.totalPrice; // Assuming additional shipping cost
     } else {
       const cart = await Cart.findOne({ userId }).populate('items.product').exec();
       if (!cart) {
@@ -890,13 +892,35 @@ const cancelCoupon = async (req, res) => {
 
 const placeOrder = async (req, res) => {
     try {
+
+      const { orderId, addressID, paymentMethod, paymentStatus, subtotal, couponCode, totalPrice } = req.body; 
+
+      if (orderId) {
+        const orderToUpdate = await Order.findById(orderId);
+
+        if (!orderToUpdate) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+
+        orderToUpdate.totalPrice = subtotal;
+        orderToUpdate.paymentMethod = paymentMethod;
+        orderToUpdate.paymentStatus = paymentStatus;
+        orderToUpdate.couponCode = couponCode;
+
+        if (paymentStatus === "Paid" || paymentStatus === "Pending") {
+            await orderToUpdate.save();
+            return res.status(200).render("user/orderPlaced", { title: "Thank You", orderId });
+        } else if (paymentStatus === "Failed") {
+            await orderToUpdate.save();
+            return res.status(200).redirect("/orderProfile");
+        }
+    }
+
         const userId = req.session.userID;
         const addressId = req.body.addressId;
         const payment = req.body.paymentMethod
         const status = req.body.paymentStatus
         const discount = req.body.discount;
-
-        console.log("+++", status)
 
 
 
@@ -908,13 +932,13 @@ const placeOrder = async (req, res) => {
         let userOrder = await Order.findOne({ userId });
 
         const userCart = await Cart.findOne({ userId }).populate('items.product');
-        let totalPrice = 0;
+        let totalPrices = 0;
         for (const item of userCart.items) {
-            totalPrice += item.product.price * item.quantity;
+          totalPrices += item.product.price * item.quantity;
         }
 
         if(userCart){
-          totalPrice = userCart.totalPrice
+          totalPrices = userCart.totalPrice
         }
 
         if (!userOrder) {
@@ -922,8 +946,8 @@ const placeOrder = async (req, res) => {
         }
 
 
-        console.log("adisdfgsdfsdf",totalPrice)
-        userOrder.totalPrice = totalPrice;
+        console.log("adisdfgsdfsdf",totalPrices)
+        userOrder.totalPrice = totalPrices;
 
         const user = await User.findById(userId);
         const address = await Address.findOne({ userId });
@@ -941,7 +965,7 @@ const placeOrder = async (req, res) => {
 
             const order = new Order({
                 userId,
-                totalPrice: totalPrice + 69 ,
+                totalPrice,
                 billingDetails: {
                     name: user.name,
                     email: user.email,
@@ -1009,9 +1033,57 @@ const placeOrder = async (req, res) => {
 
 
 const ordersProfilePage = async (req, res) => {
+  const perPage = 6; 
+  const page = req.query.page || 1;
   const userId = req.session.userID;
 
   try {
+
+    // const products = await Product.find().populate("category")
+
+      // Fetch orders associated with the user
+      const orders = await Order.find({ userId }).sort({ orderDate: -1 }).skip(perPage * page - perPage)
+      .limit(perPage)
+      .exec();
+
+      const totalProducts = await Order.countDocuments();
+
+            const totalPages = Math.ceil(totalProducts / perPage);
+
+      // Find the cart document for the user
+      const cart = await Cart.findOne({ userId: req.session.userID });
+      let cartItemCount = 0;
+      if (cart) {
+          cartItemCount = cart.items.length; // Get the count of items in the cart
+      }
+
+      res.render("user/orders", { orders, count: cartItemCount,
+        totalPages: totalPages,
+        currentPage: page,
+        perPages: perPage
+       });
+  } catch (error) {
+      console.error("Error fetching orders:", error);
+      res.status(500).send("Error fetching orders");
+  }
+};
+
+const ordersPagination = async (req, res) => {
+  const perPage = 6; 
+  const page = req.query.page || 1;
+  const userId = req.session.userID;
+
+  try {
+
+    const products = await Product.find().populate("category")
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+            .exec();
+
+            const totalProducts = await Product.countDocuments();
+
+            const totalPages = Math.ceil(totalProducts / perPage);
+
       // Fetch orders associated with the user
       const orders = await Order.find({ userId }).sort({ orderDate: -1 });
 
@@ -1022,7 +1094,11 @@ const ordersProfilePage = async (req, res) => {
           cartItemCount = cart.items.length; // Get the count of items in the cart
       }
 
-      res.render("user/orders", { orders, count: cartItemCount });
+      res.render("user/orders", { orders, count: cartItemCount,products: products,
+        totalPages: totalPages,
+        currentPage: page,
+        perPages: perPage
+       });
   } catch (error) {
       console.error("Error fetching orders:", error);
       res.status(500).send("Error fetching orders");
@@ -1066,74 +1142,51 @@ const ordersProfilePage = async (req, res) => {
     }
   };
 
-  const downloadInvoice = async (req, res) => {
-    try {
-      const orderId = req.params.orderId;
-      const order = await Order.findById(orderId);
-      
-      if (!order) {
-        return res.status(404).json({ error: 'Order not found' });
-      }
-      
-      const productsData = await Promise.all(order.items.map(async item => {
-        const product = await Product.findById(item.product);
-        if (!product) {
-          throw new Error(`Product not found for ID: ${item.product}`);
+  
+  const getOrderInvoice = async(req,res) => {
+    try{
+
+        const categoryData = await Category.find({status:'active'})
+        const orderId = req.params.orderId;
+        const userId = req.session.userID;
+        const order = await Order.findById(orderId).populate('items.product')
+        const user = await User.findById(userId)
+
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'Order not found' });
         }
-        return {
-          "quantity": item.quantity,
-          "description": product.name,
-          "tax": 0,
-          "price": product.price 
-        };
-      }));
-      
-      const data = {
-        "currency": "INR",
-        "taxNotation": "vat",
-        "marginTop": 25,
-        "marginRight": 25,
-        "marginLeft": 25,
-        "marginBottom": 25,
-        "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png",
-        "sender": {
-          "company": "Football Arena",
-          "address": "Maradu Kochi",
-          "zip": "680013",
-          "city": "Kerala",
-          "country": "India"
-        },
-        "client": {
-          "company": order.billingDetails.name,
-          "address": `${order.billingDetails.address1}, ${order.billingDetails.address2}`,
-          "zip": order.billingDetails.postalCode,
-          "city": order.billingDetails.city,
-          "country": order.billingDetails.country
-        },
-        "invoiceNumber": order.trackingId,
-        "invoiceDate": order.orderDate.toISOString(),
-        "products": productsData,
-        "total": order.totalPrice+100, 
-        "bottomNotice": `Total: ${order.totalPrice} INR`,
-      };
-      
-      const result = await easyinvoice.createInvoice(data);
-      
-      const invoicesDir = path.join(__dirname, '..', 'invoices');
-      if (!fs.existsSync(invoicesDir)) {
-        fs.mkdirSync(invoicesDir);
-      }
-      
-      const filePath = path.join(invoicesDir, `invoice_${orderId}.pdf`);
-      fs.writeFileSync(filePath, result.pdf, 'base64');
-      
-      // Send the file as a response
-      res.download(filePath, `invoice_${orderId}.pdf`);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Failed to generate invoice' });
+
+        const invoiceTemplatePath = path.join(__dirname,'..','views', 'user','invoice.ejs');
+
+        const invoiceHtml = await ejs.renderFile(invoiceTemplatePath,{categoryData,order,user});
+
+        const options = {
+            format: 'A4',
+            orientation:'portrait',
+            border:'10mm'
+        }
+
+        pdf.create(invoiceHtml, options).toStream((err, stream) => {
+            if(err) {
+                console.log('Error generating PDF:',err);
+                return res.status(500).json({ success: false, message: 'Error generating PDF' });
+            }
+
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename="invoice.pdf"');
+
+            stream.pipe(res);
+        })
+        
+
+    }catch(error){
+        console.log(error.message);
+        res.status(500).json({success:false,message:'Internal server error'})
     }
-  }
+}
+
+
+
 
 
 
@@ -1309,8 +1362,9 @@ const userWallet = async (req, res) => {
     applyCoupon,
     cancelCoupon,
     placeOrder,
-    downloadInvoice,
+    getOrderInvoice,
     ordersProfilePage,
+    ordersPagination,
     trackOrderPage,
     orderPage,
 

@@ -10,7 +10,7 @@ const Wallet = require("../models/wallet");
         try {
             const wallet = await Wallet.findOneAndUpdate({ userId }, {
                 $inc: { balance: amount },
-                $push: { transactionHistory: { amount, type: 'deposit' } }
+                $push: { transactionHistory: { amount, type: 'deposit', description: "Amount added through online" } }
             }, { new: true });
 
             console.log("yhtjtyjtyj",wallet)
@@ -29,7 +29,7 @@ const Wallet = require("../models/wallet");
         try {
             const wallet = await Wallet.findOneAndUpdate({ userId }, {
                 $inc: { balance: -amount },
-                $push: { transactionHistory: { amount, type: 'withdraw' } }
+                $push: { transactionHistory: { amount, type: 'withdraw', description: " Wallet withdrawal initiated through purchase"  } }
             }, { new: true });
 
             console.log("erfgerewfw", wallet)

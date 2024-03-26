@@ -23,7 +23,10 @@ const walletSchema = new mongoose.Schema({
             type: Date,
             default: Date.now,
             required: true
-        }
+        },
+        description: {
+            type: String,
+        },
     }]
 });
 

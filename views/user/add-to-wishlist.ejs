@@ -218,7 +218,7 @@
 				<div class="row row-pb-lg">
 					<div class="col-md-12">
 						<h2>Your Wishlist</h2>
-						<% if (wishlist) { %>
+						<% if (wishlist && wishlist.totalPrice > 0) { %>
 						<table class="table cart-table">
 							<thead>
 								<tr>

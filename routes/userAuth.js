@@ -72,14 +72,13 @@ router.post('/cancel-coupon', userController.cancelCoupon);
 
 //Order Route
 router.get('/orderProfile', user, userController.ordersProfilePage); // Orders page
+router.get("/orderProfile/:page",user, userController.ordersPagination);
 router.get('/trackOrder/:id',user, userController.trackOrderPage); // Orders page
 router.get("/orderPage",user, userController.orderPage)
 router.post('/order', user,userController.placeOrder);
-router.get('/downloadinvoice/:orderId',user,userController.downloadInvoice)
+router.get('/downloadinvoice/:orderId',user,userController.getOrderInvoice)
 router.get('/returnOrder/:orderId', user, orderController.returnOrder); // Add Address page
 router.get('/cancelOrder/:orderId', user, orderController.cancelOrder); // Add Address page
-router.get('/retryOrder/:orderId', user, orderController.retryOrder); // Add Address page
-
 
 //Wishlist Route
 router.get("/wishlist", user, userController.wishlist)

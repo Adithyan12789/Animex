@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <link rel="stylesheet" href="/static/assets/css/main.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .total {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .section h3{
+            text-align: center;
+        }
+        .invoice-header{
+            position: relative;
+        }
+        .invoice-header h3{
+           text-align: center;
+           background-color: rgba(2, 81, 2, 0.68);
+           color: white;
+           padding: 20px;
+           margin-bottom: 20px;
+        }
+        .order-date {
+           position: absolute;
+           top: 20;
+           right: 0;
+        }
+        .invoice-header h3 {
+             margin-top: 0; 
+        }
+        footer{
+           margin-top: 40px;
+           text-align: center;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- <header>
+            <div class="logo logo-width-1" >
+                <a href="/home"><h3>BOOKHUB</h3></a>
+            </div>
+            <p>BOOKHUB<br><br>
+            +91 9048524826+91 9048524826<br>
+            kiransnaik56@gmail.com<br>
+            visit us @www.bookhub.com</p>
+        </header> -->
+        
+        <section class="invoice-header">
+            <h3>ORDER INVOICE</h3>
+            <p>Order Id: <%= order.trackingId  %></p>
+            <p class="order-date"> Date: <%= order.orderDate.toDateString()  %></p>
+            <address>
+                <p>Bill To:<br>
+                Customer Name: <%= user.name %><br>
+                Customer Address:<br>
+                <%= order.billingDetails.address1  %>,<%= order.billingDetails.address2 %>,<%= order.billingDetails.city  %> , <%= order.billingDetails.state  %><br>
+                PINCODE:<%= order.billingDetails.postalCode %> <br>
+                Email Address: <%= user.email  %><br>
+                Phone Number: <%= user.mobile  %> 
+            </address>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>              
+                        <th>Discount Reduction</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let totalAmount = 0 %>
+                    <% let couponAmount = 0 %>
+                    <% let actualPrice = 0 %>
+                    <% order.items.forEach((item,index) => { %>
+                        <tr>
+                            <td><%= item.product.name  %></td>
+                            <td>x<%= item.quantity %></td>
+                            <% actualPrice = item.product.price * item.quantity %>
+                            <td><%= actualPrice  %></td>             
+                            <td>69</td>
+                            <%= totalAmount = actualPrice + 69  %>
+                            <td><%= totalAmount %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <div class="total">
+                <p>Subtotal: Rs. <%= totalAmount  %>.00/-</p>
+                <% if (order.discount > 0) { %>
+                    <% couponAmount = order.discount %>
+                    <p>Coupon Applied: <%= couponAmount  %></p>
+                <% }else{ %>
+                    <p>Coupon Applied: No coupon applied</p>
+                <% } %>
+                <p>Total: Rs. <%= totalAmount + couponAmount %>.00/-</p>
+            </div>
+        </section>
+        <footer>
+            <p class="font-weight-bold mb-0" style="color: #28a745;">Thanks for shopping with us! |<span>+91 8891768287 | adithiruthiparambil12@gmail.com</span><br>
+                <span style="color: #28a745;">TEAM ANIMEX</span>
+            </p>
+            <hr class="new3">
+        </footer>        
+    </div>
+</body>
+</html>

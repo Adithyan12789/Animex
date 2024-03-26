@@ -32,6 +32,11 @@ const orderSchema = new mongoose.Schema({
         }
     ],
 
+    retryAttempt: {
+        type: Number,
+        default: 0 // Initial value is 0
+    },
+
     totalPrice: {
         type: Number, 
         default: 0, 
