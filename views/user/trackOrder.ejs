@@ -292,7 +292,7 @@ p{
                                                 <% }else{ %>
                                                     <p><span>Discount:</span> <span>₹0</span></p>
                                                 <% } %>
-                                                <p><span>Delivery Fee:</span> <span>₹69</span></p>
+                                                <p><span>Delivery Fee:</span> <span>₹55</span></p>
                                             </div>
                                             <hr>
                                             <div class="grand-total cart__total text-center">
@@ -302,7 +302,7 @@ p{
                                         </div>
                                     </div>
                                     <div class="col-md-10" style="text-align: center; margin: 0px 10px 60px;">
-                                        <% if (order.paymentStatus == "Paid") { %>
+                                        <% if (order.paymentStatus == "Paid" && order.orderStatus == "Delivered") { %>
                                             <a href="/downloadinvoice/<%= order.id %>" class="btn btn-md btn-primary">Download Invoice</a>
                                         <% } %>   
                                     </div>

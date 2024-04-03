@@ -306,7 +306,7 @@
                         <h2>Transaction History</h2>
                         <div class="transaction-list-wrapper">
                           <ul class="profile-list" id="transaction-list">
-                            <% wallet.transactionHistory.reverse().forEach(transaction => { %>
+                            <% wallet.transactionHistory.forEach(transaction => { %>
                                 <li class="profile-item">
                                     <div class="transaction-details">
                                         <div class="transaction-description" style="color: <%= transaction.type === 'deposit' ? 'green' : 'red' %>;">

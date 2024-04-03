@@ -53,9 +53,10 @@ router.get('/bestSeller/:category?', userController.shopPage);
 router.get('/newArrival/:category?', userController.shopPage);
 router.get("/product-details/:id",  userController.productDetails); // Product details page
 
-// // Pagination Route
-// router.get('/shop/:page',  userController.getShopPagination); // Shop pagination
-// router.get('/shop/:category/:page', userController.getShopPagination); // Shop pagination with category filtering
+// Pagination Route
+router.get('/shop/:page',  userController.getShopPagination); // Shop pagination
+router.get('/shop/:category/:page', userController.getShopPagination); // Shop pagination with category filtering
+
 
 //Cart Route
 router.get('/cart', user, userController.cart);

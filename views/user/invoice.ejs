@@ -93,37 +93,36 @@
                         <th>Product Name</th>
                         <th>Quantity</th>
                         <th>Unit Price</th>              
-                        <th>Discount Reduction</th>
+                        <th>Delivery charge</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% let totalAmount = 0 %>
-                    <% let couponAmount = 0 %>
-                    <% let actualPrice = 0 %>
-                    <% order.items.forEach((item,index) => { %>
+                    <% let couponAmount = order.discount || 0 %>
+                    <% order.items.forEach((item, index) => { %>
+                        <% const actualPrice = item.product.price * item.quantity %>
+                        <% const totalPrice = actualPrice + 69 %> <!-- Discount reduction -->
+                        <% totalAmount += totalPrice %>
                         <tr>
-                            <td><%= item.product.name  %></td>
+                            <td><%= item.product.name %></td>
                             <td>x<%= item.quantity %></td>
-                            <% actualPrice = item.product.price * item.quantity %>
-                            <td><%= actualPrice  %></td>             
+                            <td><%= actualPrice %></td>
                             <td>69</td>
-                            <%= totalAmount = actualPrice + 69  %>
-                            <td><%= totalAmount %></td>
+                            <td><%= totalPrice %></td>
                         </tr>
                     <% }) %>
                 </tbody>
             </table>
             <div class="total">
-                <p>Subtotal: Rs. <%= totalAmount  %>.00/-</p>
-                <% if (order.discount > 0) { %>
-                    <% couponAmount = order.discount %>
-                    <p>Coupon Applied: <%= couponAmount  %></p>
-                <% }else{ %>
+                <p>Subtotal: Rs. <%= totalAmount.toFixed(2) %> /-</p>
+                <% if (couponAmount > 0) { %>
+                    <p>Coupon Applied: Rs. <%= couponAmount.toFixed(2) %> /-</p>
+                <% } else { %>
                     <p>Coupon Applied: No coupon applied</p>
                 <% } %>
-                <p>Total: Rs. <%= totalAmount + couponAmount %>.00/-</p>
-            </div>
+                <p>Total: Rs. <%= (totalAmount - couponAmount).toFixed(2) %> /-</p>
+            </div>            
         </section>
         <footer>
             <p class="font-weight-bold mb-0" style="color: #28a745;">Thanks for shopping with us! |<span>+91 8891768287 | adithiruthiparambil12@gmail.com</span><br>

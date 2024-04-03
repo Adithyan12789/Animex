@@ -309,13 +309,23 @@
 							<div class="col-lg-4 text-center">
 								<div class="total">
 									<div class="sub">
-										<p class="cart__total" >Subtotal:<span id="totalPrice"> ₹<%= cart.totalPrice %></span></p>
-										<p><span>Delivery Fee:</span> <span id="deliveryFee">₹69</span></p>
+										<p class="cart__total" >Subtotal:
+											<span id="totalPrice"> ₹
+												<% cart.items.forEach(row => { %>
+													<%= row.product.price %>
+										        <% }) %>
+									        </span>
+								        </p>
+										<p><span>Delivery Fee:</span> <span id="deliveryFee">₹55</span></p>
 									</div>
 									<hr>
+									
 									<div class="grand-total cart__total text-center">
-										<p><strong>Total Price:</strong><span id="totalPrice"> ₹<%= cart.totalPrice + 69 %></span></p>
+
+										<p><strong>Total Price:</strong><span id="totalPrice"> ₹<%= cart.totalPrice + 55 %></span></p>
+
 									</div>
+									
 								</div>
 							</div>
 						</div>

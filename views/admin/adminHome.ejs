@@ -18,6 +18,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/static/admin-assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="/static/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
 </head>
 
 <body>
@@ -296,80 +297,119 @@
    
 
     <script>
-       $(document).ready(function () {
-  $('#yearlyReportButton').click(function () {
-    const currentDate = new Date();
-    const yearStart = new Date(currentDate.getFullYear(), 0, 1).toISOString().split('T')[0];
-    const yearEnd = new Date(currentDate.getFullYear(), 11, 31).toISOString().split('T')[0];
-    $('#startDate').val(yearStart);
-    $('#endDate').val(yearEnd);
-  });
-
-  $('#weeklyReportButton').click(function () {
-    const currentDate = new Date();
-    const weekStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay()).toISOString().split('T')[0];
-    const weekEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 6).toISOString().split('T')[0];
-    $('#startDate').val(weekStart);
-    $('#endDate').val(weekEnd);
-  });
-
-  
-
-  $('#createReportButton').click(function () {
-    $.ajax({
-      url: '/generate-report',
-      type: 'POST',
-      data: {
-        startDate: $('#startDate').val(),
-        endDate: $('#endDate').val()
-      },
-      success: function (response) {
-        console.log(response);
-        $('#reportTableBody').empty();
-        response.reportData.forEach((order, index) => {
-          let productsHTML = '';
-          order.products.forEach(product => {
-            productsHTML += `<li>${product.productName} - ${product.quantity} - ${product.price}</li>`;
+      $(document).ready(function () {
+          $('#yearlyReportButton').click(function () {
+              const currentDate = new Date();
+              const yearStart = new Date(currentDate.getFullYear(), 0, 1).toISOString().split('T')[0];
+              const yearEnd = new Date(currentDate.getFullYear(), 11, 31).toISOString().split('T')[0];
+              $('#startDate').val(yearStart);
+              $('#endDate').val(yearEnd);
           });
+  
+          $('#weeklyReportButton').click(function () {
+              const currentDate = new Date();
+              const weekStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay()).toISOString().split('T')[0];
+              const weekEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 6).toISOString().split('T')[0];
+              $('#startDate').val(weekStart);
+              $('#endDate').val(weekEnd);
+          });
+  
+          $('#createReportButton').click(function () {
+              // Call the validateDates() function before proceeding
+              if (!validateDates()) {
+                  return; // If dates are not valid, stop further execution
+              }
+              $.ajax({
+                  url: '/generate-report',
+                  type: 'POST',
+                  data: {
+                      startDate: $('#startDate').val(),
+                      endDate: $('#endDate').val()
+                  },
+                  success: function (response) {
+                      console.log(response);
+                      if (response.reportData.length === 0) {
+                        swal("error", "No orders found within the selected date range.", "error");
+                        return; // Stop further execution if no orders are found
+                      }
 
-          let row = `<tr>
-                                  <td>${index + 1}</td>
-                                  <td>#${order.orderId}</td>
-                                  <td>${new Date(order.date).toLocaleDateString()}</td>
-                                  <td>$${order.totalPrice.toFixed(2)}</td>
-                                  <td>${order.firstName}</td>
-                                  <td>${order.address}</td>
-                                  <td>${order.paymentMethod}</td>
-                                  <td>${order.paymentStatus}</td>
-                                  <td><ul>${productsHTML}</ul></td>
-                              </tr>`;
-          $('#reportTableBody').append(row);
-        });
-        $('#reportContainer').show();
-        $('#downloadButton').show();
-        $('#downloadExcelButton').show();
-      },
-      error: function (xhr, status, error) {
-        console.error(error);
+                      $('#reportTableBody').empty();
+                      response.reportData.forEach((order, index) => {
+                          let productsHTML = '';
+                          order.products.forEach(product => {
+                              productsHTML += `<li>${product.productName} - ${product.quantity} - ${product.price}</li>`;
+                          });
+  
+                          let row = `<tr>
+                                    <td>${index + 1}</td>
+                                    <td>#${order.orderId}</td>
+                                    <td>${new Date(order.date).toLocaleDateString()}</td>
+                                    <td>$${order.totalPrice.toFixed(2)}</td>
+                                    <td>${order.firstName}</td>
+                                    <td>${order.address}</td>
+                                    <td>${order.paymentMethod}</td>
+                                    <td>${order.paymentStatus}</td>
+                                    <td><ul>${productsHTML}</ul></td>
+                                </tr>`;
+                          $('#reportTableBody').append(row);
+                      });
+                      $('#reportContainer').show();
+                      $('#downloadButton').show();
+                      $('#downloadExcelButton').show();
+                  },
+                  error: function (xhr, status, error) {
+                      console.error(error);
+                  }
+              });
+          });
+      });
+  
+      function downloadPdf() {
+          const element = document.getElementById('reportTableBody')
+          console.log(element);
+          html2pdf().from(element).save();
       }
-    });
-  });
-});
+  
+      function downloadExcel() {
+          const element = document.getElementById('reportTableBody');
+          const wb = XLSX.utils.table_to_book(element);
+          XLSX.writeFile(wb, 'report.xlsx');
+      }
+  
+// Function to validate the selected dates and check for order existence
+function validateDates() {
+    var startDate = document.getElementById('startDate').value;
+    var endDate = document.getElementById('endDate').value;
 
-function downloadPdf() {
-  const element = document.getElementById('reportTableBody')
-  console.log(element);
-  html2pdf().from(element).save();
+    if (startDate && endDate) {
+        if (startDate > endDate) {
+            swal("Error!", "End date cannot be before start date", "error");
+            return false;
+        }
+
+        // Check if orders exist within the selected date range
+        // You may need to adjust this part according to your backend API
+        $.ajax({
+            url: '/check-orders-exist',
+            type: 'POST',
+            data: {
+                startDate: startDate,
+                endDate: endDate
+            },
+            async: false, // Make the AJAX request synchronous
+            success: function (response) {
+                if (!response.ordersExist) {
+                    swal("Info", "No orders found.", "info");
+                }
+            }
+        });
+    }
+    return true;
 }
 
-function downloadExcel() {
-  const element = document.getElementById('reportTableBody');
-  const wb = XLSX.utils.table_to_book(element);
-  XLSX.writeFile(wb, 'report.xlsx');
-}
 
-
-    </script>
+  </script>
+  
 
 
 <script>
@@ -591,6 +631,7 @@ console.log('countsWithNull:', countsWithNull);
 })   
   </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     
 
 <!-- Bootstrap JavaScript -->

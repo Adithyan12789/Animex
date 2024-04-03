@@ -245,6 +245,22 @@
                             </div>
                             <% }) %>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="block-27">
+                       <ul>
+                           <li><a href="/shop?page=<%= currentPage - 1 %>"><i class="ion-ios-arrow-back"></i></a></li>
+                          <% for(i = 1 ; i <= totalPages ; i++){ %>
+                            <li class="<%= currentPage == i ? "active": "" %> ">
+                                <a href="/shop?page=<%= i %>"><span><%= i %></span></a>
+                            </li>
+                          <% } %>
+                          <li><a href="/shop?page=<%= currentPage + 1 %>"><i class="ion-ios-arrow-forward"></i></a></li>
+                       </ul>
+                    </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -354,6 +370,8 @@
 <div class="gototop js-top">
     <a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
 </div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

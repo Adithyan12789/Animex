@@ -547,14 +547,14 @@
 													<div class="col-lg-4 text-center">
 														<div class="total">
 															<div class="sub">
-																<p class="discount-label">Discount - ₹<span id="discount" class="discount-value">₹0</span></p>
-																<input type="hidden" name="discount" id="discount-item">
+																<p class="discount-label">Discount - <span id="discount" class="discount-value">₹0</span></p>
+																<input type="hidden" name="couponDiscount" id="discount-item">
 															</div>
 															<div class="sub">
-																<p class="discount-label">Delivery Fee - ₹<span class="discount-value">69</span></p>
+																<p class="discount-label">Delivery Fee - ₹<span class="discount-value">55</span></p>
 															</div>
 															<div class="grand-total cart__total text-center">
-																<p class="total-label">Total - ₹<span id="total" class="total-value"><%= totalPrice %></span></p>
+																<p class="total-label">Total - ₹<span id="total" class="total-value"><%= totalPrice + 55 %></span></p>
 															</div>
 														</div>
 													</div>
@@ -594,7 +594,7 @@
 														<div class="panel-body">
 															<p class="mb-30 font-sm">Manage your coupon below.</p>
 															<div class="form-group">
-																<input type="text" id="couponCode" placeholder="Enter Coupon Code..." class="form-control coupon-input">
+																<input type="text" name="couponCode" id="couponCode" placeholder="Enter Coupon Code..." class="form-control coupon-input">
 															</div>
 															<div class="form-group">
 																<button class="btn btn-md btn-primary" id="applyCouponBtn">Apply Coupon</button>
@@ -674,10 +674,10 @@
 										  type="hidden"
 										  id="subtotal"
 										  name="totalPrice"
-										  value="<%= totalPrice %>"
+										  value="<%= totalPrice + 55 %>"
 										/>
 										
-										<input type="hidden" name="subtotal" id="subtotalInput" value="<%= totalPrice %>">
+										<input type="hidden" name="subtotal" id="subtotalInput" value="<%= totalPrice + 55 %>">
 										<input type="hidden" id="discountAmountInput" name="discountAmount" value="">
 										<input type="hidden" id="couponCodeInput" name="couponCode" value="">
 						  
@@ -877,6 +877,8 @@
 
 
 <script>
+
+	
    document.addEventListener("DOMContentLoaded", function() {
     const toggleCoupon = document.getElementById("toggleCoupon");
     const couponSection = document.getElementById("couponActions");
@@ -895,102 +897,120 @@
     });
 
     function applyCoupon(couponCode) {
-        fetch('/apply-coupon', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ couponCode })
-        })
-        .then(response => {
-            if (!response.ok) {
-				Swal.fire({
-					title: 'Error!',
-					text: 'Failed to apply coupon',
-					icon: 'error',
-					confirmButtonText: 'OK'
-               });
-                throw new Error('Failed to apply coupon');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Coupon applied successfully');
-				const newTotalPrice = data.newTotalPrice.toFixed(2);
-				const discount = data.discount.toFixed(2);
-				console.log(newTotalPrice)
-				document.getElementById('total').innerText = newTotalPrice;
-				document.getElementById('discount').innerText = discount;
-				document.getElementById('subtotal').value = newTotalPrice;
-				document.getElementById('discount-item').value = discount;
-				Swal.fire({
-					title: 'Success!',
-					text: data.message,
-					icon: 'success',
-					confirmButtonText: 'OK'
-                });
-        }) 
-        .catch(error => {
-            console.error('Error applying coupon:', error);
-			Swal.fire({
-					title: 'Error!',
-					text: 'Error applying coupon',
-					icon: 'error',
-					confirmButtonText: 'OK'
-            });
+    // Check if the coupon code is already applied
+    const appliedCouponCode = document.getElementById('couponCode').getAttribute('data-applied-coupon');
+    if (appliedCouponCode === couponCode) {
+        // If the same coupon is already applied, show an error message
+        Swal.fire({
+            title: 'Error!',
+            text: 'Coupon is already applied.',
+            icon: 'error',
+            confirmButtonText: 'OK'
         });
+        return; // Exit the function
     }
+
+    fetch('/apply-coupon', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ couponCode })
+    })
+    .then(response => {
+        if (!response.ok) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to apply coupon',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            throw new Error('Failed to apply coupon');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Coupon applied successfully');
+        const newTotalPrice = data.newTotalPrice.toFixed(2);
+        const discount = data.discount.toFixed(2);
+        console.log(newTotalPrice)
+        document.getElementById('total').innerText = newTotalPrice;
+        document.getElementById('discount').innerText = discount;
+        document.getElementById('subtotal').value = newTotalPrice;
+        document.getElementById('discount-item').value = discount;
+        // Set the applied coupon code to the data attribute
+        document.getElementById('couponCode').setAttribute('data-applied-coupon', couponCode);
+        Swal.fire({
+            title: 'Success!',
+            text: data.message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    }) 
+    .catch(error => {
+        console.error('Error applying coupon:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Error applying coupon',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+
 });
 	</script>
 	
 	<script>
 	document.addEventListener('DOMContentLoaded', function () {
-		const cancelCouponBtn = document.getElementById('cancelCouponBtn');
-		if (cancelCouponBtn) {
-			cancelCouponBtn.addEventListener('click', cancelCoupon);
-		}
-	});
-	
-	function cancelCoupon() {
-		fetch('/cancel-coupon', {
-			method: 'POST'
-		})
-		.then(response => {
-			if (!response.ok) {
-				throw new Error('Failed to cancel coupon');
-				Swal.fire({
-					title: 'Error!',
-					text: 'Failed to cancel coupon',
-					icon: 'error',
-					confirmButtonText: 'OK'
-                });
-			}
-			return response.json();
-		})
-		.then(data => {
-			console.log('Coupon canceled successfully');
-			const originalTotalPrice = data.originalTotalPrice.toFixed(2);
-			console.log(originalTotalPrice)
-			document.getElementById('total').innerText = originalTotalPrice;
-			document.getElementById('discount').innerText = 0;
-            document.getElementById('subtotal').value = originalTotalPrice;
-			Swal.fire({
-				title: 'Successfully Cancelled!',
-				text: data.message,
-				icon: 'success',
-				confirmButtonText: 'OK'
-            });
-		})
-		.catch(error => {
-			console.error('Error canceling coupon:', error);
-			Swal.fire({
-					title: 'Error!',
-					text: 'Error canceling coupon',
-					icon: 'error',
-					confirmButtonText: 'OK'
-            });
-		});
-	}
+    const cancelCouponBtn = document.getElementById('cancelCouponBtn');
+    if (cancelCouponBtn) {
+        cancelCouponBtn.addEventListener('click', function () {
+            const couponCode = document.getElementById('couponCode').value; // Get the coupon code
+            cancelCoupon(couponCode); // Pass the coupon code to the cancelCoupon function
+        });
+    }
+});
+
+function cancelCoupon(couponCode) {
+    fetch('/cancel-coupon', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ couponCode }) // Pass the coupon code in the request body
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to cancel coupon');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Coupon canceled successfully');
+        const originalTotalPrice = data.originalTotalPrice.toFixed(2);
+        console.log(originalTotalPrice)
+        document.getElementById('total').innerText = originalTotalPrice;
+        document.getElementById('discount').innerText = 0;
+        document.getElementById('subtotal').value = originalTotalPrice;
+        Swal.fire({
+            title: 'Successfully Cancelled!',
+            text: data.message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    })
+    .catch(error => {
+        console.error('Error canceling coupon:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Error canceling coupon',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+
 	</script>
 
 	
@@ -1147,6 +1167,8 @@ if (!isNaN(totalPrice)) {
 	  validateForms();
 	  validateForm();
 	});
+
+	// require('dotenv').config(); // Import dotenv to use environment variables
 	
   
 	function initiateRazorpayPayment() {
@@ -1157,9 +1179,11 @@ if (!isNaN(totalPrice)) {
 	  };
 	 
 	  const totalPriceInput = document.getElementById("subtotal");
-		  const totalPrice = parseFloat(totalPriceInput.value);
+		const totalPrice = parseFloat(totalPriceInput.value);
   
 	  console.log(totalPrice);
+
+	//   const total = totalPrice + 55
   
 	  var options = {
 		key: "rzp_test_Oks5Gpac00wL72",
@@ -1238,13 +1262,8 @@ if (!isNaN(totalPrice)) {
     }
 }
 
-
-
-  
   
   </script>
-
-
 
 
 
