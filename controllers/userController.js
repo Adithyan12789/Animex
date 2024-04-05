@@ -14,6 +14,7 @@
   const Order = require('../models/order');
   const Wallet = require('../models/wallet');
   const Coupon = require('../models/coupon');
+  const Brand = require('../models/brand');
 const ejs = require("ejs");
 const pdf = require("html-pdf");
 
@@ -381,171 +382,318 @@ const pdf = require("html-pdf");
 
 
 
-  const shopPage = async (req, res) => {
-    const perPage = 12;
-    const page = req.query.page || 1;
-    const category = req.query.category;
-    const sort = req.query.sort; // Retrieve sort parameter from query
+//   const shopPage = async (req, res) => {
+//     const perPage = 12;
+//     const page = parseInt(req.query.page) || 1;
+//     const category = req.params.id;
+//     const sort = req.query.sort; // Retrieve sort parameter from query
 
-    try {
-        let totalProducts;
-        let products;
-        let listedProducts;
-        let selectedCategory = null;
+//     try {
+//         let totalProducts;
+//         let products;
+//         let selectedCategory = null;
+//         let sortOptions = {};
 
-        // Count total number of products
-        if (category) {
-            totalProducts = await Product.countDocuments({ category: category });
-            // Query the database to find products matching the specified category
-            products = await Product.find({ category: category })
-                .populate("category")
-                .skip(perPage * page - perPage)
-                .limit(perPage)
-                .exec();
-            selectedCategory = category;
-        } else {
-            totalProducts = await Product.countDocuments();
-            // Query the database to find all products
-            products = await Product.find()
-                .populate("category")
-                .skip(perPage * page - perPage)
-                .limit(perPage)
-                .exec();
-        }
+//         if (sort === 'lowToHigh') {
+//             sortOptions.price = 1;
+//         } else if (sort === 'highToLow') {
+//             sortOptions.price = -1;
+//         } else if (sort === 'aToZ') {
+//             sortOptions.name = 1;
+//         } else if (sort === 'zToA') {
+//             sortOptions.name = -1;
+//         } else if (sort === 'bestSell') {
+//             // Handle sorting by order count here
+//             sortOptions.orderCount = -1;
+//         }
 
-        // Apply sorting if specified
-        if (sort === 'lowToHigh') {
-          products.sort((a, b) => a.price - b.price);
-        } else if (sort === 'highToLow') {
-          products.sort((a, b) => b.price - a.price);
-        } else if (sort === 'aToZ') {
-          products.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (sort === 'zToA') {
-          products.sort((a, b) => b.name.localeCompare(a.name));
-        } else if (sort === 'bestSell') {
-          orderCount = await Order.find
-          // Sort by order count in descending order to get the best sellers first
-          products.sort((a, b) => b.orderCount - a.orderCount);
-        }
+//         // Count total number of products
+//         if (category) {
+//             totalProducts = await Product.countDocuments({ category: category });
+//             // Query the database to find products matching the specified category
+//             products = await Product.find({ category: category })
+//                 .populate("category")
+//                 .sort(sortOptions)
+//                 .skip((parseInt(page) - 1) * perPage)
+//                 .limit(perPage);
+//             selectedCategory = category;
+//         } else {
+//             totalProducts = await Product.countDocuments();
+//             // Query the database to find all products
+//             products = await Product.find()
+//                 .populate("category")
+//                 .sort(sortOptions)
+//                 .skip((parseInt(page) - 1) * perPage)
+//                 .limit(perPage);
+//         }
 
-        // Filter out products that are not listed
-        listedProducts = products.filter(product => {
-            return product.category && product.category.isListed;
+//         const totalPages = Math.ceil(totalProducts / perPage);
+
+//         const categories = await Category.find();
+
+//         // Find the cart document for the user
+//         const cart = await Cart.findOne({ userId: req.session.userID });
+//         let cartItemCount = cart ? cart.items.length : 0;
+
+//         res.render("user/shop", {
+//             title: "Product Page",
+//             products: products,
+//             selectedCategory: selectedCategory,
+//             categories: categories,
+//             totalPages: totalPages,
+//             currentPage: page,
+//             perPage: perPage,
+//             user: req.session.user,
+//             count: cartItemCount,
+//             sort: sort // Pass the sort variable
+//         });
+//     } catch (error) {
+//         console.error("Error fetching products:", error);
+//         res.status(500).send("Error fetching products: " + error.message); // Provide more specific error message
+//     }
+// }
+
+
+
+// const shopPage =  async (req, res, next) => {
+//   try {
+//       const perPage =12;
+//       const page = req.query.page || 1;
+//       const { category, brand, sort } = req.query;
+
+//       const categoriesQuery = Category.find({ isListed: true });
+//       const brandsQuery = Brand.find({ isListed: true });
+
+//       let productQuery = Product.find({ isPublished: true });
+
+//       if (category) {
+//           productQuery = productQuery.where('category').equals(category);
+//       }
+
+//       if (brand) {
+//           productQuery = productQuery.where('brand').equals(brand);
+//       }
+
+//       if (sort === 'price') {
+//           productQuery = productQuery.sort({ price: 1 });
+//       } else if (sort === 'price-desc') {
+//           productQuery = productQuery.sort({ price: -1 });
+//       }
+
+//       const [categories, brands] = await Promise.all([
+//           categoriesQuery.exec(),
+//           brandsQuery.exec()
+//       ]);
+
+//       const totalProductsCountQuery = Product.find({ isPublished: true });
+
+//       if (category) {
+//           totalProductsCountQuery.where('category').equals(category);
+//       }
+
+//       if (brand) {
+//           totalProductsCountQuery.where('brand').equals(brand);
+//       }
+
+//       const totalProductsCount = await totalProductsCountQuery.countDocuments();
+
+//       const products = await productQuery
+//           .populate({
+//               path: 'category',
+//               match: { isListed: true } 
+//           })
+//           .populate({
+//               path: 'brand',
+//               match: { isListed: true } 
+//           })
+//           .sort({ time: -1 })
+//           .skip(perPage * (page - 1))
+//           .limit(perPage)
+//           .exec();
+
+//       const filteredProducts = products.filter(product => product.category !== null && product.brand !== null);
+
+//       // Find the cart document for the user
+//         const cart = await Cart.findOne({ userId: req.session.userID });
+//         let cartItemCount = cart ? cart.items.length : 0;
+
+//       res.render("user/shop", {
+//           title: "Shop",
+//           products: filteredProducts,
+//           categories: categories,
+//           brands: brands,
+//           totalPages: Math.ceil(totalProductsCount / perPage),
+//           currentPage: page,
+//           perPage: perPage,
+//           user: req.session.user,
+//           count: cartItemCount
+//       });
+//   } catch (error) {
+//     console.error("Error fetching products:", error);
+//     res.status(500).send("Error fetching products: " + error.message); // Provide more specific error message
+// }
+// }
+
+
+const shopPage = async (req, res) => {
+  try {
+    const category = req.params.id || undefined;
+    const sort = req.query.sort;
+    const page = req.params.page || 1;
+    const limit = 12;
+    const skip = (page - 1) * limit;
+
+    const query = { isPublished: true };
+    let selectedCategory = null;
+
+    if (category) {
+      const requestedCategory = await Category.findOne({ _id: category, isListed: true });
+
+      if (!requestedCategory) {
+        return res.render("user/shop", {
+          products: [],
+          categories: [],
+          user: req.session.user,
+          text: category,
+          sort,
+          currentPage: page,
+          totalPages: 0
         });
+      }
 
-        const totalPages = Math.ceil(totalProducts / perPage);
-
-        const categories = await Category.find();
-
-        // Find the cart document for the user
-        const cart = await Cart.findOne({ userId: req.session.userID });
-        let cartItemCount = 0;
-        if (cart) {
-            cartItemCount = cart.items.length; // Get the count of items in the cart
-        }
-
-        res.render("user/shop", {
-            title: "Product Page",
-            products: listedProducts,
-            selectedCategory: selectedCategory,
-            categories: categories,
-            totalPages: totalPages,
-            currentPage: page,
-            perPage: perPage,
-            user: req.session.user,
-            count: cartItemCount,
-            sort: sort // Pass the sort variable
-        });
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        res.status(500).send("Error fetching products: " + error.message); // Provide more specific error message
+      selectedCategory = category;
+      query.category = category;
     }
+
+    const sortOptions = {};
+
+    if (sort === 'lowToHigh') {
+      sortOptions.price = 1;
+    } else if (sort === 'highToLow') {
+      sortOptions.price = -1;
+    } else if (sort === 'aToZ') {
+      sortOptions.name = 1;
+    } else if (sort === 'zToA') {
+      sortOptions.name = -1;
+    } else if (sort === 'bestSell') {
+      sortOptions.orderCount = -1;
+    }
+
+    const products = await Product.find(query)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(limit)
+      .populate('category');
+
+    const totalProductsCount = await Product.countDocuments(query);
+    const totalPages = Math.ceil(totalProductsCount / limit);
+
+    const cart = await Cart.findOne({ userId: req.session.userID });
+    const cartItemCount = cart ? cart.items.length : 0;
+
+    const categories = await Category.find({ isListed: true });
+
+    res.render("user/shop", {
+      products,
+      categories,
+      user: req.session.user,
+      text: category,
+      sort,
+      currentPage: page,
+      totalPages,
+      count: cartItemCount,
+      selectedCategory,
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).send("Internal Server Error");
+  }
 }
 
 
 
 
 
-const getShopPagination = async (req, res) => {
-  const perPage = 12;
-    const page = req.query.page || 1;
-    const category = req.query.category;
-    const sort = req.query.sort; // Retrieve sort parameter from query
 
-    try {
-        let totalProducts;
-        let products;
-        let listedProducts;
-        let selectedCategory = null;
 
-        // Count total number of products
-        if (category) {
-            totalProducts = await Product.countDocuments({ category: category });
-            // Query the database to find products matching the specified category
-            products = await Product.find({ category: category })
-                .populate("category")
-                .skip(perPage * page - perPage)
-                .limit(perPage)
-                .exec();
-            selectedCategory = category;
-        } else {
-            totalProducts = await Product.countDocuments();
-            // Query the database to find all products
-            products = await Product.find()
-                .populate("category")
-                .skip(perPage * page - perPage)
-                .limit(perPage)
-                .exec();
-        }
+// const getShopPagination = async (req, res) => {
+//   try {
+//       const perPage =12;
+//       const page = req.query.page || 1;
+//       const { category, brand, sort } = req.query;
 
-        // Apply sorting if specified
-        if (sort === 'lowToHigh') {
-          products.sort((a, b) => a.price - b.price);
-        } else if (sort === 'highToLow') {
-          products.sort((a, b) => b.price - a.price);
-        } else if (sort === 'aToZ') {
-          products.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (sort === 'zToA') {
-          products.sort((a, b) => b.name.localeCompare(a.name));
-        } else if (sort === 'bestSell') {
-          orderCount = await Order.find
-          // Sort by order count in descending order to get the best sellers first
-          products.sort((a, b) => b.orderCount - a.orderCount);
-        }
+//       const categoriesQuery = Category.find({ isListed: true });
+//       const brandsQuery = Brand.find({ isListed: true });
 
-        // Filter out products that are not listed
-        listedProducts = products.filter(product => {
-            return product.category && product.category.isListed;
-        });
+//       let productQuery = Product.find({ isPublished: true });
 
-        const totalPages = Math.ceil(totalProducts / perPage);
+//       if (category) {
+//           productQuery = productQuery.where('category').equals(category);
+//       }
 
-        const categories = await Category.find();
+//       if (brand) {
+//           productQuery = productQuery.where('brand').equals(brand);
+//       }
 
-        // Find the cart document for the user
-        const cart = await Cart.findOne({ userId: req.session.userID });
-        let cartItemCount = 0;
-        if (cart) {
-            cartItemCount = cart.items.length; // Get the count of items in the cart
-        }
+//       if (sort === 'price') {
+//           productQuery = productQuery.sort({ price: 1 });
+//       } else if (sort === 'price-desc') {
+//           productQuery = productQuery.sort({ price: -1 });
+//       }
 
-        res.render("user/shop", {
-            title: "Product Page",
-            products: listedProducts,
-            selectedCategory: selectedCategory,
-            categories: categories,
-            totalPages: totalPages,
-            currentPage: page,
-            perPage: perPage,
-            user: req.session.user,
-            count: cartItemCount,
-            sort: sort // Pass the sort variable
-        });
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        res.status(500).send("Error fetching products: " + error.message); // Provide more specific error message
-    }
-}
+//       const [categories, brands] = await Promise.all([
+//           categoriesQuery.exec(),
+//           brandsQuery.exec()
+//       ]);
+
+//       const totalProductsCountQuery = Product.find({ isPublished: true });
+
+//       if (category) {
+//           totalProductsCountQuery.where('category').equals(category);
+//       }
+
+//       if (brand) {
+//           totalProductsCountQuery.where('brand').equals(brand);
+//       }
+
+//       const totalProductsCount = await totalProductsCountQuery.countDocuments();
+
+//       const products = await productQuery
+//           .populate({
+//               path: 'category',
+//               match: { isListed: true } 
+//           })
+//           .populate({
+//               path: 'brand',
+//               match: { isListed: true } 
+//           })
+//           .sort({ time: -1 })
+//           .skip(perPage * (page - 1))
+//           .limit(perPage)
+//           .exec();
+
+//       const filteredProducts = products.filter(product => product.category !== null && product.brand !== null);
+
+//       // Find the cart document for the user
+//         const cart = await Cart.findOne({ userId: req.session.userID });
+//         let cartItemCount = cart ? cart.items.length : 0;
+
+//       res.render("user/shop", {
+//           title: "Shop",
+//           products: filteredProducts,
+//           categories: categories,
+//           brands: brands,
+//           totalPages: Math.ceil(totalProductsCount / perPage),
+//           currentPage: page,
+//           perPage: perPage,
+//           user: req.session.user,
+//           count: cartItemCount
+//       });
+//   } catch (error) {
+//     console.error("Error fetching products:", error);
+//     res.status(500).send("Error fetching products: " + error.message); // Provide more specific error message
+// }
+// }
 
 
 
@@ -1480,7 +1628,7 @@ const userWallet = async (req, res) => {
     
     //shop Page
     shopPage,
-    getShopPagination,
+    // getShopPagination,
     productDetails,
 
     //user profile

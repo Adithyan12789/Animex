@@ -46,16 +46,16 @@ router.get('/deleteAddress/:id', user,addressController.deleteAddressPage); // A
 
 // Shop Routes
 router.get("/shop",  userController.shopPage); // Shop page
-router.get("/shop/:category", userController.shopPage); // Shop page with category filtering
+router.get("/shop/:id", userController.shopPage); // Shop page with category filtering
 router.get('/priceFilter/:category?', userController.shopPage);
 router.get('/aToZFilter/:category?', userController.shopPage);
 router.get('/bestSeller/:category?', userController.shopPage);
 router.get('/newArrival/:category?', userController.shopPage);
 router.get("/product-details/:id",  userController.productDetails); // Product details page
 
-// Pagination Route
-router.get('/shop/:page',  userController.getShopPagination); // Shop pagination
-router.get('/shop/:category/:page', userController.getShopPagination); // Shop pagination with category filtering
+// // Pagination Route
+// router.get('/shop/:page',  userController.getShopPagination); // Shop pagination
+// router.get('/shop/:category/:page', userController.getShopPagination); // Shop pagination with category filtering
 
 
 //Cart Route
