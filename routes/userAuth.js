@@ -94,6 +94,10 @@ router.post('/withdrawFunds',user, walletController.withdrawFunds);
 router.get('/check-Wallet-Balance',user, walletController.checkWalletBalance);
 router.post('/clearHistory',user, walletController.clearHistory);
 
+//About Route
+router.get('/about',user, userController.aboutRoute);
 
+//Contact Route
+router.get('/contact',user, userController.contactRoute);
 
 module.exports = router;

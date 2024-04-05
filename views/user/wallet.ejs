@@ -259,8 +259,8 @@
                         <ul>
                             <li><a href="/">Home</a></li>
                             <li><a href="/shop">Shop</a></li>   
-                            <li><a href="about.ejs">About</a></li>
-                            <li><a href="contact.ejs">Contact</a></li>
+                            <li><a href="/about">About</a></li>
+                            <li><a href="/contact">Contact</a></li>
                             <li style="float: right;" class="active"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
                             <li style="float: right;" ><a href="/wishlist"><i class="fa-solid fa-heart fa-2x"></i></a></li>
                             <li class="cart"><a href="/cart"><i class="fas fa-shopping-cart fa-lg"></i> Cart [<%= count  %>]</a></li>
@@ -290,6 +290,7 @@
                     </ul>
                 </div>
             </div>
+            
             <div class="col-md-11">
                 <div class="wallet-container">
                     <div class="wallet-header">
@@ -306,18 +307,26 @@
                         <h2>Transaction History</h2>
                         <div class="transaction-list-wrapper">
                           <ul class="profile-list" id="transaction-list">
-                            <% wallet.transactionHistory.forEach(transaction => { %>
+                            <% wallet.transactionHistory.reverse().forEach(transaction => { %>
                                 <li class="profile-item">
-                                    <div class="transaction-details">
-                                        <div class="transaction-description" style="color: <%= transaction.type === 'deposit' ? 'green' : 'red' %>;">
-                                            <%= transaction.description %>: 
-                                        </div>
-                                        <div class="transaction-price" style="color: <%= transaction.type === 'deposit' ? 'green' : 'red' %>;"> 
-                                            ₹<%= transaction.amount %>
-                                        </div>
+                                  <div class="transaction-details">
+
+
+                                  <% if (transaction.type === 'deposit') { %>
+                                    <div class="transaction-description" style="color: green;">
+                                      <%= transaction.description %>:
+                                      ₹<%= transaction.amount %> +
                                     </div>
+                                  <% }else{ %>
+                                    <div class="transaction-description" style="color: rgb(183, 4, 4);">
+                                      <%= transaction.description %>:
+                                      ₹<%= transaction.amount %>-
+                                    </div>
+
+                                    <% } %>
+                                  </div>
                                     <div class="transaction-date">
-                                        (Date: <%= new Date(transaction.date).toLocaleDateString() %>)
+                                        (Date: <%= new Date(transaction.createdAt).toLocaleDateString() %>)
                                     </div>
                                 </li>
                             <% }); %>

@@ -365,10 +365,17 @@
       });
   
       function downloadPdf() {
-          const element = document.getElementById('reportTableBody')
-          console.log(element);
-          html2pdf().from(element).save();
-      }
+    const table = document.getElementById('reportContainer').innerHTML;
+    const filename = 'report.pdf';
+
+    html2pdf().from(table).set({
+        margin: 1,
+        filename: filename,
+        html2canvas: { scale: 2 },
+        jsPDF: { orientation: 'landscape', unit: 'in', format: 'letter', compressPDF: true }
+    }).save();
+}
+
   
       function downloadExcel() {
           const element = document.getElementById('reportTableBody');

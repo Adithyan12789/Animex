@@ -132,41 +132,46 @@
                     <div class="col-md-9">
                         <div class="mb-4">
                             <label class="form-label">Coupon Code</label>
-                            <input type="text" placeholder="Type here" name="coupon_code" class="form-control" id="coupon_code" required>
-                            <span id="name-error" style="font-size: 14px;"></span>
+                            <input type="text" placeholder="Type here" name="coupon_code" class="form-control" id="coupon_code" onkeyup="validateCode()">
+                            <span id="code-error" class="error-msg"></span> <!-- Corrected ID -->
                         </div>
+
                         <div class="mb-4">
                             <label class="form-label">Description</label>
-                            <textarea placeholder="Type here" class="form-control" name="description" rows="4" id="product_description" required></textarea>
-                            <span id="descriptionError" style="font-size: 14px;"></span>
+                            <textarea placeholder="Type here" class="form-control" name="description" rows="4" id="coupon_description" rows="4" onkeyup="validateDescription()"></textarea>
+                            <span id="description-error" class="error-msg"></span>
                         </div>
+
                         <div class="mb-4">
                             <label class="form-label">Percentage</label>
-                            <input type="text" placeholder="Type here" name="percentage" class="form-control" id="coupon_percentage" required>
-                            <span id="percentageError" style="font-size: 14px;"></span>
+                            <input type="text" placeholder="Type here" name="percentage" class="form-control" id="percentage" onkeyup="validatePrice()">
+                            <span id="price-error" class="error-msg"></span><!-- Corrected ID -->
                         </div>
                         <div class="mb-4">
-                            <label class="form-label">Minimum Amount</label>
-                            <input type="text" placeholder="Type here" name="minimumAmount" class="form-control" id="minimumAmount" required>
-                            <span id="minAmountError" style="font-size: 14px;"></span>
+                            <label class="form-label">Minumum Amount</label>
+                            <input type="text" placeholder="Type here" name="minimumAmount" class="form-control"  id="min_amount" min="0" onkeyup="validateMinAmount()">
+                            <span id="min-amount-error" class="error-msg"></span> <!-- Corrected ID -->
                         </div>
                         <div class="mb-4">
-                            <label class="form-label">Maximum Discount</label>
-                            <input type="text" placeholder="Type here" name="maximumAmount" class="form-control" id="maximumAmount" required>
-                            <span id="maxAmountError" style="font-size: 14px;"></span>
+                            <label class="form-label">Maximum Dicount Amount</label>
+                            <input type="text" placeholder="Type here" name="maximumAmount" class="form-control" id="max_amount" min="0" onkeyup="validateMaxAmount()">
+                            <span id="max-amount-error" class="error-msg"></span> <!-- Corrected ID -->
                         </div>
                         <div class="mb-4">
-                            <label class="form-label">Expiration Date</label>
-                            <input type="date" placeholder="Type here" name="expiryDate" class="form-control" id="coupon_exp_date" required>
-                            <span id="expDateError" style="font-size: 14px;"></span>
+                            <label class="form-label">Exp date</label>
+                            <input type="date" placeholder="Type here" name="expiryDate" class="form-control" id="expiry_date" onchange="validateDate()">
+                            <span id="date-error" class="error-msg"></span> <!-- Corrected ID -->
                         </div>
                         <div>
-                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
-                            <span id="submit-error" style="font-size: 14px;"></span>
+                            <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
+                            <button  type="submit" class="btn btn-md rounded font-sm hover-up" >Add New Coupon</button>
+                            <span id="submit-error" class="error-msg"></span>
+
                         </div>
                     </div> <!-- col.// -->
                 </div> <!-- row.// -->
             </form>
+
         </div>
     </div>
 </div>
@@ -188,73 +193,111 @@
 </main>
 
 <script>
-function validateForm() {
-var valid = true;
-var couponCode = document.getElementById("coupon_code").value.trim();
-var description = document.getElementById("product_description").value.trim();
-var percentage = document.getElementById("coupon_percentage").value.trim();
-var minAmount = document.getElementById("minimumAmount").value.trim();
-var maxAmount = document.getElementById("maximumAmount").value.trim();
-var expDate = document.getElementById("coupon_exp_date").value.trim();
+    function validateCode() {
+      var codeError = document.getElementById("code-error");
+      var code = document.getElementById("coupon_code").value.trim();
+      var uppercaseRegex = /^[A-Z0-9]+$/;
+      if (!uppercaseRegex.test(code)) {
+        codeError.innerHTML = "Coupon code must contain only uppercase letters and numbers";
+        codeError.style.color = "red";
+        return false;
+      }
+      codeError.innerHTML = "";
+      return true;
+    }
 
-if (couponCode === "") {
-    document.getElementById("name-error").innerHTML = "Coupon code is required";
-    valid = false;
-} else {
-    document.getElementById("name-error").innerHTML = "";
-}
+    function validateDescription() {
+      var descriptionError = document.getElementById("description-error");
+      var desc = document.getElementById("coupon_description").value.trim();
+      if (desc.length === 0) {
+        descriptionError.innerHTML = "Description is required";
+        descriptionError.style.color = "red";
+        return false;
+      }
+      descriptionError.innerHTML = "";
+      return true;
+    }
 
-if (description === "") {
-    document.getElementById("descriptionError").innerHTML = "Description is required";
-    valid = false;
-} else {
-    document.getElementById("descriptionError").innerHTML = "";
-}
+    function validatePrice() {
+      var priceError = document.getElementById("price-error");
+      var price = document.getElementById("percentage").value.trim();
+      if (price.length === 0 || isNaN(price) || parseFloat(price) <= 0 || parseFloat(price) > 100) {
+        priceError.innerHTML = "Invalid entry";
+            priceError.style.color = "red";
+            return false;
+          }
+          priceError.innerHTML = "";
+          return true;
+        }
+    
+        function validateMinAmount() {
+          var minAmountError = document.getElementById("min-amount-error");
+          var minAmount = document.getElementById("min_amount").value.trim();
+          if (minAmount.length === 0 || minAmount < 1  || isNaN(minAmount) || parseFloat(minAmount) < 0) {
+            minAmountError.innerHTML = "Invalid entry";
+            minAmountError.style.color = "red";
+            return false;
+          }
+          minAmountError.innerHTML = "";
+          return true;
+        }
+    
+        function validateMaxAmount() {
+          var maxAmountError = document.getElementById("max-amount-error");
+          var maxAmount = document.getElementById("max_amount").value.trim();
+          if (maxAmount.length === 0 || maxAmount < 1 || isNaN(maxAmount) || parseFloat(maxAmount) < 0) {
+            maxAmountError.innerHTML = "Invalid entry";
+            maxAmountError.style.color = "red";
+            return false;
+          }
+          maxAmountError.innerHTML = "";
+          return true;
+        }
+    
+        function validateDate() {
+          var dateError = document.getElementById("date-error");
+          var dateInput = document.getElementById("expiry_date").value;
+          var currentDate = new Date();
+          var selectedDate = new Date(dateInput);
+          if (selectedDate <= currentDate) {
+            dateError.innerHTML = "Please select a future date";
+            dateError.style.color = "red";
+            return false;
+          }
+          dateError.innerHTML = "";
+          return true;
+        }
+    
+        function validateForm() {
+          var isValid = true;
+          isValid &= validateCode();
+          isValid &= validateDescription();
+          isValid &= validatePrice();
+          isValid &= validateMinAmount();
+          isValid &= validateMaxAmount();
+          isValid &= validateDate();
+          
+          var submitError = document.getElementById("submit-error");
+          if (!isValid) {
+            submitError.innerHTML = "Please enter all the fields correctly to submit";
+            submitError.style.color = "red";
+            return false;
+          } else {
+            submitError.innerHTML = "";
+            return true;
+          }
+        }
+      </script>
 
-if (percentage === "") {
-    document.getElementById("percentageError").innerHTML = "Percentage is required";
-    valid = false;
-} else {
-    document.getElementById("percentageError").innerHTML = "";
-}
 
-if (minAmount === "") {
-    document.getElementById("minAmountError").innerHTML = "Minimum amount is required";
-    valid = false;
-} else {
-    document.getElementById("minAmountError").innerHTML = "";
-}
-
-if (maxAmount === "") {
-    document.getElementById("maxAmountError").innerHTML = "Maximum discount amount is required";
-    valid = false;
-} else {
-    document.getElementById("maxAmountError").innerHTML = "";
-}
-
-if (expDate === "") {
-    document.getElementById("expDateError").innerHTML = "Expiration date is required";
-    valid = false;
-} else {
-    document.getElementById("expDateError").innerHTML = "";
-}
-
-return valid;
-}
-</script>
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- Bootstrap JavaScript -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/static/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
-  <script src="/static/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
-  <script src="/static/admin-assets/js/vendors/select2.min.js"></script>
-  <script src="/static/admin-assets/js/vendors/perfect-scrollbar.js"></script>
-  <script src="/static/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
-  <!-- Main Script -->
-  <script src="/static/admin-assets/js/main.js" type="text/javascript"></script>
-  <script src="https://kit.fontawesome.com/c3933791eb.js" crossorigin="anonymous"></script>
+ <!-- JavaScript Libraries -->
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="/static/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+ <script src="/static/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+ <script src="/static/admin-assets/js/vendors/select2.min.js"></script>
+ <script src="/static/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+ <script src="/static/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
 </body>
 
 </html>

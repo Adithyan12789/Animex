@@ -1072,6 +1072,8 @@ const checkoutPage = async (req, res) => {
         isListed: true 
     });
 
+    const razorpayKey = process.env.RAZORPAY_KEY
+
     // Render the checkout page with necessary data
     res.render('user/checkout', {
       title: 'Checkout',
@@ -1081,7 +1083,8 @@ const checkoutPage = async (req, res) => {
       totalPrice,
       orderId,
       count: cartItemCount,
-      coupons: validCoupons
+      coupons: validCoupons,
+      razorpayKey
     });
 
   } catch (err) {
@@ -1606,6 +1609,39 @@ const userWallet = async (req, res) => {
   }
 }
 
+const aboutRoute = async (req,res) => {
+  const userId = req.session.userID;
+
+
+  // Find the cart document for the user
+  const cart = await Cart.findOne({ userId });
+  let cartItemCount = 0;
+  if (cart) {
+    cartItemCount = cart.items.length; // Get the count of items in the cart
+  }
+
+  res.render("user/about",{
+    user: req.session.user,
+    count: cartItemCount
+  })
+ }
+ 
+ const contactRoute = async (req,res) => {
+  const userId = req.session.userID;
+
+
+  // Find the cart document for the user
+  const cart = await Cart.findOne({ userId });
+  let cartItemCount = 0;
+  if (cart) {
+    cartItemCount = cart.items.length; // Get the count of items in the cart
+  }
+
+  res.render("user/contact",{
+    user: req.session.user,
+    count: cartItemCount
+  })
+ }
 
   module.exports = {
     //page 404
@@ -1659,6 +1695,12 @@ const userWallet = async (req, res) => {
     wishlist,
     wishlistPage,
     deleteWishlist,
+    userWallet,
 
-    userWallet
+
+    //about
+    aboutRoute,
+    
+    //Contact
+    contactRoute
   };

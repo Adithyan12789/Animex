@@ -415,8 +415,8 @@
 									<ul>
 										<li class="active"><a href="/">Home</a></li>
 										<li><a href="/shop">Shop</a></li>
-										<li><a href="about.ejs">About</a></li>
-										<li><a href="contact.ejs">Contact</a></li>
+										<li><a href="/about">About</a></li>
+										<li><a href="/contact">Contact</a></li>
 										<li style="float: right;"><a href="/profile"><i
 													class="fa-regular fa-circle-user fa-2x"></i></a></li>
 													<li style="float: right;"><a href="/wishlist"><i class="fa-regular fa-heart fa-2x"></i></a></li>
@@ -1186,7 +1186,7 @@ if (!isNaN(totalPrice)) {
 	//   const total = totalPrice + 55
   
 	  var options = {
-		key: "rzp_test_Oks5Gpac00wL72",
+		key: `<%= razorpayKey %>`,
 		amount: totalPrice * 100,
 		currency: "INR",
 		name: "Animex",
