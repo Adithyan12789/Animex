@@ -8,7 +8,7 @@
   const bcrypt = require("bcrypt");
   const Address = require('../models/address');
   const saltpassword = 10;
-  const Cart = require("../models/Cart");
+  const Cart = require("../models/cart");
   const Product = require('../models/products');
   const Wishlist = require('../models/wishlist');
   const Order = require('../models/order');
