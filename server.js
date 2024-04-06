@@ -39,8 +39,15 @@ app.use(
 
 app.use(nocache());
 
+
 app.use("/", userauthRoute);
 app.use("/", adminfeatRoute);
+
+// Handling all other GET requests
+app.get("*", (req, res) => {
+  res.status(404).render("user/page404");
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);

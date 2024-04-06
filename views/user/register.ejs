@@ -10,7 +10,10 @@
         <style>
             body {
                 font-family: 'Montserrat', sans-serif;
-                background-color: #f9f9f9;
+                background-image: url("/static/images/5631533.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             }
 
             .container {
@@ -26,7 +29,7 @@
 
             .card-header {
                 color: #fff;
-                background-color: #088178;
+                background-color: #88c8bc;
                 border-top-left-radius: 15px;
                 border-top-right-radius: 15px;
                 padding: 1.5rem;
@@ -50,7 +53,7 @@
             }
 
             .btn {
-                background-color: #088178;
+                background-color: #88c8bc;
                 color: #fff;
                 border: none;
                 border-radius: 8px;
@@ -110,8 +113,12 @@
                         <div class="card-header">
                             <h3 class="mb-0">Sign Up</h3>
                         </div>
+                        <% if(locals.message) { %>
+                            <div class="alert alert-danger"><%= locals.message %></div>
+                        <% } %>
                         <div class="card-body">
                             <form id="regform" action="/register" method="post">
+                                
                                 <div class="mb-3">
                                     <label class="form-label">Full Name</label>
                                     <input class="form-control" placeholder="Your Full Name" name="name" type="text" id="contact-name" required onkeyup="validateName()">
