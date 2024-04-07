@@ -286,6 +286,7 @@ const pdf = require("html-pdf");
             title: "Product Page",
             categories: categories,
             user: req.session.user,
+            text: category,
             count :cartItemCount,
             selectedCategory: selectedCategory,
             sort: sort, // Pass the sort variable,
