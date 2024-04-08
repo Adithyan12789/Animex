@@ -16,14 +16,17 @@ router.get('page404', userController.page404)
 
 // User Authentication Routes
 router.get('/', userController.loaduserHome); // User login page
+
 router.get('/userlogin', isLogged, userController.loadlogin); // User login page
 router.post('/userlogin',  userController.loguser); // User login action
-// router.get('/index', userController.loaduserHome)
+
 router.get('/register', userController.loadregister); // User registration page
 router.post('/register', userController.insertUser); // User registration action
+
 router.get('/verifyOtp', authController.OTPpage); // OTP verification page
 router.post('/verifyOtp', authController.verifyOTP); // OTP verification action
 router.get('/resend-otp', userController.resendOTP); // Resend OTP
+
 router.get('/userlogout', user, userController.logoutuser); // User logout
 
 //Search Route
