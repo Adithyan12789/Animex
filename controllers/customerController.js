@@ -13,6 +13,7 @@ const blockUser = async (req, res) => {
   const userId = req.params.userid;
   try {
     await User.findByIdAndUpdate(userId, { isBlocked: true });
+    req.session.isLogged = false;
     req.session.user = null
     res.redirect('/adminCustomer');
   } catch (err) {
@@ -25,6 +26,7 @@ const unblockUser = async (req, res) => {
   const userId = req.params.userid;
   try {
     await User.findByIdAndUpdate(userId, { isBlocked: false });
+    req.session.isLogged = false;
     res.redirect('/adminCustomer');
   } catch (err) {
     console.error(err.message);
