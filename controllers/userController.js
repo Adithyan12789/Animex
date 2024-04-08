@@ -64,6 +64,8 @@ const pdf = require("html-pdf");
        cartItemCount = cart.items.length; // Get the count of items in the cart
    }
 
+   req.session.checkoutBlock = false;
+
     res.render("user/index",{product: listedProducts,totalPages: totalPages,
       currentPage: page, user:req.session.user, count: cartItemCount});
   };
@@ -1027,6 +1029,9 @@ const deleteCart = async (req, res) => {
 };
 
 const checkoutPage = async (req, res) => {
+  if(req.session.checkoutBlock){
+    res.redirect("/")
+  }
   try {
     const userId = req.session.userID;
     const orderId = req.query.orderId;
@@ -1306,6 +1311,7 @@ const placeOrder = async (req, res) => {
         }
 
           if (status !== "Failed") {
+            req.session.checkoutBlock = true;
               res.redirect("/orderPage");
           } else {
               res.redirect("/orderProfile");
