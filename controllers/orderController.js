@@ -86,8 +86,6 @@ const adminTrackOrderPage = async (req, res) => {
         // Find the order based on the provided id and populate the items
         const order = await Order.findOne({ _id: id }).populate("items.product");
 
-        console.log("order: ",order)
-
         // Render the "user/trackOrder" view with the user and order data
         res.render("admin/orderDetails", { user, order });
     } catch (error) {
@@ -111,6 +109,24 @@ const updateOrderStatus = async (req,res) => {
 
         // Find the order by orderId and update its status
         const order = await Order.findByIdAndUpdate(orderId, { orderStatus: newStatus }, { new: true });
+
+        if (order.orderStatus === 'Return') {
+            return res.status(400).json({ error: 'Order already Returned' });
+        }
+
+        // Calculate total quantity of all items in the order
+        let totalQuantity = 0;
+        for (const item of order.items) {
+            totalQuantity += item.quantity;
+        }
+
+        // Increment stock count by the total quantity
+        await Product.updateMany({}, {
+            $inc: { stock: totalQuantity }
+        });
+
+        // Update order status to "Cancelled"
+        order.orderStatus = 'Return';
 
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
@@ -168,6 +184,7 @@ const returnOrder = async (req, res) => {
 const cancelOrder = async (req, res) => {
     try {
         const orderId = req.params.orderId;
+        const newStatus = req.body.newStatus;
         const order = await Order.findById(orderId);
 
         if (!order) {
@@ -177,6 +194,7 @@ const cancelOrder = async (req, res) => {
         if (order.orderStatus === 'Cancelled') {
             return res.status(400).json({ error: 'Order already canceled' });
         }
+
 
         // Calculate total quantity of all items in the order
         let totalQuantity = 0;

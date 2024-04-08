@@ -486,7 +486,7 @@
 													<div class="address-box" id="address<%= index + 1 %>">
 														<label>
 															<div class="radio-box">
-																<input style="margin: 3px 20px 32px 0px;" type="radio" name="addressId" value="<%= address._id %>">
+																<input style="margin: 3px 20px 32px 0px;" type="radio" name="addressId" value="<%= address._id %>" <%= index === 0 ? 'checked' : '' %>>
 																<h3 onclick="toggleAddressDetails('<%= index + 1 %>', '<%= address._id %>')">Address <%= index + 1 %></h3>
 															</div>
 														</label>
@@ -503,7 +503,7 @@
 											<% } else { %>
 												<p>No address found</p>
 											<% } %>
-										</div>
+										</div>										
 									</div>
 									
 								</div>

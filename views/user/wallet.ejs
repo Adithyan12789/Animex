@@ -307,7 +307,7 @@
                         <h2>Transaction History</h2>
                         <div class="transaction-list-wrapper">
                           <ul class="profile-list" id="transaction-list">
-                            <% wallet.transactionHistory.reverse().forEach(transaction => { %>
+                            <% wallet.transactionHistory.forEach(transaction => { %>
                                 <li class="profile-item">
                                   <div class="transaction-details">
 
@@ -325,9 +325,9 @@
 
                                     <% } %>
                                   </div>
-                                    <div class="transaction-date">
-                                        (Date: <%= new Date(transaction.createdAt).toLocaleDateString() %>)
-                                    </div>
+                                  <div class="transaction-date">
+                                    (Date: <%= new Date(transaction.date).toLocaleDateString() %>)
+                                </div>  
                                 </li>
                             <% }); %>
                           </ul>       
@@ -381,6 +381,7 @@
                 };
     
                 var rzp = new Razorpay(options);
+                
                 rzp.open();
             } else {
                 alert("Please enter a valid amount.");
