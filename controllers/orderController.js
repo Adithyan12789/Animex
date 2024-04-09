@@ -110,9 +110,6 @@ const updateOrderStatus = async (req,res) => {
         // Find the order by orderId and update its status
         const order = await Order.findByIdAndUpdate(orderId, { orderStatus: newStatus }, { new: true });
 
-        if (order.orderStatus === 'Return') {
-            return res.status(400).json({ error: 'Order already Returned' });
-        }
 
         // Calculate total quantity of all items in the order
         let totalQuantity = 0;
@@ -125,8 +122,6 @@ const updateOrderStatus = async (req,res) => {
             $inc: { stock: totalQuantity }
         });
 
-        // Update order status to "Cancelled"
-        order.orderStatus = 'Return';
 
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
@@ -165,6 +160,7 @@ const returnOrder = async (req, res) => {
 
         // Update order status to "Cancelled"
         order.orderStatus = 'Return';
+
         await order.save();
 
         // Pass userId and amount to returnMoneyToWallet

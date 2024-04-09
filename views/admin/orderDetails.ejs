@@ -301,6 +301,11 @@
             icon: 'success',
             confirmButtonText: 'OK'
         });
+
+        // If order canceled or returned successfully, add refunded amount to wallet
+        if (newStatus === "Return" || newStatus === "Cancelled") {
+            addFunds();
+        }
     })
     .catch(error => {
         // Handle error
@@ -312,6 +317,32 @@
             confirmButtonText: 'OK'
         });
     });
+}
+
+async function addFunds() {
+    const subtotalText = document.getElementById("subtotal").textContent;
+    const amountString = subtotalText.replace('₹', ''); // Remove the currency symbol
+    const amount = parseFloat(amountString);
+    console.log(amount);
+    if (!isNaN(amount)) {
+        const response = await fetch('/addFunds', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ amount })
+        });
+        const data = await response.json();
+        if (data.success) {
+            balanceDisplay.textContent = `Balance: ₹${data.balance}`;
+            addTransaction(amount, 'deposit');
+            document.getElementById('add-amount').value = '';
+        } else {
+            alert(data.message);
+        }
+    } else {
+        alert("Invalid amount!");
+    }
 }
 
 </script>
