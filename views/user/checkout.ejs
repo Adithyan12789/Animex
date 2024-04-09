@@ -1039,7 +1039,7 @@ function cancelCoupon(couponCode) {
         });
         return false; // Prevent form submission
 	}else {
-        return true; // Proceed with form submission
+        validateForm()
     }
 }
   
@@ -1048,6 +1048,7 @@ function cancelCoupon(couponCode) {
 	const paymentRazorpayCheckbox = document.getElementById("payment-razorpay");
 	const paymentWalletCheckbox = document.getElementById("payment-wallet");
 	const paymentStatusInput = document.getElementById("paymentStatus");
+	
 	const checkedCount = [paymentCODCheckbox, paymentRazorpayCheckbox, paymentWalletCheckbox].filter(checkbox => checkbox.checked).length;
   
 	// Retrieve the subtotal element by ID
@@ -1165,7 +1166,6 @@ if (!isNaN(totalPrice)) {
 	  event.preventDefault();
   
 	  validateForms();
-	  validateForm();
 	});
 
 	// require('dotenv').config(); // Import dotenv to use environment variables
