@@ -22,7 +22,16 @@ app.use((req, res, next) => {
 // MongoDB connection with better error handling
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.DB_URI);
+    const options = {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      maxPoolSize: 10,
+      minPoolSize: 5,
+      retryWrites: true,
+      retryReads: true
+    };
+    
+    await mongoose.connect(process.env.DB_URI, options);
     console.log("MongoDB connected successfully");
   } catch (error) {
     console.error("MongoDB connection error:", error);
@@ -33,11 +42,18 @@ const connectDB = async () => {
   }
 };
 
+// Initialize MongoDB connection
 connectDB();
 
-const db = mongoose.connection;
-db.on("error", (error) => console.error("MongoDB connection error:", error));
-db.once("open", () => console.log("Connected to the Database"));
+// Handle MongoDB connection events
+mongoose.connection.on('error', (error) => {
+  console.error('MongoDB connection error:', error);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected. Attempting to reconnect...');
+  connectDB();
+});
 
 // Basic middleware
 app.use(express.json());
@@ -52,20 +68,35 @@ app.use(express.static("uploads"));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// Session configuration
+// Session configuration with memory store for serverless
+const MemoryStore = require('memorystore')(session);
 app.use(
   session({
+    store: new MemoryStore({
+      checkPeriod: 86400 // prune expired entries every 24h
+    }),
     secret: process.env.SESSION_SECRET || '1231fdsdfssg33435',
     resave: false,
     saveUninitialized: true,
     cookie: {
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: 'lax'
     }
   })
 );
 
 app.use(nocache());
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    database: dbStatus
+  });
+});
 
 // Routes
 app.use("/", userauthRoute);
@@ -81,15 +112,34 @@ app.use((err, req, res, next) => {
     timestamp: new Date().toISOString()
   });
   
-  res.status(500).render("user/page404", { 
-    error: "Something went wrong!",
-    message: process.env.NODE_ENV === 'development' ? err.message : undefined
-  });
+  // Check if headers are already sent
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  // Try to render error page, fallback to JSON if that fails
+  try {
+    res.status(500).render("user/page404", { 
+      error: "Something went wrong!",
+      message: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+  } catch (renderError) {
+    console.error("Error rendering error page:", renderError);
+    res.status(500).json({
+      error: "Internal Server Error",
+      message: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+  }
 });
 
 // 404 handler
 app.get("*", (req, res) => {
-  res.status(404).render("user/page404");
+  try {
+    res.status(404).render("user/page404");
+  } catch (error) {
+    console.error("Error rendering 404 page:", error);
+    res.status(404).json({ error: "Not Found" });
+  }
 });
 
 // For Vercel serverless function
