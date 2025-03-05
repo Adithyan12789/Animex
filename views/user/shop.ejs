@@ -112,8 +112,9 @@
                     <div class="col-sm-5 col-md-3">
                         <form action="/search" class="search-wrap" method="get">
                             <div class="form-group">
-                                <input type="search" class="form-control search" name="q" placeholder="Search">
-                                <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+                                <input type="search" class="form-control search" style="width: 320px;" name="q" placeholder="Search">
+                                <button class="btn btn-primary submit-search text-center" type="submit"><i
+                                        class="icon-search"></i></button>
                             </div>
                         </form>
                     </div>
@@ -121,18 +122,18 @@
                 <div class="row">
                     <div class="col-sm-12 text-left menu-1">
                         <ul>
-                            <li><a href="/">Home</a></li>
-                            <li class="active"><a href="/shop">Shop</a></li>
-                            <li><a href="/about">About</a></li>
-                            <li><a href="/contact">Contact</a></li>
+                            <li class="pb-3"><a href="/">Home</a></li>
+                            <li class="active pb-3"><a href="/shop">Shop</a></li>
+                            <li class="pb-3"><a href="/about">About</a></li>
+                            <li class="pb-3"><a href="/contact">Contact</a></li>
                             <li style="float: right;"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
-                            <li style="float: right;"><a href="/wishlist"><i class="fa-regular fa-heart fa-2x"></i></a></li>
+                            <li class="pr-3" style="float: right;"><a href="/wishlist"><i class="fa-regular fa-heart fa-2x"></i></a></li>
+                            <li class="cart pb-3"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
                             <% if(user) { %>
-								<li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
-							<% } else { %>
-								<li class="login"><a href="/userlogin"><i class="login-Page"></i> Login</a></li>
-							<% } %>
-                            <li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
+                                <li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
+                            <% } else { %>
+                                <li class="login"><a href="userlogin"><i class="login-Page"></i> Login</a></li>
+                            <% } %>
                         </ul>
                     </div>
                 </div>
@@ -187,7 +188,7 @@
     <div class="colorlib-product">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-xl-3">
+                <div class="col-lg-3 col-xl-3 col-sm-6">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="side border mb-1">

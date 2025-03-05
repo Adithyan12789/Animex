@@ -15,14 +15,14 @@
   const Wallet = require('../models/wallet');
   const Coupon = require('../models/coupon');
   const Brand = require('../models/brand');
-const ejs = require("ejs");
-const pdf = require("html-pdf");
+  const ejs = require("ejs");
+  const pdf = require("html-pdf");
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: 'adithiruthiparambil12@gmail.com',
-      pass: 'cqao zawl ztku uslf' 
+      pass: 'phfa kacx ozkz ueig' 
     }
   });
 

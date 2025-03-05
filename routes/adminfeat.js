@@ -59,11 +59,7 @@ router.get("/adminProductPage/:page",admin, productController.getPagination);
 router.get("/adminAddProduct",admin, productController.createProduct);
 router.post("/adminAddProduct",admin, uploadImage, productController.addProducts);
 router.get("/adminEditProduct/:id",admin, productController.editProduct);
-router.post(
-  "/adminUpdateProduct/:id",
-  uploadImage,admin,
-  productController.updateProduct
-);
+router.post("/adminUpdateProduct/:id",uploadImage,admin,productController.updateProduct);
 router.get("/unpublishProduct/:id",admin, productController.unpublishProducts);
 router.get("/publishProduct/:id",admin, productController.publishProducts);
 

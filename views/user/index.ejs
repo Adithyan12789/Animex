@@ -86,8 +86,6 @@
     margin-top: 10px;
 }
 
-
-
 	</style>
 
 </head>
@@ -107,7 +105,7 @@
 						<div class="col-sm-5 col-md-3">
 							<form action="/search" class="search-wrap" method="get">
 								<div class="form-group">
-									<input type="search" class="form-control search" name="q" placeholder="Search">
+									<input type="search" class="form-control search" style="width: 320px;" name="q" placeholder="Search">
 									<button class="btn btn-primary submit-search text-center" type="submit"><i
 											class="icon-search"></i></button>
 								</div>
@@ -117,13 +115,13 @@
 					<div class="row">
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
-								<li class="active"><a href="/">Home</a></li>
-								<li><a href="/shop">Shop</a></li>
-								<li><a href="/about">About</a></li>
-								<li><a href="/contact">Contact</a></li>
+								<li class="active pb-3"><a href="/">Home</a></li>
+								<li class="pb-3"><a href="/shop">Shop</a></li>
+								<li class="pb-3"><a href="/about">About</a></li>
+								<li class="pb-3"><a href="/contact">Contact</a></li>
 								<li style="float: right;"><a href="/profile"><i class="fa-regular fa-circle-user fa-2x"></i></a></li>
-								<li style="float: right;"><a href="/wishlist"><i class="fa-regular fa-heart fa-2x"></i></a></li>
-								<li class="cart"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
+								<li class="pr-3" style="float: right;"><a href="/wishlist"><i class="fa-regular fa-heart fa-2x"></i></a></li>
+								<li class="cart pb-3"><a href="/cart"><i class="icon-shopping-cart"></i> Cart [<%= count %>]</a></li>
 								<% if(user) { %>
                                     <li class="logout"><a href="userlogout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a></li>
 								<% } else { %>
@@ -171,7 +169,7 @@
 											<h2 class="head-2">T-shirts</h2>
 											<h2 class="head-3">Collection</h2>
 											<p class="category"><span>New trending Hoodies</span></p>
-											<p><a href/shop" class="btn btn-primary">Shop Collection</a></p>
+											<p><a href="/shop" class="btn btn-primary">Shop Collection</a></p>
 										</div>
 									</div>
 								</div>
