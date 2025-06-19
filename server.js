@@ -5,6 +5,7 @@ const userauthRoute = require("./routes/userAuth");
 const adminfeatRoute = require("./routes/adminfeat");
 const session = require("express-session");
 const mongoose = require("mongoose");
+const serverless = require('serverless-http');
 require("dotenv").config();
 
 // Load environment variables from .env file
@@ -142,9 +143,8 @@ app.get("*", (req, res) => {
   }
 });
 
-// For Vercel serverless function
 if (process.env.NODE_ENV === 'production') {
-  module.exports = app;
+  module.exports = serverless(app); // for Vercel
 } else {
   app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
